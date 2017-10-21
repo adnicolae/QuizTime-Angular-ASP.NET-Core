@@ -10,6 +10,7 @@ namespace QuizTime.Models
         public long SessionId { get; set; }
         // time limit in seconds
         public int TimeLimit { get; set; }
+        public DateTime DateCreated { get; set; }
 
         // the results of all users that participated
         public ICollection<Result> Results { get; set; }

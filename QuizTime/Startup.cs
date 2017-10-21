@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using QuizTime.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace QuizTime
 {
@@ -22,11 +24,13 @@ namespace QuizTime
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<Context>(options => options.UseSqlServer(Configuration["Data:QuizTime:ConnectionString"]));
+
             services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, Context context)
         {
             if (env.IsDevelopment())
             {
@@ -53,6 +57,8 @@ namespace QuizTime
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
             });
+
+            SeedData.SeedDatabase(context);
         }
     }
 }
