@@ -11,7 +11,7 @@ namespace QuizTime.Models
         public int Score { get; set; }
 
         // The user who obtained that score
-        public User User { get; set; }
+        public User SessionParticipant { get; set; }
         // The session where he obtained that score
         public Session Session { get; set; }
     }
