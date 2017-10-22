@@ -14,5 +14,7 @@ namespace QuizTime.Models
         public User SessionParticipant { get; set; }
         // The session where he obtained that score
         public Session Session { get; set; }
+        // maybe add Choice to register what choice the user made in that session
+        public Choice Choice { get; set; }
     }
 }
