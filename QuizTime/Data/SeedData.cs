@@ -27,75 +27,125 @@ namespace QuizTime.Data
                     Password = "None"
                 };
 
-                context.Quizzes.AddRange(
-                    new Quiz
-                    {
-                        Title = "CS130 First Quiz",
-                        AssignedPoints = 15,
-                        DateCreated = DateTime.Now.Date,
-                        Creator = user1,
-                        Choices = new List<Choice>
+                var choice1 = new Choice
+                {
+                    Title = "Choice1",
+                    Correctness = true,
+                };
+
+                var choice2 = new Choice
+                {
+                    Title = "Choice2",
+                    Correctness = false,
+                };
+
+                var choice3 = new Choice
+                {
+                    Title = "Choice3",
+                    Correctness = false,
+                };
+
+                var choice4 = new Choice
+                {
+                    Title = "Choice4",
+                    Correctness = false,
+                };
+
+                var choice1_alt = new Choice
+                {
+                    Title = "Choice1.2",
+                    Correctness = false,
+                };
+
+                var choice3_alt = new Choice
+                {
+                    Title = "Choice3.2",
+                    Correctness = true,
+                };
+
+                var choices1 = new List<Choice>
+                {
+                    choice1,
+                    choice2,
+                    choice3,
+                    choice4,
+                };
+
+                var choices2 = new List<Choice>
+                {
+                    choice1_alt,
+                    choice2,
+                    choice3_alt,
+                    choice4
+                };
+
+                var quiz1 = new Quiz
+                {
+                    Title = "CS130 First Quiz",
+                    AssignedPoints = 15,
+                    DateCreated = DateTime.Now.Date,
+                    Creator = user1,
+                    Choices = choices1
+                };
+
+                var quiz2 = new Quiz
+                {
+                    Title = "My Personal quiz",
+                    AssignedPoints = 10,
+                    DateCreated = DateTime.Now.Date,
+                    Creator = user2,
+                    Choices = choices2
+                };
+
+                context.Quizzes.AddRange(quiz1, quiz2);
+                context.SaveChanges();
+
+                var session2 = new Session
+                {
+                    TimeLimit = 150,
+                    DateCreated = new DateTime(2017, 11, 1),
+                    Results = new List<Result> {
+                        new Result
                         {
-                            new Choice
-                            {
-                                Title = "Choice1",
-                                Correctness = true,
-                            },
+                            Score = 15,
+                            SessionParticipant = user1,
+                            Choice = choice1
+                        },
 
-                            new Choice
-                            {
-                                Title = "Choice2",
-                                Correctness = false,
-                            },
-
-                            new Choice
-                            {
-                                Title = "Choice3",
-                                Correctness = false,
-                            },
-
-                            new Choice
-                            {
-                                Title = "Choice4",
-                                Correctness = false,
-                            },
+                        new Result
+                        {
+                            Score = 0,
+                            SessionParticipant = user2,
+                            Choice = choice2
                         }
                     },
+                    Quiz = quiz1
+                };
 
-                    new Quiz
-                    {
-                        Title = "My Personal quiz",
-                        AssignedPoints = 10,
-                        DateCreated = DateTime.Now.Date,
-                        Creator = user2,
-                        Choices = new List<Choice>
+                var session1 = new Session
+                {
+                    TimeLimit = 10,
+                    DateCreated = new DateTime(2017, 10, 22),
+                    Results = new List<Result> {
+                        new Result
                         {
-                            new Choice
-                            {
-                                Title = "Choice1",
-                                Correctness = false,
-                            },
+                            Score = 15,
+                            SessionParticipant = user2,
+                            Choice = choice3_alt
+                        },
 
-                            new Choice
-                            {
-                                Title = "Choice2",
-                                Correctness = false,
-                            },
-
-                            new Choice
-                            {
-                                Title = "Choice3",
-                                Correctness = true,
-                            },
-
-                            new Choice
-                            {
-                                Title = "Choice4",
-                                Correctness = false,
-                            },
+                        new Result
+                        {
+                            Score = 0,
+                            SessionParticipant = user1,
+                            Choice = choice1_alt
                         }
-                    }
-                );
+                    },
+                    Quiz = quiz2
+                };
+
+
+                context.Sessions.AddRange(session1, session2);
 
                 context.SaveChanges();
             }
