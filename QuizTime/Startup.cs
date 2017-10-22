@@ -27,6 +27,7 @@ namespace QuizTime
             services.AddDbContext<Context>(options => options.UseSqlServer(Configuration["Data:QuizTime:ConnectionString"]));
 
             services.AddMvc();
+            //services.AddMvc().AddJsonOptions(options => { options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Serialize; options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore; });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
