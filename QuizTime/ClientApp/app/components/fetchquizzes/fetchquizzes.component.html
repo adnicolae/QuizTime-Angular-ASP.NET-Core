@@ -1,16 +1,24 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>All Quizzes</title>
-</head>
-<body>
-    <ul>
-        <li [routerLinkActive] ="['link-active']">
-        <a [routerLink]="['/fetch-quizzes']"> Quiz 1</a></li>
-    </ul>
-    <div class="col-sm-3">
-        Quiiizz
-    </div>
-</body>
-</html>
+﻿<h1>Quizzes</h1>
+
+<p *ngIf="!quizzes"><em>Loading...</em></p>
+
+<table class='table table-striped' *ngIf="quizzes">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Points</th>
+            <th>Date</th>
+            <th>CreatedBy</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let quiz of quizzes">
+            <td>{{ quiz.quizId }}</td>
+            <td>{{ quiz.title }}</td>
+            <td>{{ quiz.assignedPoints }}</td>
+            <td>{{ quiz.dateCreated }}</td>
+            <td>{{ quiz.creator.username }}</td>
+        </tr>
+    </tbody>
+</table>

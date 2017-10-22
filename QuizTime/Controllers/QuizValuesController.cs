@@ -51,7 +51,7 @@ namespace QuizTime.Controllers
         public IEnumerable<Quiz> GetQuizzes(string search, int creatorId = 1, bool related = false)
         {
             IQueryable<Quiz> query = _context.Quizzes;
-            query = query.Where(q => q.Creator.UserId == creatorId);
+            //query = query.Where(q => q.Creator.UserId == creatorId);
 
             if (!string.IsNullOrWhiteSpace(search))
             {
