@@ -1,6 +1,7 @@
 ﻿import { Component, Inject } from "@angular/core";
 import { Quiz } from "../../models/quiz.model";
 import { Http } from '@angular/http';
+import { Repository } from "../../data/repository";
 
 @Component(
     {
@@ -10,11 +11,14 @@ import { Http } from '@angular/http';
 )
 
 export class FetchQuizzesComponent {
-    public quizzes: Quiz[];
 
-    constructor(http: Http, @Inject('BASE_URL') baseUrl: string) {
-        http.get(baseUrl + 'api/quizzes?related=true').subscribe(result => {
-            this.quizzes = result.json() as Quiz[];
-        }, error => console.error(error));
+    constructor(private repo: Repository) { }
+
+    get quiz(): Quiz {
+        return this.repo.quiz;
+    }
+
+    get quizzes(): Quiz[] {
+        return this.repo.quizzes;
     }
 }
