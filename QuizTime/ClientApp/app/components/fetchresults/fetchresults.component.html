@@ -2,21 +2,25 @@
 
 <p *ngIf="!results"><em>Loading...</em></p>
 
-<table class='table table-striped' *ngIf="results">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Participant</th>
-            <th>Score</th>
-            <th>Quiz Title</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let result of results">
-            <td>{{ result.resultId }}</td>
-            <td>{{ result.sessionParticipant.username }}</td>
-            <td>{{ result.score }}</td>
-            <td>{{ result.session.quiz.title }}</td>
-        </tr>
-    </tbody>
-</table>
+<div class="row">
+    <div class="col-sm-6">
+        <table class='table table-striped' *ngIf="results">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Participant</th>
+                    <th>Score</th>
+                    <th>Quiz Title</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let result of results">
+                    <td>{{ result.resultId }}</td>
+                    <td>{{ result.sessionParticipant.username }}</td>
+                    <td>{{ result.score }} out of {{ result.session.quiz.assignedPoints }}</td>
+                    <td>{{ result.session.quiz.title }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

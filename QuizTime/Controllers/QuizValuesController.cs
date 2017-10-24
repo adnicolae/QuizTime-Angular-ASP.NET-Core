@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using QuizTime.Data;
 using QuizTime.Models;
+using QuizTime.Models.BindingTargets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -90,6 +91,28 @@ namespace QuizTime.Controllers
             else
             {
                 return query;
+            }
+        }
+
+        [HttpPost]
+        public IActionResult CreateQuiz([FromBody] QuizData quizData)
+        {
+            if (ModelState.IsValid)
+            {
+                Quiz quiz = quizData.Quiz;
+
+                if (quiz.Creator != null && quiz.Creator.UserId != 0)
+                {
+                    _context.Attach(quiz.Creator);
+                }
+
+                _context.Add(quiz);
+                _context.SaveChanges();
+                return Ok(quiz.QuizId);
+            }
+            else
+            {
+                return BadRequest(ModelState);
             }
         }
     }

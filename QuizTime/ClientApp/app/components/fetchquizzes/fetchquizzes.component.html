@@ -2,23 +2,32 @@
 
 <p *ngIf="!quizzes"><em>Loading...</em></p>
 
-<table class='table table-striped' *ngIf="quizzes">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Title</th>
-            <th>Points</th>
-            <th>Date</th>
-            <th>CreatedBy</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let quiz of quizzes">
-            <td>{{ quiz.quizId }}</td>
-            <td>{{ quiz.title }}</td>
-            <td>{{ quiz.assignedPoints }}</td>
-            <td>{{ quiz.dateCreated }}</td>
-            <td>{{ quiz.creator.username }}</td>
-        </tr>
-    </tbody>
-</table>
+<div class="row">
+    <div class="col-sm-6">
+        <table class='table table-striped' *ngIf="quizzes">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Points</th>
+                    <th>Date</th>
+                    <th>Created By</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let quiz of quizzes">
+                    <td>{{ quiz.quizId }}</td>
+                    <td>{{ quiz.title }}</td>
+                    <td>{{ quiz.assignedPoints }}</td>
+                    <td>{{ quiz.dateCreated | date }}</td>
+                    <td>{{ quiz.creator.username }}</td>
+                    <td>
+                        <button class="btn btn-sm btn-default">Details</button>
+                        <button class="btn btn-sm btn-primary">Start Session</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
