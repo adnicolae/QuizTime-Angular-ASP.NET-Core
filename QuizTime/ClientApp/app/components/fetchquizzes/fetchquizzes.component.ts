@@ -21,4 +21,12 @@ export class FetchQuizzesComponent {
     get quizzes(): Quiz[] {
         return this.repo.quizzes;
     }
+
+    createQuiz() {
+        this.repo.createQuiz(new Quiz(0, "New CS130 Quiz", 15, new Date(), this.repo.quizzes[1].creator));
+    }
+
+    logSession() {
+        console.log("session created");
+    }
 }

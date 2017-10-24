@@ -12,6 +12,7 @@ import { FetchDataComponent } from './components/fetchdata/fetchdata.component';
 import { CounterComponent } from './components/counter/counter.component';
 import { FetchQuizzesComponent } from './components/fetchquizzes/fetchquizzes.component';
 import { FetchResultsComponent } from './components/fetchresults/fetchresults.component';
+import { SessionBoardComponent } from './components/sessionboard/sessionboard.component';
 
 @NgModule({
     declarations: [
@@ -21,6 +22,7 @@ import { FetchResultsComponent } from './components/fetchresults/fetchresults.co
         FetchDataComponent,
         FetchQuizzesComponent,
         FetchResultsComponent,
+        SessionBoardComponent,
         HomeComponent
     ],
     imports: [
@@ -35,6 +37,7 @@ import { FetchResultsComponent } from './components/fetchresults/fetchresults.co
             { path: 'fetch-data', component: FetchDataComponent },
             { path: 'fetch-quizzes', component: FetchQuizzesComponent },
             { path: 'fetch-results', component: FetchResultsComponent },
+            { path: 'session-board', component: SessionBoardComponent },
             { path: '**', redirectTo: 'home' }
         ])
     ]

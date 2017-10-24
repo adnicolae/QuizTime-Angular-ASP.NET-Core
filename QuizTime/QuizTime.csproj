@@ -23,6 +23,7 @@
   <ItemGroup>
     <None Remove="ClientApp\app\components\fetchquizzes\fetchquizzes.component.ts" />
     <None Remove="ClientApp\app\components\fetchresults\fetchresults.component.ts" />
+    <None Remove="ClientApp\app\components\sessionboard\sessionboard.component.ts" />
     <None Remove="ClientApp\app\data\config.repository.ts" />
     <None Remove="ClientApp\app\data\repository.module.ts" />
     <None Remove="ClientApp\app\data\repository.ts" />
@@ -36,6 +37,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\app\components\fetchquizzes\fetchquizzes.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\fetchresults\fetchresults.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\sessionboard\sessionboard.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\data\config.repository.ts" />
     <TypeScriptCompile Include="ClientApp\app\data\repository.module.ts" />
     <TypeScriptCompile Include="ClientApp\app\data\repository.ts" />

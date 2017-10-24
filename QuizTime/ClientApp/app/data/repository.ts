@@ -17,9 +17,11 @@ export class Repository {
     result: Result;
     quizzes: Quiz[];
     results: Result[];
+    private urlBase: string;
 
     constructor(private http: Http, @Inject('BASE_URL') baseUrl: string) {
         this.quizFilter.related = true;
+        this.urlBase = baseUrl;
         this.getQuizzes(baseUrl);
         this.getResults(baseUrl);
     }
@@ -58,6 +60,23 @@ export class Repository {
 
         this.sendRequest(RequestMethod.Get, url)
             .subscribe(response => this.results = response);
+    }
+
+    createQuiz(newQuiz: Quiz) {
+        let data = {
+            title: newQuiz.title,
+            assignedPoints: newQuiz.assignedPoints,
+            dateCreated: newQuiz.dateCreated,
+            creator: newQuiz.creator ? newQuiz.creator.userId : 0
+        };
+
+        let url = this.urlBase + quizzesUrl;
+
+        this.sendRequest(RequestMethod.Post, url, data)
+            .subscribe(response => {
+                newQuiz.quizId = response;
+                this.quizzes.push(newQuiz);
+            });
     }
 
     get resultFilter(): ResultFilter {
