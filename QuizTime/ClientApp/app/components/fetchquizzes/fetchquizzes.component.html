@@ -24,8 +24,8 @@
                     <td>{{ quiz.creator.username }}</td>
                     <td>
                         <button class="btn btn-sm btn-default">Details</button>
-                        <a [routerLink]="['/session-board']">
-                            <span class="btn btn-sm btn-primary" (click)="logSession()">Start Session</span>
+                        <a [routerLink]="['/session-board']" [queryParams]="quiz">
+                            <span class="btn btn-sm btn-primary" (click)="logSession(quiz)">Start Session</span>
                         </a>
 </td>
                 </tr>

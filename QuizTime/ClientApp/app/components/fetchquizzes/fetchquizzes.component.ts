@@ -26,7 +26,8 @@ export class FetchQuizzesComponent {
         this.repo.createQuiz(new Quiz(0, "New CS130 Quiz", 15, new Date(), this.repo.quizzes[1].creator));
     }
 
-    logSession() {
-        console.log("session created");
+    // handle session insertion
+    logSession(quiz: Quiz) {
+        console.log(quiz.quizId);
     }
 }
