@@ -1,6 +1,8 @@
 ﻿<h1>Session started</h1>
 
-<h2>Ask your participants to join session id: </h2>
+<!--<p *ngIf="!hostedSession"><em>Loading...</em></p>-->
+
+<h2>Ask your participants to join session id: {{ hostedSession?.generatedHostId }}  </h2>
 <h2>Press start when you're ready</h2>
 <button class="btn btn-primary">Start</button>
 
@@ -10,11 +12,11 @@
         <h2>0</h2>
     </div>
     <div class="col-sm-9">
-        <h2>Question title: {{ quiz.title }}</h2>
+        <h2>Question title: {{ hostedSession?.quiz.title }}</h2>
     </div>
 
     <div class="col-sm-2">
-        <h2>Max score: {{ quiz.assignedPoints }}</h2>
+        <h2>Max score: {{ hostedSession?.quiz.assignedPoints }}</h2>
     </div>
 </div>
 

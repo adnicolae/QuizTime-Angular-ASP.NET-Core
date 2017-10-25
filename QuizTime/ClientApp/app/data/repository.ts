@@ -49,7 +49,7 @@ export class Repository {
 
     getHostedSession(generatedHostId: number) {
         this.sendRequest(RequestMethod.Get, this.urlBase + sessionsUrl + "/host/" + generatedHostId)
-            .subscribe(response => { this.session = response; });
+            .subscribe(response => { this.hostedSession = response; });
     }
 
     getQuizzes(baseUrl: string, related = true) {
@@ -103,7 +103,7 @@ export class Repository {
     }
 
     createSession(newSession: Session) {
-        let data {
+        let data = {
             timeLimit: newSession.timeLimit,
             dateCreated: newSession.dateCreated,
             generatedHostId: newSession.generatedHostId,

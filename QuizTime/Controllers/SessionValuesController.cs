@@ -41,6 +41,13 @@ namespace QuizTime.Controllers
 
             return session;
         }
+        
+        [HttpGet]
+        public IEnumerable<Session> GetSessions()
+        {
+            IQueryable<Session> query = _context.Sessions;
+            return query;
+        }
 
         [HttpGet]
         [Route("host/{hostId:long}")]

@@ -8,7 +8,7 @@ export class Session {
         public dateCreated?: Date,
         public generatedHostId?: number,
         public status?: number,
-        public results?: Result[],
-        public quiz?: Quiz
+        public quiz?: Quiz,
+        public results?: Result[]
     ) { }
 }

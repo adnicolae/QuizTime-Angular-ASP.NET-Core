@@ -40,6 +40,7 @@ import { QuizDetailComponent } from './components/quizdetail/quizdetail.componen
             { path: 'fetch-quizzes', component: FetchQuizzesComponent },
             { path: 'fetch-results', component: FetchResultsComponent },
             { path: 'session-board', component: SessionBoardComponent },
+            { path: 'session-board/host/:id', component: SessionBoardComponent },
             { path: 'fetch-quizzes/detail', component: QuizDetailComponent },
             { path: 'fetch-quizzes/detail/:id', component: QuizDetailComponent },
             { path: '**', redirectTo: 'home' }
