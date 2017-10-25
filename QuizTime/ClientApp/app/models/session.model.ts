@@ -6,6 +6,8 @@ export class Session {
         public sessionId?: number,
         public timeLimit?: number,
         public dateCreated?: Date,
+        public generatedHostId?: number,
+        public status?: number,
         public results?: Result[],
         public quiz?: Quiz
     ) { }
