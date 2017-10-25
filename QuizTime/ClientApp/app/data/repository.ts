@@ -1,5 +1,6 @@
 ﻿import { Quiz } from "../models/quiz.model";
 import { Result } from "../models/result.model";
+import { Session } from "../models/session.model";
 import { Injectable, Inject } from "@angular/core";
 import { Http, RequestMethod, Request, Response } from "@angular/http";
 import { Observable } from "rxjs/Observable";
@@ -8,6 +9,7 @@ import { QuizFilter, ResultFilter } from "./config.repository";
 
 const quizzesUrl = "api/quizzes";
 const resultsUrl = "api/results";
+const sessionsUrl = "api/sessions";
 
 @Injectable()
 export class Repository {
@@ -15,8 +17,11 @@ export class Repository {
     private resultFilterObject = new ResultFilter();
     quiz: Quiz;
     result: Result;
+    session: Session;
+    hostedSession: Session;
     quizzes: Quiz[];
     results: Result[];
+    sessions: Session[];
     private urlBase: string;
 
     constructor(private http: Http, @Inject('BASE_URL') baseUrl: string) {
@@ -24,16 +29,27 @@ export class Repository {
         this.urlBase = baseUrl;
         this.getQuizzes(baseUrl);
         this.getResults(baseUrl);
+        this.getSessions();
     }
 
     getQuiz(id: number) {
-        this.sendRequest(RequestMethod.Get, quizzesUrl + "/" + id)
-            .subscribe(response => { this.quiz = response.json(); });
+        this.sendRequest(RequestMethod.Get, this.urlBase + quizzesUrl + "/" + id)
+            .subscribe(response => { this.quiz = response; });
     }
 
     getResult(id: number) {
-        this.sendRequest(RequestMethod.Get, resultsUrl + "/" + id)
-            .subscribe(response => { this.result = response.json(); });
+        this.sendRequest(RequestMethod.Get, this.urlBase + resultsUrl + "/" + id)
+            .subscribe(response => { this.result = response; });
+    }
+
+    getSession(id: number) {
+        this.sendRequest(RequestMethod.Get, this.urlBase + sessionsUrl + "/" + id)
+            .subscribe(response => { this.session = response; });
+    }
+
+    getHostedSession(generatedHostId: number) {
+        this.sendRequest(RequestMethod.Get, this.urlBase + sessionsUrl + "/host/" + generatedHostId)
+            .subscribe(response => { this.session = response; });
     }
 
     getQuizzes(baseUrl: string, related = true) {
@@ -62,6 +78,13 @@ export class Repository {
             .subscribe(response => this.results = response);
     }
 
+    getSessions() {
+        let url = this.urlBase + sessionsUrl;
+
+        this.sendRequest(RequestMethod.Get, url)
+            .subscribe(response => this.sessions = response);
+    }
+
     createQuiz(newQuiz: Quiz) {
         let data = {
             title: newQuiz.title,
@@ -76,6 +99,24 @@ export class Repository {
             .subscribe(response => {
                 newQuiz.quizId = response;
                 this.quizzes.push(newQuiz);
+            });
+    }
+
+    createSession(newSession: Session) {
+        let data {
+            timeLimit: newSession.timeLimit,
+            dateCreated: newSession.dateCreated,
+            generatedHostId: newSession.generatedHostId,
+            status: newSession.status,
+            quiz: newSession.quiz ? newSession.quiz.quizId : 0
+        };
+
+        let url = this.urlBase + sessionsUrl;
+
+        this.sendRequest(RequestMethod.Post, url, data)
+            .subscribe(response => {
+                newSession.sessionId = response;
+                this.sessions.push(newSession);
             });
     }
 

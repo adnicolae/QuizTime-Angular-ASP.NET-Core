@@ -23,10 +23,12 @@
                     <td>{{ quiz.dateCreated | date }}</td>
                     <td>{{ quiz.creator.username }}</td>
                     <td>
-                        <button class="btn btn-sm btn-default">Details</button>
-                        <a [routerLink]="['/session-board']" [queryParams]="quiz">
-                            <span class="btn btn-sm btn-primary" (click)="logSession(quiz)">Start Session</span>
-                        </a>
+                        <button class="btn btn-default btn-sm" [routerLink]="['/fetch-quizzes/detail', quiz.quizId]">
+                            Details
+                        </button>
+                        
+                            <span class="btn btn-sm btn-primary" (click)="selectQuiz(quiz.quizId)">Start Session</span>
+                        
 </td>
                 </tr>
             </tbody>
