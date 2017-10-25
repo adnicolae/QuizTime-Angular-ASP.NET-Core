@@ -119,7 +119,9 @@ namespace QuizTime.Data
                             Choice = choice2
                         }
                     },
-                    Quiz = quiz1
+                    Quiz = quiz1,
+                    Status = SessionStatus.Complete,
+                    GeneratedHostId = 1234
                 };
 
                 var session1 = new Session
@@ -141,7 +143,9 @@ namespace QuizTime.Data
                             Choice = choice1_alt
                         }
                     },
-                    Quiz = quiz2
+                    Quiz = quiz2,
+                    Status = SessionStatus.Complete,
+                    GeneratedHostId = 3456
                 };
 
 

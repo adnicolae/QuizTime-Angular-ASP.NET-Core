@@ -40,5 +40,15 @@ namespace QuizTime.Controllers
 
             return session;
         }
+
+        [HttpGet]
+        [Route("host/{hostId:long}")]
+        public Session GetHostedSession(long hostId)
+        {
+            Session session = _context.Sessions
+                .Include(s => s.Quiz)
+                .FirstOrDefault(s => (s.GeneratedHostId == hostId));
+            return session;
+        }
     }
 }

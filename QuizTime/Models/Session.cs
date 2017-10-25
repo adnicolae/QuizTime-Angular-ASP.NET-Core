@@ -11,6 +11,8 @@ namespace QuizTime.Models
         // time limit in seconds
         public int TimeLimit { get; set; }
         public DateTime DateCreated { get; set; }
+        public long GeneratedHostId { get; set; }
+        public SessionStatus Status { get; set; }
 
         // the results of all users that participated
         public ICollection<Result> Results { get; set; }
@@ -20,5 +22,13 @@ namespace QuizTime.Models
         //add enum with session status: Created / InProgress / Complete
         // signalr for: when a client/user joins a session, his name appears in the teacher's page immediately ( this might be solved with angular only )
         // signalr for: after the users joined the session and the teacher presses start session, the question and all it's quizzes should appear to those users connected to it
+    }
+
+    public enum SessionStatus
+    {
+        None,
+        Created,
+        InProgress,
+        Complete
     }
 }
