@@ -28,21 +28,30 @@ export class FetchQuizzesComponent {
         return this.repo.hostedSession;
     }
 
+    get sessions(): Session[] {
+        return this.repo.sessions;
+    }
+
     createQuiz() {
         this.repo.createQuiz(new Quiz(0, "New CS130 Quiz", 15, new Date(), this.repo.quizzes[1].creator));
     }
 
+
     selectQuiz(quizz: Quiz) {
         // generate random session id 
         var generatedId: number = parseInt(this.generatePin());
-
+        //console.log(this.sessions.map(s => JSON.stringify(s.quiz)));
+        //console.log(JSON.stringify(quizz));
         //TODO: add verification if a session for that quiz is already in status 1, then don't create a new one
+        if (JSON.stringify(this.quiz) === JSON.stringify(quizz)) {
+            console.log("already a session with quiz");
+        } else {
+            // create a new session
+            this.repo.createSession(new Session(0, 120, new Date(), generatedId, 1, quizz));
 
-        // create a new session
-        this.repo.createSession(new Session(0, 120, new Date(), generatedId, 1, quizz));
-
-        // go to "/session-board/host/{id}"
-        this.router.navigateByUrl("/session-board/host/" + generatedId);
+            // go to "/session-board/host/{id}"
+            this.router.navigateByUrl("/session-board/host/" + generatedId);
+        }
     }
 
     // handle session insertion

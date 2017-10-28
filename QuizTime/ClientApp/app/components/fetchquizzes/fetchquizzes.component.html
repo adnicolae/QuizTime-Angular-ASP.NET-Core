@@ -31,6 +31,22 @@
                 </tr>
             </tbody>
         </table>
+
+        <!--<table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>GeneratedHostId</th>
+                    <th>QuizId</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let session of sessions">
+                    <td>{{ session?.generatedHostId }}</td>
+                    <td>{{ session?.quiz?.quizId }}</td>
+                </tr>
+            </tbody>
+        </table>-->
+
         <button class="btn btn-primary m-1" (click)="createQuiz()">
             Create Quiz
         </button>

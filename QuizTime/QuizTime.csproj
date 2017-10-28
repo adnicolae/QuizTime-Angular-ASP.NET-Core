@@ -21,8 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\app\components\createquiz\createquiz.component.ts" />
     <None Remove="ClientApp\app\components\fetchquizzes\fetchquizzes.component.ts" />
     <None Remove="ClientApp\app\components\fetchresults\fetchresults.component.ts" />
+    <None Remove="ClientApp\app\components\joinsession\joinsession.component.ts" />
     <None Remove="ClientApp\app\components\quizdetail\quizdetail.component.ts" />
     <None Remove="ClientApp\app\components\sessionboard\sessionboard.component.ts" />
     <None Remove="ClientApp\app\data\config.repository.ts" />
@@ -36,8 +38,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\app\components\createquiz\createquiz.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\fetchquizzes\fetchquizzes.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\fetchresults\fetchresults.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\joinsession\joinsession.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\quizdetail\quizdetail.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\sessionboard\sessionboard.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\data\config.repository.ts" />

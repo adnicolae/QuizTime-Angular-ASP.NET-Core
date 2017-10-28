@@ -46,6 +46,9 @@ namespace QuizTime.Controllers
         public IEnumerable<Session> GetSessions()
         {
             IQueryable<Session> query = _context.Sessions;
+            query = query
+                .Include(s => s.Quiz);
+
             return query;
         }
 
