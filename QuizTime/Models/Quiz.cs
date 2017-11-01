@@ -19,6 +19,6 @@ namespace QuizTime.Models
         public DateTime DateCreated { get; set; }
 
         public User Creator { get; set; }
-        public ICollection<Choice> Choices { get; set; }
+        public List<Choice> Choices { get; set; }
     }
 }

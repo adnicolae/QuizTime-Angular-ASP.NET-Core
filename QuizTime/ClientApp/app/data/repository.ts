@@ -90,7 +90,7 @@ export class Repository {
             title: newQuiz.title,
             assignedPoints: newQuiz.assignedPoints,
             dateCreated: newQuiz.dateCreated,
-            creator: newQuiz.creator ? newQuiz.creator.userId : 0
+            creator: newQuiz.creator ? newQuiz.creator.userId : 0,
         };
 
         let url = this.urlBase + quizzesUrl;
@@ -100,6 +100,7 @@ export class Repository {
                 newQuiz.quizId = response;
                 this.quizzes.push(newQuiz);
             });
+        return newQuiz.quizId;
     }
 
     createSession(newSession: Session) {

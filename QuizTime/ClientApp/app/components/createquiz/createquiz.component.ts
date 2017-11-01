@@ -38,12 +38,36 @@ export class CreateQuizComponent {
     onSubmit() {
         const formModel = this.quizForm.value;
 
+        const saveQuiz: Quiz = {
+            quizId: 0,
+            title: formModel.title as string,
+            dateCreated: new Date(),
+            assignedPoints: formModel.assignedPoints as number,
+            creator: this.repo.quizzes[1].creator
+        };
+
+        this.repo.createQuiz(saveQuiz);
+
+        console.log(this.repo.quizzes[this.repo.quizzes.length - 1]);
+
+        const ch: any = formModel.choices.map((choice: Choice) => choice.choiceId = 0);
+
+        const ch2: any = formModel.choices.map((choice: Choice) => choice.quiz = this.repo.quizzes[this.repo.quizzes.length - 1]);
+
         const choicesCopy: Choice[] = formModel.choices.map(
-            (choice: Choice) => Object.assign({}, choice));
+            (choice: Choice) => Object.assign(new Choice(), choice));
 
 
+        for (var c in choicesCopy)
+        {
+            console.log(choicesCopy[c]);
+        }
 
-        this.repo.createQuiz(new Quiz(0, formModel.title as string, formModel.assignedPoints as number, new Date(), this.repo.quizzes[1].creator));
+        console.log(choicesCopy);
+        console.log(ch);
+        console.log("AFTER");
+        console.log(this.choiices);
+        console.log(formModel.choices as Choice[]);
     }
 
     createForm() {
