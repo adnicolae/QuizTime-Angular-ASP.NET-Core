@@ -1,6 +1,7 @@
 ﻿import { Quiz } from "../models/quiz.model";
 import { Result } from "../models/result.model";
 import { Session } from "../models/session.model";
+import { Choice } from "../models/choice.model";
 import { Injectable, Inject } from "@angular/core";
 import { Http, RequestMethod, Request, Response } from "@angular/http";
 import { Observable } from "rxjs/Observable";
@@ -10,6 +11,7 @@ import { QuizFilter, ResultFilter } from "./config.repository";
 const quizzesUrl = "api/quizzes";
 const resultsUrl = "api/results";
 const sessionsUrl = "api/sessions";
+const choicesUrl = "api/choices";
 
 @Injectable()
 export class Repository {
@@ -22,7 +24,8 @@ export class Repository {
     quizzes: Quiz[];
     results: Result[];
     sessions: Session[];
-    private urlBase: string;
+    latestQuiz: Quiz;
+    urlBase: string;
 
     constructor(private http: Http, @Inject('BASE_URL') baseUrl: string) {
         this.quizFilter.related = true;
@@ -35,6 +38,11 @@ export class Repository {
     getQuiz(id: number) {
         this.sendRequest(RequestMethod.Get, this.urlBase + quizzesUrl + "/" + id)
             .subscribe(response => { this.quiz = response; });
+    }
+
+    getLastQuiz() {
+        this.sendRequest(RequestMethod.Get, this.urlBase + quizzesUrl + "/last")
+            .subscribe(response => { this.latestQuiz = response });
     }
 
     getResult(id: number) {
@@ -90,7 +98,7 @@ export class Repository {
             title: newQuiz.title,
             assignedPoints: newQuiz.assignedPoints,
             dateCreated: newQuiz.dateCreated,
-            creator: newQuiz.creator ? newQuiz.creator.userId : 0,
+            creator: newQuiz.creator ? newQuiz.creator.userId : 0
         };
 
         let url = this.urlBase + quizzesUrl;
@@ -100,7 +108,21 @@ export class Repository {
                 newQuiz.quizId = response;
                 this.quizzes.push(newQuiz);
             });
-        return newQuiz.quizId;
+    }
+
+    createChoice(newChoice: Choice) {
+        let data = {
+            title: newChoice.title,
+            correctness: newChoice.correctness,
+            quiz: newChoice.quiz ? newChoice.quiz.quizId : 0
+        };
+
+        let url = this.urlBase + choicesUrl;
+
+        this.sendRequest(RequestMethod.Post, url, data)
+            .subscribe(response => {
+                newChoice.choiceId = response;
+            });
     }
 
     createSession(newSession: Session) {

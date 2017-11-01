@@ -12,25 +12,33 @@
                 <input class="form-control" formControlName="assignedPoints">
             </label>
         </div>
+        
         <div formArrayName="choices" class="well well-lg">
-            <div *ngFor="let choice of choices.controls; let i=index" [formGroupName]="i">
-                <h4>Choice #{{i+1}}</h4>
-                <div style="margin-left: 1em;">
-                    <div class="form-group">
-                        <label class="center-block">
-                        <input type="checkbox" formControlName="correctness" value="true" />
-                            <button (click)="removeChoice(i)" type="button">Remove</button>
-                            <input class="form-control" formControlName="title" />
-                        </label>
-                    </div>
+            <div class="row">
+                
+                    <div *ngFor="let choice of choices.controls; let i=index" [formGroupName]="i">
+                        <div class="col-md-3 center-block">
+                        <h4>Choice #{{i+1}}</h4>
+                        <div style="margin-left: 1em;">
+                            <div class="form-group">
+                                <label class="center-block">
+                                    <input type="checkbox" formControlName="correctness" value="true" class="checkbox-inline" />
+                                    <button (click)="removeChoice(i)" type="button" class="btn btn-sm btn-danger">X</button>
+                                    <input class="form-control hidden" formControlName="title" value="Choice"/>
+                                </label>
+                            </div>
+                        </div>
+                            </div>
+                    
+                </div>
+                        <button (click)="addChoice()" type="button" class="btn btn-lg btn-default">+</button>
                 </div>
             </div>
-            <button (click)="addChoice()" type="button">Add a new Choice</button>
-        </div>
         <button type="submit"
-                [disabled]="quizForm.pristine" class="btn btn-success">
-            Save
+                [disabled]="quizForm.pristine" class="btn btn-warning">
+            Confirm
         </button> 
+        <span class="btn btn-success" (click)="addChoices()">Save</span>
     </form>
 </div>
 

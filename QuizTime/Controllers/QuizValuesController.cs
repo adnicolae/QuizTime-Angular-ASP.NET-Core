@@ -47,6 +47,35 @@ namespace QuizTime.Controllers
 
             return quiz;
         }
+        [HttpGet]
+        [Route("last")]
+        public Quiz GetLastQuiz()
+        {
+            Quiz quiz = _context.Quizzes
+                .Include(q => q.Creator)
+                .Include(q => q.Choices)
+                .LastOrDefault();
+
+            if (quiz != null)
+            {
+                if (quiz.Choices != null)
+                {
+                    foreach (Choice choice in quiz.Choices)
+                    {
+                        choice.Quiz = null;
+                    }
+                }
+
+                if (quiz.Creator != null)
+                {
+                    quiz.Creator.QuizzesCreated = null;
+                    quiz.Creator.Results = null;
+                }
+            }
+
+            return quiz;
+        }
+
 
         [HttpGet]
         public IEnumerable<Quiz> GetQuizzes(string search, int creatorId = 1, bool related = false)

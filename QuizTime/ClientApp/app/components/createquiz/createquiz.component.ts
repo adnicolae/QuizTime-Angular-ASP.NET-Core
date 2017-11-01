@@ -3,6 +3,10 @@ import { FormControl, FormGroup, FormBuilder, Validators, FormArray } from '@ang
 import { Repository } from '../../data/repository';
 import { Quiz } from '../../models/quiz.model';
 import { Choice } from '../../models/choice.model';
+import { Injectable, Inject } from "@angular/core";
+import { Http, RequestMethod, Request, Response } from "@angular/http";
+import { Observable } from "rxjs/Observable";
+import "rxjs/add/operator/map";
 
 @Component({
     selector: 'create-quiz',
@@ -10,8 +14,11 @@ import { Choice } from '../../models/choice.model';
 })
 export class CreateQuizComponent {
     quizForm: FormGroup;
+    latestQuiz: Quiz;
+    private thisBaseUrl: string;
 
-    constructor(private formBuilder: FormBuilder, private repo: Repository) {
+    constructor(private formBuilder: FormBuilder, private repo: Repository, private http: Http, @Inject('BASE_URL') baseUrl: string) {
+        this.thisBaseUrl = baseUrl;
         this.createForm();
     }
 
@@ -25,6 +32,10 @@ export class CreateQuizComponent {
         return this.quizForm.get('choices') as FormArray;
     }
 
+    get quizzes(): Quiz[] {
+        return this.repo.quizzes;
+    }
+
     addChoice() {
         this.choices.push(this.formBuilder.group(new Choice()));
     }
@@ -32,8 +43,6 @@ export class CreateQuizComponent {
     removeChoice(index: number) {
         this.choices.removeAt(index);
     }
-
-    choiices : Choice[] = [new Choice(2310, 'titlu', false), new Choice(233, 'titlu2', true)];
 
     onSubmit() {
         const formModel = this.quizForm.value;
@@ -46,8 +55,32 @@ export class CreateQuizComponent {
             creator: this.repo.quizzes[1].creator
         };
 
-        this.repo.createQuiz(saveQuiz);
+        this.repo.createQuiz(saveQuiz); // add quiz to db and repository
 
+        console.log(this.quizzes); // shows newly added quiz
+        //this.wait(5000);
+        console.log();
+        var l = this.quizzes.length;
+        console.log(l);
+        console.log(this.repo.quizzes[this.repo.quizzes.length - 1]);
+        console.log(this.getLastElement()); // gets the length-2 instead of -1 (penultimate)
+        console.log(this.quizzes.slice(-1));
+    }
+
+    getLastElement() {
+        return this.quizzes[this.quizzes.length - 1];
+    }
+
+    wait(ms: number) {
+        var start = new Date().getTime();
+        var end = start;
+        while (end < start + ms) {
+            end = new Date().getTime();
+        }
+    }
+
+    addChoices() {
+        const formModel = this.quizForm.value;
         console.log(this.repo.quizzes[this.repo.quizzes.length - 1]);
 
         const ch: any = formModel.choices.map((choice: Choice) => choice.choiceId = 0);
@@ -56,18 +89,18 @@ export class CreateQuizComponent {
 
         const choicesCopy: Choice[] = formModel.choices.map(
             (choice: Choice) => Object.assign(new Choice(), choice));
-
-
-        for (var c in choicesCopy)
-        {
+        
+        for (var c in choicesCopy) {
+            //this.repo.createChoice(choicesCopy[c]);
+            var idx = parseInt(c) + 1;
+            choicesCopy.map((choice: Choice) => choice.title = "Choice " + idx.toString());
             console.log(choicesCopy[c]);
+            this.repo.createChoice(choicesCopy[c]);
         }
+    }
 
-        console.log(choicesCopy);
-        console.log(ch);
-        console.log("AFTER");
-        console.log(this.choiices);
-        console.log(formModel.choices as Choice[]);
+    showLastQuiz() {
+        console.log(this.repo.quizzes[this.repo.quizzes.length - 1]);
     }
 
     createForm() {
@@ -76,5 +109,18 @@ export class CreateQuizComponent {
             assignedPoints: '0',
             choices: this.formBuilder.array([]),
         });
+    }
+
+    getLastQuiz() {
+        this.sendRequest(RequestMethod.Get, this.repo.urlBase + "api/quizzes/last")
+            .subscribe(response => { this.latestQuiz = response });
+    }
+
+    private sendRequest(verb: RequestMethod, url: string, data?: any): Observable<any> {
+        return this.http.request(new Request({
+            method: verb,
+            url: url,
+            body: data
+        })).map(response => response.json());
     }
 }
