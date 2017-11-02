@@ -34,6 +34,7 @@
                         <button (click)="addChoice()" type="button" class="btn btn-lg btn-default">+</button>
                 </div>
             </div>
+        <p>Note: Please Confirm then Save for the correct insertion of the quiz!</p>
         <button type="submit"
                 [disabled]="quizForm.pristine" class="btn btn-warning">
             Confirm
@@ -42,6 +43,22 @@
     </form>
 </div>
 
-<p>Form value: {{ quizForm.value | json }}</p>
+<div class="col-sm-6">
+    <h2>Preview</h2>
+
+    <h3>{{ quizForm.get('title').value }}</h3>
+    <h4>Maximum points: {{ quizForm.get('assignedPoints').value }}</h4>
+    <div class="col-sm-3">
+    <div *ngFor="let choice of quizForm.get('choices').value; let i = index">
+        <div class="col-sm-6" style="background-color:orange;">
+            <p>Choice # {{ i+1 }}</p>
+            <span *ngIf="choice.correctness == true" style="color:forestgreen;"><strong>Correct</strong></span>
+            <span *ngIf="choice.correctness != true" style="color:red;"><strong>Wrong</strong></span>
+        </div>
+    </div>
+        </div>
+</div>
+
+<!--<p>Form value: {{ quizForm.value | json }}</p>
 <p>Form status: {{ quizForm.status | json }}</p>
-<p>Quiz Title: {{ quizForm.get('title').value }}</p>
+<p>Quiz Title: {{ quizForm.get('title').value }}</p>-->
