@@ -17,6 +17,7 @@ import { SessionBoardComponent } from './components/sessionboard/sessionboard.co
 import { QuizDetailComponent } from './components/quizdetail/quizdetail.component';
 import { JoinSessionComponent } from './components/joinsession/joinsession.component';
 import { CreateQuizComponent } from './components/createquiz/createquiz.component';
+import { QuizCreatedComponent } from './components/createquiz/quizcreated.component';
 
 @NgModule({
     declarations: [
@@ -30,6 +31,7 @@ import { CreateQuizComponent } from './components/createquiz/createquiz.componen
         QuizDetailComponent,
         JoinSessionComponent,
         CreateQuizComponent,
+        QuizCreatedComponent,
         HomeComponent
     ],
     imports: [
@@ -45,6 +47,7 @@ import { CreateQuizComponent } from './components/createquiz/createquiz.componen
             { path: 'fetch-data', component: FetchDataComponent },
             { path: 'fetch-quizzes', component: FetchQuizzesComponent },
             { path: 'new/quiz', component: CreateQuizComponent },
+            { path: 'new/quiz/created', component: QuizCreatedComponent },
             { path: 'fetch-results', component: FetchResultsComponent },
             { path: 'session-board', component: SessionBoardComponent },
             { path: 'session-board/host/:id', component: SessionBoardComponent },

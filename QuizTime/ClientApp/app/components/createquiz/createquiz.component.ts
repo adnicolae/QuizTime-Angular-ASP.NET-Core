@@ -7,6 +7,7 @@ import { Injectable, Inject } from "@angular/core";
 import { Http, RequestMethod, Request, Response } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/map";
+import { Router } from "@angular/router";
 
 @Component({
     selector: 'create-quiz',
@@ -17,7 +18,7 @@ export class CreateQuizComponent {
     latestQuiz: Quiz;
     private thisBaseUrl: string;
 
-    constructor(private formBuilder: FormBuilder, private repo: Repository, private http: Http, @Inject('BASE_URL') baseUrl: string) {
+    constructor(private router: Router, private formBuilder: FormBuilder, private repo: Repository, private http: Http, @Inject('BASE_URL') baseUrl: string) {
         this.thisBaseUrl = baseUrl;
         this.createForm();
     }
@@ -97,6 +98,8 @@ export class CreateQuizComponent {
             console.log(choicesCopy[c]);
             this.repo.createChoice(choicesCopy[c]);
         }
+
+        this.router.navigateByUrl("/new/quiz/created" );
     }
 
     showLastQuiz() {
