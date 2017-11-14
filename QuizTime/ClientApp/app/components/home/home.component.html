@@ -6,6 +6,10 @@
             <h2>Actions</h2>
             <button class="btn btn-primary" [routerLink]="['/new/quiz']">New Quiz</button>
             <button class="btn btn-warning" [routerLink]="['/join-session']">Join Quiz Session</button>
+
+            <div *ngFor="let result of hostedSession?.results">
+            {{ result.sessionParticipant.username }}
+                </div>
         </div>
         <div class="col-sm-5">
             <h2>Recent Results</h2>

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using QuizTime.Data;
 using QuizTime.Models;
+using QuizTime.Models.BindingTargets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -102,7 +103,39 @@ namespace QuizTime.Controllers
             {
                 return query;
             }
+        }
 
+        [HttpPost]
+        public IActionResult CreateResult([FromBody] ResultData resultData)
+        {
+            if (ModelState.IsValid)
+            {
+                Result result = resultData.Result;
+
+                if (result.SessionParticipant != null && result.SessionParticipant.Username.Length > 0)
+                {
+                    _context.Attach(result.SessionParticipant);
+                }
+
+                if (result.Session != null && result.Session.SessionId != 0)
+                {
+                    _context.Attach(result.Session);
+                }
+
+                if (result.Choice != null && result.Choice.ChoiceId != 0)
+                {
+                    _context.Attach(result.Choice);
+                }
+
+                _context.Add(result);
+                _context.SaveChanges();
+
+                return Ok(result.ResultId);
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
         }
     }
 }

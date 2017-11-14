@@ -25,6 +25,7 @@ namespace QuizTime.Controllers
         {
             Session session = _context.Sessions
                 .Include(s => s.Results)
+                    .ThenInclude(r => r.SessionParticipant)
                 .Include(s => s.Quiz)
                 .FirstOrDefault(s => s.SessionId == id);
 
@@ -35,6 +36,7 @@ namespace QuizTime.Controllers
                     foreach (Result result in session.Results)
                     {
                         result.Session = null;
+                        result.SessionParticipant.Results = null;
                     }
                 }
             }
@@ -57,8 +59,23 @@ namespace QuizTime.Controllers
         public Session GetHostedSession(long hostId)
         {
             Session session = _context.Sessions
+                .Include(s => s.Results)
+                    .ThenInclude(r => r.SessionParticipant)
                 .Include(s => s.Quiz)
                 .FirstOrDefault(s => (s.GeneratedHostId == hostId));
+
+            if (session != null)
+            {
+                if (session.Results != null)
+                {
+                    foreach (Result result in session.Results)
+                    {
+                        result.Session = null;
+                        result.SessionParticipant.Results = null;
+                    }
+                }
+            }
+
             return session;
         }
 

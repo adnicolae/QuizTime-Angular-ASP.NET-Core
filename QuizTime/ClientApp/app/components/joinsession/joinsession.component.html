@@ -1,3 +1,25 @@
 ﻿<h1>Join session</h1>
 
 <h4>Fill the field below with the session id</h4>
+
+<div class="row">
+    <div class="col-md-4">
+        <form>
+            <div class="form-group">
+                <label for="sessionId">Session ID</label>
+                <input type="text" class="form-control" name="sessionId" [(ngModel)]="hostedSessionId" />
+            </div>
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" name="username" [(ngModel)] = "username" />
+            </div>
+
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Join" />
+            </div>
+        </form>
+    </div>
+</div>
+
+{{ sessionId }}

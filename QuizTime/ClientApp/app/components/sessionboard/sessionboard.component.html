@@ -21,7 +21,8 @@
 </div>
 
 <div class="row">
-    <ul>
-        <li>user1</li>
+    <h3>Already in</h3>
+    <ul *ngFor="let result of hostedSession?.results">
+        <li>{{ result.sessionParticipant.username }}</li>
     </ul>
 </div>
