@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using QuizTime.Data;
 using Microsoft.EntityFrameworkCore;
+using QuizTime.Hubs;
 
 namespace QuizTime
 {
@@ -25,6 +26,8 @@ namespace QuizTime
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<Context>(options => options.UseSqlServer(Configuration["Data:QuizTime:ConnectionString"]));
+
+            services.AddSignalR();
 
             //services.AddMvc();
             services.AddMvc().AddJsonOptions(options => { options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Serialize; options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore; });
@@ -47,6 +50,12 @@ namespace QuizTime
             }
 
             app.UseStaticFiles();
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<QuizHub>("quiz");
+                routes.MapHub<SessionBoardHub>("boardhub");
+            });
 
             app.UseMvc(routes =>
             {

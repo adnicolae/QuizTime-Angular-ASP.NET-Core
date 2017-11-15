@@ -20,9 +20,16 @@
     </div>
 </div>
 
-<div class="row">
+<!--<div *ngIf="!participants" class="row">
     <h3>Already in</h3>
     <ul *ngFor="let result of hostedSession?.results">
         <li>{{ result.sessionParticipant.username }}</li>
     </ul>
+</div>-->
+
+<div class="row">
+    <h3>Already in session</h3>
+    <ul *ngFor="let participant of participants">
+        <li>{{ participant }}</li>
+    </ul> 
 </div>

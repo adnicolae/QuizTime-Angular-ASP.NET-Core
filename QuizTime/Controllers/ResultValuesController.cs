@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using QuizTime.Data;
+using QuizTime.Hubs;
 using QuizTime.Models;
 using QuizTime.Models.BindingTargets;
 using System;
@@ -14,9 +16,14 @@ namespace QuizTime.Controllers
     public class ResultValuesController : Controller
     {
         private Context _context;
-        public ResultValuesController(Context context)
+        private IHubContext<QuizHub> _quizHubContext;
+        private IHubContext<SessionBoardHub> _boardHubContext;
+
+        public ResultValuesController(Context context, IHubContext<QuizHub> quizHubContext, IHubContext<SessionBoardHub> boardHubContext)
         {
             _context = context;
+            _quizHubContext = quizHubContext;
+            _boardHubContext = boardHubContext;
         }
         
         [HttpGet("{id}")]
@@ -129,6 +136,10 @@ namespace QuizTime.Controllers
 
                 _context.Add(result);
                 _context.SaveChanges();
+
+                _quizHubContext.Clients.All.InvokeAsync("send", "Hello, player " + result.SessionParticipant.Username + " joined session " + result.Session);
+
+                _boardHubContext.Clients.All.InvokeAsync("send", result.SessionParticipant.Username);
 
                 return Ok(result.ResultId);
             }
