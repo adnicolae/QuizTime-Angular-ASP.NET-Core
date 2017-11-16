@@ -45,6 +45,7 @@
     <TypeScriptCompile Include="ClientApp\app\components\fetchquizzes\fetchquizzes.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\fetchresults\fetchresults.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\joinsession\joinsession.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\joinsession\participantboard.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\quizdetail\quizdetail.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\sessionboard\sessionboard.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\data\config.repository.ts" />

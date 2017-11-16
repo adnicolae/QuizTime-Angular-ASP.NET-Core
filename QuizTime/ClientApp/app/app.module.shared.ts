@@ -5,6 +5,7 @@ import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { RepositoryModule } from './data/repository.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CookieModule } from 'ngx-cookie';
 
 import { AppComponent } from './components/app/app.component';
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
@@ -16,6 +17,7 @@ import { FetchResultsComponent } from './components/fetchresults/fetchresults.co
 import { SessionBoardComponent } from './components/sessionboard/sessionboard.component';
 import { QuizDetailComponent } from './components/quizdetail/quizdetail.component';
 import { JoinSessionComponent } from './components/joinsession/joinsession.component';
+import { ParticipantBoardComponent } from './components/joinsession/participantboard.component';
 import { CreateQuizComponent } from './components/createquiz/createquiz.component';
 import { QuizCreatedComponent } from './components/createquiz/quizcreated.component';
 
@@ -32,6 +34,7 @@ import { QuizCreatedComponent } from './components/createquiz/quizcreated.compon
         JoinSessionComponent,
         CreateQuizComponent,
         QuizCreatedComponent,
+        ParticipantBoardComponent,
         HomeComponent
     ],
     imports: [
@@ -40,6 +43,7 @@ import { QuizCreatedComponent } from './components/createquiz/quizcreated.compon
         FormsModule,
         ReactiveFormsModule,
         RepositoryModule,
+        CookieModule.forRoot(),
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
@@ -51,6 +55,7 @@ import { QuizCreatedComponent } from './components/createquiz/quizcreated.compon
             { path: 'fetch-results', component: FetchResultsComponent },
             { path: 'session-board', component: SessionBoardComponent },
             { path: 'session-board/host/:id', component: SessionBoardComponent },
+            { path: 'session-board/participant/:id', component: ParticipantBoardComponent },
             { path: 'join', component: JoinSessionComponent },
             { path: 'fetch-quizzes/detail', component: QuizDetailComponent },
             { path: 'fetch-quizzes/detail/:id', component: QuizDetailComponent },

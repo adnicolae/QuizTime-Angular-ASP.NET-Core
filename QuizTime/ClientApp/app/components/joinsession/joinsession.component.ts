@@ -2,6 +2,8 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Repository } from "../../data/repository";
 import { Result } from '../../models/result.model';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie';
 
 @Component({
     selector: 'join-session',
@@ -10,7 +12,7 @@ import { Result } from '../../models/result.model';
 export class JoinSessionComponent {
     joinForm: FormGroup;
 
-    constructor(private fb: FormBuilder, private repo: Repository) {
+    constructor(private fb: FormBuilder, private repo: Repository, private router: Router, private cookieService: CookieService) {
         this.createForm();
     }
 
@@ -34,5 +36,13 @@ export class JoinSessionComponent {
         
 
         this.repo.createResult(0, formModel.username as string, this.repo.hostedSession.sessionId as number);
+
+        this.putCookie("participantName", formModel.username as string);
+
+        this.router.navigateByUrl("/session-board/participant/" + parseInt(formModel.hostedSessionId));
+    }
+
+    putCookie(key: string, value: string) {
+        return this.cookieService.put(key, value);
     }
 }

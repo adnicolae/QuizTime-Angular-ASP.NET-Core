@@ -62,6 +62,7 @@ namespace QuizTime.Controllers
                 .Include(s => s.Results)
                     .ThenInclude(r => r.SessionParticipant)
                 .Include(s => s.Quiz)
+                    .ThenInclude(q => q.Choices)
                 .FirstOrDefault(s => (s.GeneratedHostId == hostId));
 
             if (session != null)
@@ -72,6 +73,14 @@ namespace QuizTime.Controllers
                     {
                         result.Session = null;
                         result.SessionParticipant.Results = null;
+                    }
+                }
+
+                if (session.Quiz != null)
+                {
+                    foreach (Choice choice in session.Quiz.Choices)
+                    {
+                        choice.Quiz = null;
                     }
                 }
             }
