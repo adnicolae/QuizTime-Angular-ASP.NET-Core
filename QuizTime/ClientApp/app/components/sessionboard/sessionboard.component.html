@@ -2,9 +2,9 @@
 
 <!--<p *ngIf="!hostedSession"><em>Loading...</em></p>-->
 
-<h2>Ask your participants to join session id: {{ hostedSession?.generatedHostId }} {{ hostedSession?.status }} </h2>
+<h2>Ask your participants to join session id: {{ hostedSession?.generatedHostId }} {{ currentStatus}} </h2>
 <h2>Press start when you're ready</h2>
-<button class="btn btn-primary">Start</button>
+<button class="btn btn-primary" (click)="updateSession()">Start</button>
 
 <div class="row">
     <div class="col-sm-2">

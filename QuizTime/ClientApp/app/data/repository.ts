@@ -156,6 +156,17 @@ export class Repository {
             });
     }
 
+    updateSession(id: number, changes: Map<string, any>) {
+        let patch: any[] = [];
+        changes.forEach((value, key) =>
+            patch.push({ op: "replace", path: key, value: value }));
+
+        let url = this.urlBase + sessionsUrl;
+
+        this.sendRequest(RequestMethod.Patch, url + "/" + id, patch)
+            .subscribe(response => this.getSessions());
+    }
+
     get resultFilter(): ResultFilter {
         return this.resultFilterObject;
     }

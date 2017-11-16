@@ -14,6 +14,7 @@ export class SessionBoardComponent {
     private _hubConnection: HubConnection;
     participant = '';
     participants: string[] = [];
+    currentStatus: number = 1;
 
     constructor(
         private repo: Repository,
@@ -48,6 +49,13 @@ export class SessionBoardComponent {
             .catch(err => {
                 console.log("error while establishing hub connection")
             });
+    }
+
+    updateSession() {
+        let changes = new Map<string, any>();
+        changes.set("status", "2");
+        this.repo.updateSession(this.hostedSession.sessionId as number, changes);
+        this.currentStatus = 1;
     }
 
     get hostedSession(): Session {
