@@ -125,6 +125,19 @@ export class Repository {
             });
     }
 
+    createResult(score: number, participant: string, session: number) {
+        let data = {
+            score: score,
+            sessionParticipant: participant,
+            session: session
+        };
+
+        let url = this.urlBase + resultsUrl;
+
+        this.sendRequest(RequestMethod.Post, url, data)
+            .subscribe();
+    }
+
     createSession(newSession: Session) {
         let data = {
             timeLimit: newSession.timeLimit,

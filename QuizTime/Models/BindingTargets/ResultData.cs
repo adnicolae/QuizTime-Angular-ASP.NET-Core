@@ -24,7 +24,7 @@ namespace QuizTime.Models.BindingTargets
             },
             Session = Session == 0 ? null : new Session
             {
-                SessionId = Session
+                GeneratedHostId = Session
             },
             Choice = Choice == 0 ? null : new Choice
             {
