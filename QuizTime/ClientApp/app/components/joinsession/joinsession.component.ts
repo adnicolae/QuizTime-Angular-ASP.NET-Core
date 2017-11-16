@@ -4,6 +4,8 @@ import { Repository } from "../../data/repository";
 import { Result } from '../../models/result.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie';
+import { Http, Response } from '@angular/http';
+import { Observable } from 'rxjs/Rx';
 
 @Component({
     selector: 'join-session',

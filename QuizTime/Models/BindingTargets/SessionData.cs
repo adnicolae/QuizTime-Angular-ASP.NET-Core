@@ -9,26 +9,32 @@ namespace QuizTime.Models.BindingTargets
     public class SessionData
     {
         [Required]
-        public int TimeLimit { get; set; }
+        public int TimeLimit { get => Session.TimeLimit; set => Session.TimeLimit = value; }
 
         [Required]
-        public DateTime DateCreated { get; set; }
+        public DateTime DateCreated { get => Session.DateCreated; set => Session.DateCreated = value; }
 
         [Range(0, 9999, ErrorMessage = "Generated id should be less than 9999")]
-        public long GeneratedHostId { get; set; }
+        public long GeneratedHostId { get => Session.GeneratedHostId; set => Session.GeneratedHostId = value; }
 
         [Required]
-        public SessionStatus Status { get; set; }
+        public SessionStatus Status { get => Session.Status; set => Session.Status = value; }
 
-        public long Quiz { get; set; }
+        public long? Quiz { get => Session.Quiz?.QuizId ?? null; set {
+                if (!value.HasValue)
+                {
+                    Session.Quiz = null;
+                } else
+                {
+                    if (Session.Quiz == null)
+                    {
+                        Session.Quiz = new Quiz();
+                    }
+                    Session.Quiz.QuizId = value.Value;
+                }
+            }
+        }
 
-        public Session Session => new Session
-        {
-            TimeLimit = TimeLimit,
-            DateCreated = DateCreated,
-            GeneratedHostId = GeneratedHostId,
-            Status = SessionStatus.Created,
-            Quiz = Quiz == 0 ? null : new Quiz { QuizId = Quiz }
-        };
+        public Session Session { get; set; } = new Session();
     }
 }
