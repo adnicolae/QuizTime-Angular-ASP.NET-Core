@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuizTime.Data;
 using QuizTime.Models;
@@ -104,6 +105,37 @@ namespace QuizTime.Controllers
                 return Ok(s.SessionId);
             }
             else
+            {
+                return BadRequest(ModelState);
+            }
+        }
+
+        /// <summary>
+        /// Method used to update an existing session record.
+        /// </summary>
+        /// <param name="id">The id used to identify the session that is being modified.</param>
+        /// <param name="patch">The JSON Patch document.</param>
+        /// <returns>200 if the request was correct, 500 otherwise</returns>
+        [HttpPatch("{id}")]
+        public IActionResult UpdateSession(long id, [FromBody]JsonPatchDocument<SessionData> patch)
+        {
+            Session session = _context.Sessions
+                .Include(s => s.Quiz)
+                .First(s => s.SessionId == id);
+
+            SessionData sessionData = new SessionData { Session = session };
+
+            patch.ApplyTo(sessionData, ModelState);
+
+            if (ModelState.IsValid && TryValidateModel(sessionData))
+            {
+                if (session.Quiz != null && session.Quiz.QuizId != 0)
+                {
+                    _context.Attach(session.Quiz);
+                }
+                _context.SaveChanges();
+                return Ok();
+            } else
             {
                 return BadRequest(ModelState);
             }
