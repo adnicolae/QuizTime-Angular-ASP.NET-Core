@@ -16,6 +16,7 @@ import { Router } from "@angular/router";
 export class CreateQuizComponent {
     quizForm: FormGroup;
     latestQuiz: Quiz;
+    quizTimeLimit: number = 30;
     private thisBaseUrl: string;
 
     constructor(private router: Router, private formBuilder: FormBuilder, private repo: Repository, private http: Http, @Inject('BASE_URL') baseUrl: string) {
@@ -51,8 +52,10 @@ export class CreateQuizComponent {
         const saveQuiz: Quiz = {
             quizId: 0,
             title: formModel.title as string,
+            timeLimit: this.quizTimeLimit,
             dateCreated: new Date(),
             assignedPoints: formModel.assignedPoints as number,
+            deducedPoints: formModel.deducedPoints as number,
             creator: this.repo.quizzes[1].creator
         };
 
@@ -109,7 +112,9 @@ export class CreateQuizComponent {
     createForm() {
         this.quizForm = this.formBuilder.group({
             title: ['', Validators.required],
+            timeLimit: '30',
             assignedPoints: '0',
+            deducedPoints: '0',
             choices: this.formBuilder.array([]),
         });
     }
@@ -117,6 +122,14 @@ export class CreateQuizComponent {
     getLastQuiz() {
         this.sendRequest(RequestMethod.Get, this.repo.urlBase + "api/quizzes/last")
             .subscribe(response => { this.latestQuiz = response });
+    }
+
+    increaseTimeLimit() {
+        this.quizTimeLimit += 30;
+    }
+
+    decreaseTimeLimit() {
+        this.quizTimeLimit -= 30;
     }
 
     private sendRequest(verb: RequestMethod, url: string, data?: any): Observable<any> {

@@ -18,7 +18,7 @@ export class QuizCreatedComponent {
     createSession() {
         var generatedId: number = parseInt(this.generatePin());
 
-        this.repo.createSession(new Session(0, 120, new Date(), generatedId, 1, this.repo.quizzes[this.repo.quizzes.length - 1]));
+        this.repo.createSession(new Session(0, new Date(), generatedId, 1, this.repo.quizzes[this.repo.quizzes.length - 1]));
 
         this.router.navigateByUrl("/session-board/host/" + generatedId);
     }

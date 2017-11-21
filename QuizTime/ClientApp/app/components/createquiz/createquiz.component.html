@@ -7,9 +7,24 @@
                 Title:
                 <input class="form-control" formControlName="title">
             </label>
-            <label class="center-block">
-                Points:
-                <input class="form-control" formControlName="assignedPoints">
+        </div>
+        <label class="center-block">
+            Points:
+        </label>
+        <div class="form-group form-inline">
+            <label>
+                (+):
+                <input class="form-control small" formControlName="assignedPoints">
+            </label>
+            <label>
+                (-):
+                <input class="form-control small" formControlName="deducedPoints">
+            </label>
+            <label>
+                Time limit:
+                <strong style="font-size:2em;">{{ quizTimeLimit }}</strong>
+                <span class="btn btn-danger" (click)="decreaseTimeLimit()">-</span>
+                <span class="btn btn-success" (click)="increaseTimeLimit()">+</span>
             </label>
         </div>
         

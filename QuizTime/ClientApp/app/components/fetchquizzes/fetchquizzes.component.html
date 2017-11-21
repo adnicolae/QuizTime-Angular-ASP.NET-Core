@@ -3,13 +3,15 @@
 <p *ngIf="!quizzes"><em>Loading...</em></p>
 
 <div class="row">
-    <div class="col-sm-6">
+    <div class="col-sm-8">
         <table class='table table-striped' *ngIf="quizzes">
             <thead>
                 <tr>
                     <th>Id</th>
                     <th>Title</th>
-                    <th>Points</th>
+                    <th>Time Limit</th>
+                    <th>+ Points</th>
+                    <th>- Points</th>
                     <th>Date</th>
                     <th>Created By</th>
                     <th></th>
@@ -19,7 +21,9 @@
                 <tr *ngFor="let quiz of quizzes">
                     <td>{{ quiz.quizId }}</td>
                     <td>{{ quiz.title }}</td>
+                    <td>{{ quiz.timeLimit }}</td>
                     <td>{{ quiz.assignedPoints }}</td>
+                    <td>{{ quiz.deducedPoints }}</td>
                     <td>{{ quiz.dateCreated | date }}</td>
                     <td>{{ quiz.creator.username }}</td>
                     <td>
@@ -47,8 +51,5 @@
             </tbody>
         </table>-->
 
-        <button class="btn btn-primary m-1" (click)="createQuiz()">
-            Create Quiz
-        </button>
     </div>
 </div>

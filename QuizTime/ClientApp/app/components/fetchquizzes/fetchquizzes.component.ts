@@ -37,11 +37,6 @@ export class FetchQuizzesComponent {
         return this.repo.sessions;
     }
 
-    createQuiz() {
-        this.repo.createQuiz(new Quiz(0, "New CS130 Quiz", 15, new Date(), this.repo.quizzes[1].creator));
-    }
-
-
     selectQuiz(quizz: Quiz) {
         // generate random session id 
         var generatedId: number = parseInt(this.generatePin());
@@ -52,7 +47,7 @@ export class FetchQuizzesComponent {
             console.log("already a session with quiz");
         } else {
             // create a new session
-            this.repo.createSession(new Session(0, 120, new Date(), generatedId, 1, quizz));
+            this.repo.createSession(new Session(0, new Date(), generatedId, 1, quizz));
 
             // go to "/session-board/host/{id}"
             this.router.navigateByUrl("/session-board/host/" + generatedId);
