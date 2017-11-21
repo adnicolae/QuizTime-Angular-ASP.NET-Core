@@ -82,7 +82,9 @@ namespace QuizTime.Data
                 var quiz1 = new Quiz
                 {
                     Title = "CS130 First Quiz",
+                    TimeLimit = 120,
                     AssignedPoints = 15,
+                    DeducedPoints = 5,
                     DateCreated = DateTime.Now.Date,
                     Creator = user1,
                     Choices = choices1
@@ -91,7 +93,9 @@ namespace QuizTime.Data
                 var quiz2 = new Quiz
                 {
                     Title = "My Personal quiz",
+                    TimeLimit = 60,
                     AssignedPoints = 10,
+                    DeducedPoints = 10,
                     DateCreated = DateTime.Now.Date,
                     Creator = user2,
                     Choices = choices2
