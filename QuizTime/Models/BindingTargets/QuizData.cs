@@ -29,7 +29,9 @@ namespace QuizTime.Models.BindingTargets
         public Quiz Quiz => new Quiz
         {
             Title = Title,
+            TimeLimit = TimeLimit,
             AssignedPoints = AssignedPoints,
+            DeducedPoints = DeducedPoints,
             DateCreated = DateCreated,
             Creator = Creator == 0 ? null : new User
             {
