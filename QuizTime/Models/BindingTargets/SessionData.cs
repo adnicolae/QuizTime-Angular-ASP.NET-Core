@@ -9,9 +9,6 @@ namespace QuizTime.Models.BindingTargets
     public class SessionData
     {
         [Required]
-        public int TimeLimit { get => Session.TimeLimit; set => Session.TimeLimit = value; }
-
-        [Required]
         public DateTime DateCreated { get => Session.DateCreated; set => Session.DateCreated = value; }
 
         [Range(0, 9999, ErrorMessage = "Generated id should be less than 9999")]
