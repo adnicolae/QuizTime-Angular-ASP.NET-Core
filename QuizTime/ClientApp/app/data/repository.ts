@@ -96,7 +96,9 @@ export class Repository {
     createQuiz(newQuiz: Quiz) {
         let data = {
             title: newQuiz.title,
+            timeLimit: newQuiz.timeLimit,
             assignedPoints: newQuiz.assignedPoints,
+            deducedPoints: newQuiz.deducedPoints,
             dateCreated: newQuiz.dateCreated,
             creator: newQuiz.creator ? newQuiz.creator.userId : 0
         };
@@ -140,7 +142,6 @@ export class Repository {
 
     createSession(newSession: Session) {
         let data = {
-            timeLimit: newSession.timeLimit,
             dateCreated: newSession.dateCreated,
             generatedHostId: newSession.generatedHostId,
             status: newSession.status,
