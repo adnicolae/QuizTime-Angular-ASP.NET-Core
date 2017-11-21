@@ -1,9 +1,26 @@
-﻿<h3>Hi {{ participant }}</h3>
+﻿<div *ngIf="hostedSession?.status == 1 && result == ''">
+    <h3>Hi {{ participant }}</h3>
 
-<h2>We're waiting for others to join in! ({{ hostedSession?.generatedHostId}})</h2>
+    <h2>We're waiting for others to join in! ({{ hostedSession?.generatedHostId}})</h2>
+</div>
 
-<!--<div>
-    <ul *ngFor="let choice of hostedSession?.quiz.choices">
-        <li>{{ choice?.title }}</li>
-    </ul>
-</div>-->
+<div *ngIf="hostedSession?.status == 2 && result == ''">
+    <h3>{{ hostedSession?.quiz.title }}</h3>
+    <!--<ul *ngFor="let choice of hostedSession?.quiz.choices">-->
+        <div class="radio-toolbar" *ngFor="let choice of hostedSession?.quiz.choices">
+            <label for="choice">{{ choice.title }}</label>
+            <input type="radio" class="radio" name="radios" value="choice" (click)="logClick(choice.correctness)">
+        </div>
+        <!--<li>{{ choice?.title }}</li>-->
+    <!--</ul>-->
+</div>
+
+<div *ngIf="result == 'won'">
+    <h3>Congratulations, {{ participant }}!</h3>
+    <h3> You were correct ! </h3>
+</div>
+
+<div *ngIf="result == 'lost'">
+    <h3>So sorry, {{ participant }}!</h3>
+    <h3> You were wrong! </h3>
+</div>

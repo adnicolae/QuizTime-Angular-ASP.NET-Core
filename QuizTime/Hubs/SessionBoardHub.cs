@@ -12,5 +12,10 @@ namespace QuizTime.Hubs
         {
             return Clients.All.InvokeAsync("Send", username);
         }
+
+        public Task Update(int status)
+        {
+            return Clients.All.InvokeAsync("Update", status);
+        }
     }
 }

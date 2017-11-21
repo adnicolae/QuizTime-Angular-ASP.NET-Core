@@ -100,58 +100,58 @@ namespace QuizTime.Data
                 context.Quizzes.AddRange(quiz1, quiz2);
                 context.SaveChanges();
 
-                var session2 = new Session
-                {
-                    TimeLimit = 150,
-                    DateCreated = new DateTime(2017, 11, 1),
-                    Results = new List<Result> {
-                        new Result
-                        {
-                            Score = 15,
-                            SessionParticipant = user1,
-                            Choice = choice1
-                        },
+                //var session2 = new Session
+                //{
+                //    TimeLimit = 150,
+                //    DateCreated = new DateTime(2017, 11, 1),
+                //    Results = new List<Result> {
+                //        new Result
+                //        {
+                //            Score = 15,
+                //            SessionParticipant = user1,
+                //            Choice = choice1
+                //        },
 
-                        new Result
-                        {
-                            Score = 0,
-                            SessionParticipant = user2,
-                            Choice = choice2
-                        }
-                    },
-                    Quiz = quiz1,
-                    Status = SessionStatus.Complete,
-                    GeneratedHostId = 1234
-                };
+                //        new Result
+                //        {
+                //            Score = 0,
+                //            SessionParticipant = user2,
+                //            Choice = choice2
+                //        }
+                //    },
+                //    Quiz = quiz1,
+                //    Status = SessionStatus.Complete,
+                //    GeneratedHostId = 1234
+                //};
 
-                var session1 = new Session
-                {
-                    TimeLimit = 10,
-                    DateCreated = new DateTime(2017, 10, 22),
-                    Results = new List<Result> {
-                        new Result
-                        {
-                            Score = 15,
-                            SessionParticipant = user2,
-                            Choice = choice3_alt
-                        },
+                //var session1 = new Session
+                //{
+                //    TimeLimit = 10,
+                //    DateCreated = new DateTime(2017, 10, 22),
+                //    Results = new List<Result> {
+                //        new Result
+                //        {
+                //            Score = 15,
+                //            SessionParticipant = user2,
+                //            Choice = choice3_alt
+                //        },
 
-                        new Result
-                        {
-                            Score = 0,
-                            SessionParticipant = user1,
-                            Choice = choice1_alt
-                        }
-                    },
-                    Quiz = quiz2,
-                    Status = SessionStatus.Complete,
-                    GeneratedHostId = 3456
-                };
+                //        new Result
+                //        {
+                //            Score = 0,
+                //            SessionParticipant = user1,
+                //            Choice = choice1_alt
+                //        }
+                //    },
+                //    Quiz = quiz2,
+                //    Status = SessionStatus.Complete,
+                //    GeneratedHostId = 3456
+                //};
 
 
-                context.Sessions.AddRange(session1, session2);
+                //context.Sessions.AddRange(session1, session2);
 
-                context.SaveChanges();
+                //context.SaveChanges();
             }
         }
     }

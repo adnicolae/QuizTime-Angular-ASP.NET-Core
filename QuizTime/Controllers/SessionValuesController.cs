@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using QuizTime.Data;
+using QuizTime.Hubs;
 using QuizTime.Models;
 using QuizTime.Models.BindingTargets;
 using System;
@@ -15,10 +17,12 @@ namespace QuizTime.Controllers
     public class SessionValuesController : Controller
     {
         private Context _context;
+        private IHubContext<SessionBoardHub> _boardHubContext;
 
-        public SessionValuesController(Context context)
+        public SessionValuesController(Context context, IHubContext<SessionBoardHub> boardHubContext)
         {
             _context = context;
+            _boardHubContext = boardHubContext;
         }
 
         [HttpGet("{id}")]
@@ -134,8 +138,12 @@ namespace QuizTime.Controllers
                     _context.Attach(session.Quiz);
                 }
                 _context.SaveChanges();
+
+                _boardHubContext.Clients.All.InvokeAsync("update", sessionData.Session.Status);
+
                 return Ok();
-            } else
+            }
+            else
             {
                 return BadRequest(ModelState);
             }

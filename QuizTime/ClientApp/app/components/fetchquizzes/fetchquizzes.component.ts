@@ -21,7 +21,12 @@ export class FetchQuizzesComponent {
     }
 
     get quizzes(): Quiz[] {
-        return this.repo.quizzes.reverse();
+        if (this.repo.quizzes != null) {
+            return this.repo.quizzes.reverse();
+        }
+        else {
+            return this.repo.quizzes;
+        }
     }
 
     get hostedSession(): Session {
