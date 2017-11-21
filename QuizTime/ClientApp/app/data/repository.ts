@@ -164,8 +164,9 @@ export class Repository {
 
         let url = this.urlBase + sessionsUrl;
 
-        this.sendRequest(RequestMethod.Patch, url + "/" + id, patch)
-            .subscribe(response => this.getSessions());
+        this.http.patch(url + "/" + id, patch).subscribe(response => this.getSessions());
+        //this.sendRequest(RequestMethod.Patch, url + "/" + id, patch)
+        //    .subscribe(response => this.getSessions());
     }
 
     get resultFilter(): ResultFilter {
