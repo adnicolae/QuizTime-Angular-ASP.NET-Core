@@ -18,19 +18,19 @@ export class SessionBoardComponent {
 
     constructor(
         private repo: Repository,
-        router: Router,
-        activeRoute: ActivatedRoute) {
+        private router: Router,
+        private activeRoute: ActivatedRoute) {
+    }
 
-        let id = Number.parseInt(activeRoute.snapshot.params["id"]);
+    ngOnInit() {
+        let id = Number.parseInt(this.activeRoute.snapshot.params["id"]);
 
         if (id) {
             this.repo.getHostedSession(id);
         } else {
-            router.navigateByUrl("/");
+            this.router.navigateByUrl("/");
         }
-    }
 
-    ngOnInit() {
         this._hubConnection = new HubConnection('/boardhub');
 
         this._hubConnection.on('send', (username: any) => {

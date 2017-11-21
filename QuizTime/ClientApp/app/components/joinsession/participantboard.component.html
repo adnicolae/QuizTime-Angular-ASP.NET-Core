@@ -1,26 +1,50 @@
-﻿<div *ngIf="hostedSession?.status == 1 && result == ''">
-    <h3>Hi {{ participant }}</h3>
-
-    <h2>We're waiting for others to join in! ({{ hostedSession?.generatedHostId}})</h2>
+﻿
+<!-- STATUS: Waiting for players to join -->
+<div *ngIf="hostedSession?.status == 1">
+    <div class="well well-lg" style="text-align:center">
+        <h3>Welcome {{ participant }}!</h3>
+        <h2>We're waiting for others to join in! ({{ hostedSession?.generatedHostId}})</h2>
+    </div>
 </div>
 
-<div *ngIf="hostedSession?.status == 2 && result == ''">
-    <h3>{{ hostedSession?.quiz.title }}</h3>
-    <!--<ul *ngFor="let choice of hostedSession?.quiz.choices">-->
-        <div class="radio-toolbar" *ngFor="let choice of hostedSession?.quiz.choices">
-            <label for="choice">{{ choice.title }}</label>
-            <input type="radio" class="radio" name="radios" value="choice" (click)="logClick(choice.correctness)">
+<!-- STATUS: Timer before question -->
+<div *ngIf="hostedSession?.status == 2">
+    <h3>The quiz will start in: </h3>
+</div>
+
+<!-- STATUS: Display timer and choices -->
+<div *ngIf="hostedSession?.status == 3">
+        <h3>Select the answer:</h3>
+        <h4>Time remaining:</h4>
+        <div class="col-xs-6" *ngFor="let choice of hostedSession?.quiz.choices">
+            <button class="btn btn-default btn-lg" (click)="selectAnswer(choice.choiceId, choice.correctness)" style="width:100%; height:100px;">
+                {{ choice.title }}
+            <strong *ngIf="currentSelection == choice.choiceId"><span class="glyphicon glyphicon-arrow-left"></span></strong>
+            </button>
         </div>
-        <!--<li>{{ choice?.title }}</li>-->
-    <!--</ul>-->
 </div>
 
-<div *ngIf="result == 'won'">
-    <h3>Congratulations, {{ participant }}!</h3>
-    <h3> You were correct ! </h3>
+<!-- STATUS: Display individual scores -->
+<div *ngIf="hostedSession?.status == 4">
+    <div class="well well-lg" style="text-align:center">
+        <div *ngIf="result == 'won'">
+            <h2>Congratulations, {{ participant }}!</h2>
+            <h3> You were correct ! </h3>
+            <h2>Score: </h2>
+        </div>
+
+        <div *ngIf="result == 'lost'">
+            <h2>So sorry, {{ participant }}!</h2>
+            <h3> You were wrong! </h3>
+            <h2>Score:</h2>
+        </div>
+    </div>
 </div>
 
-<div *ngIf="result == 'lost'">
-    <h3>So sorry, {{ participant }}!</h3>
-    <h3> You were wrong! </h3>
+<!-- STATUS: Show leaderboard message -->
+<div *ngIf="hostedSession?.status == 5">
+    <div class="well well-lg" style="text-align:center">
+        <h2>The quiz is now over!</h2>
+        <h3>Thank you for playing!</h3>
+    </div>
 </div>

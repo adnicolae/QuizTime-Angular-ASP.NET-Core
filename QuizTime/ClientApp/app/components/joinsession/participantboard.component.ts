@@ -16,21 +16,13 @@ export class ParticipantBoardComponent implements OnInit{
     participant = '';
     participants: string[] = [];
     result = '';
+    currentSelection: number;
 
     constructor(
         private repo: Repository,
         private router: Router,
         private activeRoute: ActivatedRoute,
         private cookieService: CookieService) {
-
-        //let id = Number.parseInt(activeRoute.snapshot.params["id"]);
-
-        //if (id) {
-        //    this.repo.getHostedSession(id);
-        //    console.log(this.hostedSession);
-        //} else {
-        //    router.navigateByUrl("/");
-        //}
     }
 
     ngOnInit() {
@@ -61,8 +53,9 @@ export class ParticipantBoardComponent implements OnInit{
             });
     }
 
-    logClick(correctness: boolean) {
+    selectAnswer(choiceId: number, correctness: boolean) {
         console.log(correctness);
+        this.currentSelection = choiceId;
         if (correctness == true) {
             this.result = "won";
         }
@@ -70,6 +63,8 @@ export class ParticipantBoardComponent implements OnInit{
             this.result = "lost";
         }
         this.putCookie("correctness", this.result);
+        console.log(this.currentSelection);
+        console.log(choiceId);
     }
 
     getCookie(key: string) {
@@ -80,8 +75,8 @@ export class ParticipantBoardComponent implements OnInit{
         return this.cookieService.put(key, value);
     }
 
-    deleteCookie(key: string) {
-        return this.cookieService.remove(key);
+    deleteCookie() {
+        return this.cookieService.remove("correctness");
     }
     
     //checkCookie(key: string) {
