@@ -7,6 +7,7 @@ import { Http, RequestMethod, Request, Response } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/map";
 import { QuizFilter, ResultFilter } from "./config.repository";
+import { CookieService } from 'ngx-cookie';
 
 const quizzesUrl = "api/quizzes";
 const resultsUrl = "api/results";
@@ -27,11 +28,11 @@ export class Repository {
     latestQuiz: Quiz;
     urlBase: string;
 
-    constructor(private http: Http, @Inject('BASE_URL') baseUrl: string) {
+    constructor(private http: Http, @Inject('BASE_URL') baseUrl: string, private cookieService: CookieService) {
         this.quizFilter.related = true;
         this.urlBase = baseUrl;
         this.getQuizzes(baseUrl);
-        this.getResults(baseUrl);
+        this.getResults();
         this.getSessions();
     }
 
@@ -71,8 +72,8 @@ export class Repository {
             .subscribe(response => this.quizzes = response);
     }
 
-    getResults(baseUrl: string) {
-        let url = baseUrl + resultsUrl + "?specific=" + this.resultFilter.specific + "&related=" + this.resultFilter.related;
+    getResults() {
+        let url = this.urlBase  + resultsUrl + "?specific=" + this.resultFilter.specific + "&related=" + this.resultFilter.related;
 
         if (this.quizFilter.search) {
             url += "&search=" + this.resultFilter.search;
@@ -137,7 +138,7 @@ export class Repository {
         let url = this.urlBase + resultsUrl;
 
         this.sendRequest(RequestMethod.Post, url, data)
-            .subscribe();
+            .subscribe(response => { this.cookieService.put("resultId", response); });
     }
 
     createSession(newSession: Session) {
@@ -167,6 +168,16 @@ export class Repository {
         this.http.patch(url + "/" + id, patch).subscribe(response => this.getSessions());
         //this.sendRequest(RequestMethod.Patch, url + "/" + id, patch)
         //    .subscribe(response => this.getSessions());
+    }
+
+    updateResult(id: number, changes: Map<string, any>) {
+        let patch: any[] = [];
+        changes.forEach((value, key) =>
+            patch.push({ op: "replace", path: key, value: value }));
+
+        let url = this.urlBase + resultsUrl;
+
+        this.http.patch(url + "/" + id, patch).subscribe(response => this.getResults());
     }
 
     get resultFilter(): ResultFilter {
