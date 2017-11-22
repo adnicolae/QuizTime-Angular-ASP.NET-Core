@@ -20,8 +20,10 @@ import { JoinSessionComponent } from './components/joinsession/joinsession.compo
 import { ParticipantBoardComponent } from './components/joinsession/participantboard.component';
 import { CreateQuizComponent } from './components/createquiz/createquiz.component';
 import { QuizCreatedComponent } from './components/createquiz/quizcreated.component';
+import { SimpleTimer } from 'ng2-simple-timer';
 
 @NgModule({
+    providers: [SimpleTimer],
     declarations: [
         AppComponent,
         NavMenuComponent,
