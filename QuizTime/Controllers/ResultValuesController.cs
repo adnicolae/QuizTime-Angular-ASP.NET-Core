@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using QuizTime.Data;
@@ -137,11 +138,52 @@ namespace QuizTime.Controllers
                 _context.Add(result);
                 _context.SaveChanges();
 
-                _quizHubContext.Clients.All.InvokeAsync("send", "Hello, player " + result.SessionParticipant.Username + " joined session " + result.Session);
+                _quizHubContext.Clients.All.InvokeAsync("send", "Hello, player " + result.SessionParticipant.Username + " joined session " + result.Session.GeneratedHostId);
 
                 _boardHubContext.Clients.All.InvokeAsync("send", result.SessionParticipant.Username);
 
                 return Ok(result.ResultId);
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+        }
+
+        [HttpPatch("{id}")]
+        public IActionResult UpdateResult(long id, [FromBody] JsonPatchDocument<ResultPatchData> patch)
+        {
+            Result result = _context.Results
+                .Include(r => r.SessionParticipant)
+                .Include(r => r.Session)
+                .Include(r => r.Choice)
+                .First(r => r.ResultId == id);
+
+            ResultPatchData resultData = new ResultPatchData { Result = result };
+
+            patch.ApplyTo(resultData, ModelState);
+
+            if (ModelState.IsValid && TryValidateModel(resultData))
+            {
+                if (result.SessionParticipant != null && result.SessionParticipant.UserId != 0)
+                {
+                    _context.Attach(result.SessionParticipant);
+                }
+
+                if (result.Session != null && result.Session.SessionId != 0)
+                {
+                    _context.Attach(result.Session);
+                }
+
+                if (result.Choice != null && result.Choice.ChoiceId != 0)
+                {
+                    _context.Attach(result.Choice);
+                }
+
+                _context.SaveChanges();
+                _boardHubContext.Clients.All.InvokeAsync("send", "Updating results");
+
+                return Ok();
             }
             else
             {
