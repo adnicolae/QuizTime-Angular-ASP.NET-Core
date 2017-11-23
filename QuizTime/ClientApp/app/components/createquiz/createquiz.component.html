@@ -49,12 +49,10 @@
                         <button (click)="addChoice()" type="button" class="btn btn-lg btn-default">+</button>
                 </div>
             </div>
-        <p>Note: Please Confirm then Save for the correct insertion of the quiz!</p>
         <button type="submit"
-                [disabled]="quizForm.pristine" class="btn btn-warning">
-            Confirm
+                [disabled]="quizForm.pristine" class="btn btn-success btn-lg">
+            Add Quiz
         </button> 
-        <span class="btn btn-success" (click)="addChoices()">Save</span>
     </form>
 </div>
 
