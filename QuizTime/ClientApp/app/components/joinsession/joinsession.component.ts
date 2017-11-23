@@ -1,20 +1,25 @@
-﻿import { Component } from '@angular/core';
+﻿import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Repository } from "../../data/repository";
 import { Result } from '../../models/result.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie';
 import { Http, Response } from '@angular/http';
+import { Session } from '../../models/session.model';
 import { Observable } from 'rxjs/Rx';
+import "rxjs/add/operator/takeWhile";
 
 @Component({
     selector: 'join-session',
     templateUrl: './joinsession.component.html'
 })
-export class JoinSessionComponent {
+export class JoinSessionComponent implements OnDestroy {
     joinForm: FormGroup;
+    session: Session = new Session();
+    errorMessage = "";
+    private alive: boolean = true;
 
-    constructor(private fb: FormBuilder, private repo: Repository, private router: Router, private cookieService: CookieService) {
+    constructor(private fb: FormBuilder, private repo: Repository, private router: Router, private cookieService: CookieService, private http: Http) {
         this.createForm();
     }
 
@@ -25,23 +30,37 @@ export class JoinSessionComponent {
         });
     }
 
-    onSubmit() {
-        const formModel = this.joinForm.value;
-        console.log(formModel.hostedSessionId);
-        console.log(formModel.username);
-        this.repo.getHostedSession(formModel.hostedSessionId);
+    ngOnDestroy() {
+        this.alive = false;
+        this.repo.alive = false;
     }
 
-    onSave() {
+    onSubmit() {
         const formModel = this.joinForm.value;
-        console.log(this.repo.hostedSession.sessionId);
-        
-
-        this.repo.createResult(0, formModel.username as string, this.repo.hostedSession.sessionId as number);
-
-        this.putCookie("participantName", formModel.username as string);
-
-        this.router.navigateByUrl("/session-board/participant/" + parseInt(formModel.hostedSessionId));
+        this.errorMessage = "";
+        this.http
+            .get(`${this.repo.urlBase}/api/sessions/host/${formModel.hostedSessionId}`)
+            .takeWhile(() => this.alive)
+            .subscribe(response => {
+                this.session = response.json();
+                console.log(this.session);
+                let data = {
+                    score: 0,
+                    sessionParticipant: formModel.username,
+                    session: this.session.sessionId
+                };
+                this.http.post(`${this.repo.urlBase}/api/results`, data)
+                    .takeWhile(() => this.alive)
+                    .subscribe(response => {
+                        console.log(response);
+                        this.putCookie("resultId", response.json());
+                        this.putCookie("participantName", formModel.username);
+                        this.router.navigateByUrl(`/session-board/participant/${parseInt(formModel.hostedSessionId)}`);
+                    });
+            }, response => {
+                this.errorMessage = "Unable to load session.";
+                console.log(this.errorMessage);
+            });
     }
 
     putCookie(key: string, value: string) {
