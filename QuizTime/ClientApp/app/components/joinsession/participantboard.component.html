@@ -1,23 +1,24 @@
 ﻿
 <!-- STATUS: Waiting for players to join -->
-<div *ngIf="hostedSession?.status == 1">
+<div *ngIf="session?.status == 1">
     <div class="well well-lg" style="text-align:center">
         <h3>Welcome {{ participant }}!</h3>
-        <h2>We're waiting for others to join in! ({{ hostedSession?.generatedHostId}})</h2>
+        <h2>We're waiting for others to join in! ({{ session?.generatedHostId}})</h2>
     </div>
 </div>
 
 <!-- STATUS: Timer before question -->
-<div *ngIf="hostedSession?.status == 2">
-    <h3>The quiz will start in: </h3>
+<div *ngIf="session?.status == 2">
+    <div class="well well-lg" style="text-align:center">
+        <h3>The question will show up soon!</h3>
+    </div>
 </div>
 
 <!-- STATUS: Display timer and choices -->
-<div *ngIf="hostedSession?.status == 3">
-        <h3>Select the answer:</h3>
-        <h4>Time remaining:</h4>
-        <div class="col-xs-6" *ngFor="let choice of hostedSession?.quiz.choices">
-            <button class="btn btn-default btn-lg" (click)="selectAnswer(choice.choiceId, choice.correctness)" style="width:100%; height:100px;">
+<div *ngIf="session?.status == 3">
+        <h2>Select the answer:</h2>
+        <div class="col-xs-6" *ngFor="let choice of session?.quiz.choices">
+            <button class="btn btn-default btn-lg" (click)="selectAnswer(choice.choiceId, choice.correctness, session?.quiz.assignedPoints, session?.quiz.deducedPoints)" style="width:100%; height:100px;">
                 {{ choice.title }}
             <strong *ngIf="currentSelection == choice.choiceId"><span class="glyphicon glyphicon-arrow-left"></span></strong>
             </button>
@@ -25,24 +26,24 @@
 </div>
 
 <!-- STATUS: Display individual scores -->
-<div *ngIf="hostedSession?.status == 4">
+<div *ngIf="session?.status == 4">
     <div class="well well-lg" style="text-align:center">
         <div *ngIf="result == 'won'">
             <h2>Congratulations, {{ participant }}!</h2>
             <h3> You were correct ! </h3>
-            <h2>Score: </h2>
+            <h2>Score: <strong style="color:limegreen">+{{ session?.quiz.assignedPoints }}</strong></h2>
         </div>
 
         <div *ngIf="result == 'lost'">
             <h2>So sorry, {{ participant }}!</h2>
             <h3> You were wrong! </h3>
-            <h2>Score:</h2>
+            <h2>Score: <strong style="color: orangered">-{{ session?.quiz.deducedPoints }}</strong></h2>
         </div>
     </div>
 </div>
 
 <!-- STATUS: Show leaderboard message -->
-<div *ngIf="hostedSession?.status == 5">
+<div *ngIf="session?.status == 5">
     <div class="well well-lg" style="text-align:center">
         <h2>The quiz is now over!</h2>
         <h3>Thank you for playing!</h3>
