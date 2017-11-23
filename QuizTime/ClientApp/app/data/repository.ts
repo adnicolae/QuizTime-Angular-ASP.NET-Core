@@ -5,6 +5,7 @@ import { Choice } from "../models/choice.model";
 import { Injectable, Inject } from "@angular/core";
 import { Http, RequestMethod, Request, Response } from "@angular/http";
 import { Observable } from "rxjs/Observable";
+import "rxjs/add/operator/takeWhile";
 import "rxjs/add/operator/map";
 import { QuizFilter, ResultFilter } from "./config.repository";
 import { CookieService } from 'ngx-cookie';
@@ -26,6 +27,7 @@ export class Repository {
     results: Result[];
     sessions: Session[];
     latestQuiz: Quiz;
+    alive: boolean = true;
     urlBase: string;
 
     constructor(private http: Http, @Inject('BASE_URL') baseUrl: string, private cookieService: CookieService) {
@@ -58,6 +60,7 @@ export class Repository {
 
     getHostedSession(generatedHostId: number) {
         this.sendRequest(RequestMethod.Get, this.urlBase + sessionsUrl + "/host/" + generatedHostId)
+            .takeWhile(() => this.alive)
             .subscribe(response => { this.hostedSession = response; });
     }
 
@@ -84,6 +87,7 @@ export class Repository {
         }
 
         this.sendRequest(RequestMethod.Get, url)
+            .takeWhile(() => this.alive)
             .subscribe(response => this.results = response);
     }
 
@@ -138,6 +142,7 @@ export class Repository {
         let url = this.urlBase + resultsUrl;
 
         this.sendRequest(RequestMethod.Post, url, data)
+            .takeWhile(() => this.alive)
             .subscribe(response => { this.cookieService.put("resultId", response); });
     }
 
@@ -152,6 +157,7 @@ export class Repository {
         let url = this.urlBase + sessionsUrl;
 
         this.sendRequest(RequestMethod.Post, url, data)
+            .takeWhile(() => this.alive)
             .subscribe(response => {
                 newSession.sessionId = response;
                 this.sessions.push(newSession);
@@ -165,7 +171,9 @@ export class Repository {
 
         let url = this.urlBase + sessionsUrl;
 
-        this.http.patch(url + "/" + id, patch).subscribe(response => this.getSessions());
+        this.http.patch(url + "/" + id, patch)
+            .takeWhile(() => this.alive)
+            .subscribe(response => this.getSessions());
         //this.sendRequest(RequestMethod.Patch, url + "/" + id, patch)
         //    .subscribe(response => this.getSessions());
     }
@@ -177,7 +185,9 @@ export class Repository {
 
         let url = this.urlBase + resultsUrl;
 
-        this.http.patch(url + "/" + id, patch).subscribe(response => this.getResults());
+        this.http.patch(url + "/" + id, patch)
+            .takeWhile(() => this.alive)
+            .subscribe(response => this.getResults());
     }
 
     get resultFilter(): ResultFilter {
