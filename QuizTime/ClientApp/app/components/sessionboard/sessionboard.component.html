@@ -1,34 +1,34 @@
-﻿<p *ngIf="!hostedSession"><em>Loading...</em></p>
+﻿<p *ngIf="!session"><em>Loading...</em></p>
 
 <!-- STATUS: Waiting for players to join -->
-<div *ngIf="hostedSession?.status == 1">
+<div *ngIf="session?.status == 1">
     <div class="col-xs-8">
         <div class="well well-lg" style="text-align:center">
             <h1>Session created!</h1>
-            <h3>Join our quiz using the ID: <strong>{{ hostedSession?.generatedHostId }}</strong></h3>
-            <button class="btn btn-lg btn-success" (click)="updateSession(hostedSession?.quiz.timeLimit)">Let's start</button>
+            <h3>Join our quiz using the ID: <strong>{{ session?.generatedHostId }}</strong></h3>
+            <button class="btn btn-lg btn-success" (click)="updateSession(session?.quiz.timeLimit)">Let's start</button>
         </div>
     </div>
 
     <div class="col-xs-8">
-        <h3>Participants: {{ participants.length + hostedSession?.results.length }}</h3>
+        <h3>Participants: {{ session?.results.length }}</h3>
         <h4>Let's welcome the following:</h4>
-        <ul *ngFor="let result of hostedSession?.results">
+        <ul *ngFor="let result of session?.results">
             <li>{{ result.sessionParticipant.username }}</li>
         </ul>
     </div>
 </div>
 
 <!-- STATUS: Timer before question -->
-<div *ngIf="hostedSession?.status == 2">
+<div *ngIf="session?.status == 2">
     <h3>The quiz will start in: {{ counter1 }}</h3>
 </div>
 
 <!-- STATUS: Display question and timer -->
-<div *ngIf="hostedSession?.status == 3">
-    <h1>{{ hostedSession?.quiz?.title }}</h1>
+<div *ngIf="session?.status == 3">
+    <h1>{{ session?.quiz?.title }}</h1>
     <h4>Time remaining: {{ counter2 }}</h4>
-    <div *ngFor="let choice of hostedSession?.quiz?.choices" class="col-md-6">
+    <div *ngFor="let choice of session?.quiz?.choices" class="col-md-6">
         <div class="well">
         <h3>{{ choice.title }}</h3>
         </div>
@@ -36,11 +36,11 @@
 </div>
 
 <!-- STATUS: Display correct answer -->
-<div *ngIf="hostedSession?.status == 4">
+<div *ngIf="session?.status == 4">
     <div class="col-xs-8">
         <div class="well well-lg" style="text-align:center">
             <h1>The correct answer was:</h1>
-            <div *ngFor="let choice of hostedSession?.quiz?.choices">
+            <div *ngFor="let choice of session?.quiz?.choices">
                 <h3 *ngIf="choice.correctness == true">{{ choice.title }}</h3>
             </div>
             <button class="btn btn-lg btn-success" (click)="updateSessionWithNoTimer()">Leaderboard</button>
@@ -49,10 +49,10 @@
 </div>
 
 <!-- STATUS: Show Leaderboard -->
-<div *ngIf="hostedSession?.status == 5">
+<div *ngIf="session?.status == 5">
     <div class="row">
         <div class="col-sm-6">
-            <table class='table table-striped' *ngIf="hostedSession?.results">
+            <table class='table table-striped' *ngIf="session?.results">
                 <thead>
                     <tr>
                         <th>Student</th>
@@ -60,7 +60,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let result of hostedSession?.results">
+                    <tr *ngFor="let result of session?.results">
                         <td>{{ result.sessionParticipant.username }}</td>
                         <td>{{ result.score }}</td>
                     </tr>
