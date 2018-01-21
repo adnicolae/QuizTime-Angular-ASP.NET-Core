@@ -1,15 +1,15 @@
 ﻿
 <!-- STATUS: Waiting for players to join -->
 <div *ngIf="session?.status == 1">
-    <div class="well well-lg" style="text-align:center">
+    <div class="well well-lg" style="text-align:center; margin-top:20px">
         <h3>Welcome {{ participant }}!</h3>
-        <h2>We're waiting for others to join in! ({{ session?.generatedHostId}})</h2>
+        <h2>We're waiting for others to join in!</h2>
     </div>
 </div>
 
 <!-- STATUS: Timer before question -->
 <div *ngIf="session?.status == 2">
-    <div class="well well-lg" style="text-align:center">
+    <div class="well well-lg" style="text-align:center; margin-top:20px">
         <h3>The question will show up soon!</h3>
     </div>
 </div>
@@ -27,7 +27,7 @@
 
 <!-- STATUS: Display individual scores -->
 <div *ngIf="session?.status == 4">
-    <div class="well well-lg" style="text-align:center">
+    <div class="well well-lg" style="text-align:center; margin-top:20px">
         <div *ngIf="result == 'won'">
             <h2>Congratulations, {{ participant }}!</h2>
             <h3> You were correct ! </h3>
@@ -44,7 +44,7 @@
 
 <!-- STATUS: Show leaderboard message -->
 <div *ngIf="session?.status == 5">
-    <div class="well well-lg" style="text-align:center">
+    <div class="well well-lg" style="text-align:center; margin-top:20px">
         <h2>The quiz is now over!</h2>
         <h3>Thank you for playing!</h3>
     </div>

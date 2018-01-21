@@ -28,6 +28,7 @@
     <None Remove="ClientApp\app\components\fetchresults\fetchresults.component.ts" />
     <None Remove="ClientApp\app\components\joinsession\joinsession.component.ts" />
     <None Remove="ClientApp\app\components\quizdetail\quizdetail.component.ts" />
+    <None Remove="ClientApp\app\components\sessionboard\board.component.ts" />
     <None Remove="ClientApp\app\components\sessionboard\sessionboard.component.ts" />
     <None Remove="ClientApp\app\data\config.repository.ts" />
     <None Remove="ClientApp\app\data\repository.module.ts" />
@@ -47,6 +48,8 @@
     <TypeScriptCompile Include="ClientApp\app\components\joinsession\joinsession.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\joinsession\participantboard.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\quizdetail\quizdetail.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\registration\register.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\sessionboard\board.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\sessionboard\sessionboard.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\data\config.repository.ts" />
     <TypeScriptCompile Include="ClientApp\app\data\repository.module.ts" />

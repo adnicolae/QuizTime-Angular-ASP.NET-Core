@@ -127,6 +127,7 @@ export class Repository {
         let url = this.urlBase + choicesUrl;
 
         this.sendRequest(RequestMethod.Post, url, data)
+            .takeWhile(() => this.alive)
             .subscribe(response => {
                 newChoice.choiceId = response;
             });
@@ -187,7 +188,12 @@ export class Repository {
 
         this.http.patch(url + "/" + id, patch)
             .takeWhile(() => this.alive)
-            .subscribe(response => this.getResults());
+            .subscribe(response => {
+                this.getResults();
+                console.log("Updated result " + id + ";");
+            }, response => {
+                console.log("Unable to update result " + id);
+            });
     }
 
     get resultFilter(): ResultFilter {

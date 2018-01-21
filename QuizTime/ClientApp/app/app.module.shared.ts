@@ -15,12 +15,16 @@ import { CounterComponent } from './components/counter/counter.component';
 import { FetchQuizzesComponent } from './components/fetchquizzes/fetchquizzes.component';
 import { FetchResultsComponent } from './components/fetchresults/fetchresults.component';
 import { SessionBoardComponent } from './components/sessionboard/sessionboard.component';
+
+import { BoardComponent } from './components/sessionboard/board.component';
+
 import { QuizDetailComponent } from './components/quizdetail/quizdetail.component';
 import { JoinSessionComponent } from './components/joinsession/joinsession.component';
 import { ParticipantBoardComponent } from './components/joinsession/participantboard.component';
 import { CreateQuizComponent } from './components/createquiz/createquiz.component';
 import { QuizCreatedComponent } from './components/createquiz/quizcreated.component';
 import { SimpleTimer } from 'ng2-simple-timer';
+import { RegisterComponent } from './components/registration/register.component';
 
 @NgModule({
     providers: [SimpleTimer],
@@ -32,11 +36,13 @@ import { SimpleTimer } from 'ng2-simple-timer';
         FetchQuizzesComponent,
         FetchResultsComponent,
         SessionBoardComponent,
+        BoardComponent,
         QuizDetailComponent,
         JoinSessionComponent,
         CreateQuizComponent,
         QuizCreatedComponent,
         ParticipantBoardComponent,
+        RegisterComponent,
         HomeComponent
     ],
     imports: [
@@ -61,6 +67,7 @@ import { SimpleTimer } from 'ng2-simple-timer';
             { path: 'join', component: JoinSessionComponent },
             { path: 'fetch-quizzes/detail', component: QuizDetailComponent },
             { path: 'fetch-quizzes/detail/:id', component: QuizDetailComponent },
+            { path: 'register', component: RegisterComponent },
             { path: '**', redirectTo: 'home' }
         ])
     ]

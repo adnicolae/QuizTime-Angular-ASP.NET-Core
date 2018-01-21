@@ -13,7 +13,9 @@ import { ResultFilter } from "../../data/config.repository";
 
 export class FetchResultsComponent {
 
-    constructor(private repo: Repository) { }
+    constructor(private repo: Repository) {
+        console.log(this.repo.results);
+    }
 
     get result(): Result {
         return this.repo.result;

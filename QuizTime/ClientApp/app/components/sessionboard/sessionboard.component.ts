@@ -72,6 +72,7 @@ export class SessionBoardComponent implements OnInit, OnDestroy {
         console.log("destroyed " + this.session.generatedHostId)
         this.alive = false;
         this.repo.alive = false;
+        this._hubConnection.stop();
         this.timer.unsubscribe(this.timer1Id);
         this.timer.unsubscribe(this.timer2Id);
     }

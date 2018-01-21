@@ -15,10 +15,10 @@
             </thead>
             <tbody>
                 <tr *ngFor="let result of results">
-                    <td>{{ result.resultId }}</td>
-                    <td>{{ result.sessionParticipant.username }}</td>
-                    <td>{{ result.score }} out of {{ result.session.quiz.assignedPoints }}</td>
-                    <td>{{ result.session.quiz.title }}</td>
+                    <td>{{ result?.resultId }}</td>
+                    <td>{{ result?.sessionParticipant.username }}</td>
+                    <td>{{ result?.score }} out of {{ result?.session.quiz.assignedPoints }}</td>
+                    <td>{{ result?.session.quiz.title }}</td>
                 </tr>
             </tbody>
         </table>

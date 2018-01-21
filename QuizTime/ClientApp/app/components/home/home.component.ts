@@ -28,24 +28,24 @@ export class HomeComponent implements OnInit {
     }
 
     ngOnInit() {
-        this._hubConnection = new HubConnection('/quiz');
+        //this._hubConnection = new HubConnection('/quiz');
 
-        this._hubConnection.on('Send', (data: any) => {
-            const received = `Received: ${data}`;
-            this.messages.push(received);
-        });
+        //this._hubConnection.on('Send', (data: any) => {
+        //    const received = `Received: ${data}`;
+        //    this.messages.push(received);
+        //});
 
-        this._hubConnection.on('send', data => {
-            console.log(data);
-        });
+        //this._hubConnection.on('send', data => {
+        //    console.log(data);
+        //});
 
-        this._hubConnection.start()
-            .then(() => {
-                console.log("Hub connection started")
-            })
-            .catch(err => {
-                console.log("error while establishing hub connection")
-            });
+        //this._hubConnection.start()
+        //    .then(() => {
+        //        console.log("Hub connection started")
+        //    })
+        //    .catch(err => {
+        //        console.log("error while establishing hub connection")
+        //    });
     }
 
     get hostedSession(): Session {

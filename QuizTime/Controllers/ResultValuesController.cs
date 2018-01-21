@@ -83,7 +83,8 @@ namespace QuizTime.Controllers
                 query = query
                     .Include(r => r.SessionParticipant)
                     .Include(r => r.Session)
-                        .ThenInclude(r => r.Quiz);
+                        .ThenInclude(r => r.Quiz)
+                    .Include(r => r.Choice);
 
                 List<Result> data = query.ToList();
 
@@ -100,9 +101,14 @@ namespace QuizTime.Controllers
                         r.Session.Results = null;
                     }
 
-                    if (r.Session.Quiz != null)
+                    if (r.Session != null && r.Session.Quiz != null)
                     {
                         r.Session.Quiz.Creator = null;
+                    }
+
+                    if (r.Choice != null)
+                    {
+                        r.Choice.Quiz = null;
                     }
                 });
                 return data;
@@ -138,7 +144,7 @@ namespace QuizTime.Controllers
                 _context.Add(result);
                 _context.SaveChanges();
 
-                _quizHubContext.Clients.All.InvokeAsync("send", "Hello, player " + result.SessionParticipant.Username + " joined session " + result.Session.GeneratedHostId);
+                //_quizHubContext.Clients.All.InvokeAsync("send", "Hello, player " + result.SessionParticipant.Username + " joined session " + result.Session.GeneratedHostId);
 
                 _boardHubContext.Clients.All.InvokeAsync("send", result.SessionParticipant.Username);
 
@@ -181,7 +187,7 @@ namespace QuizTime.Controllers
                 }
 
                 _context.SaveChanges();
-                _boardHubContext.Clients.All.InvokeAsync("send", "Updating results");
+                //_boardHubContext.Clients.All.InvokeAsync("send", "Updating results");
 
                 return Ok();
             }

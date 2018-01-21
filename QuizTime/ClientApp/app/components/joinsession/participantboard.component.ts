@@ -91,6 +91,7 @@ export class ParticipantBoardComponent implements OnInit, OnDestroy{
         console.log("destroyed" + this.session.generatedHostId)
         this.alive = false;
         this.repo.alive = false;
+        this._hubConnection.stop();
         this.clearCookies();
     }
 
@@ -115,10 +116,27 @@ export class ParticipantBoardComponent implements OnInit, OnDestroy{
 
     updateResult() {
         let changes = new Map<string, any>();
-        console.log(this.score);
+        console.log("Score:" + this.score);
         changes.set("score", this.score);
         changes.set("choice", this.choiceId);
-        this.repo.updateResult(parseInt(this.getCookie("resultId")), changes);
+        console.log("Changes:" + changes);
+        console.log("ResultID: " + parseInt(this.getCookie("resultId")));
+
+        let patch: any[] = [];
+        changes.forEach((value, key) =>
+            patch.push({ op: "replace", path: key, value: value }));
+
+        let url = this.repo.urlBase + "api/results";
+
+        this.http.patch(url + "/" + parseInt(this.getCookie("resultId")), patch)
+            .takeWhile(() => this.alive)
+            .subscribe(response => {
+                console.log("Updated result;");
+            }, response => {
+                console.log("Unable to update result");
+            });
+
+        //this.repo.updateResult(parseInt(this.getCookie("resultId")), changes);
     }
 
     getCookie(key: string) {

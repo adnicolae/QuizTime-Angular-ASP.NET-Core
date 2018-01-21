@@ -1,0 +1,23 @@
+﻿<!-- STATUS: Waiting for players to join -->
+<div *ngIf="session?.status == 1">
+    <div class="col-xs-8">
+        <div class="well well-lg" style="text-align:center">
+            <h1>Session created!</h1>
+            <h3>Join our quiz using the ID: <strong>{{ session?.generatedHostId }}</strong></h3>
+            <button class="btn btn-lg btn-success" (click)="updateSession()">Let's start</button>
+        </div>
+    </div>
+
+    <div class="col-xs-8">
+        <h3>Participants: {{ session?.results.length }}</h3>
+        <h4>Let's welcome the following:</h4>
+        <ul *ngFor="let result of session?.results">
+            <li>{{ result.sessionParticipant.username }}</li>
+        </ul>
+    </div>
+</div>
+
+<!-- STATUS: Timer before question -->
+<div *ngIf="session?.status == 2">
+    <h3>The quiz will start in: {{ timerCounter }}</h3>
+</div>
