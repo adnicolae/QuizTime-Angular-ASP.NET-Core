@@ -1,4 +1,4 @@
-﻿import { Component, OnDestroy } from '@angular/core';
+﻿import { Component, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Repository } from "../../data/repository";
 import { Result } from '../../models/result.model';
@@ -7,6 +7,8 @@ import { CookieService } from 'ngx-cookie';
 import { Http, Response } from '@angular/http';
 import { Session } from '../../models/session.model';
 import { Observable } from 'rxjs/Rx';
+import { AuthService } from '../registration/auth.service';
+import { isPlatformServer, isPlatformBrowser } from '@angular/common';
 import "rxjs/add/operator/takeWhile";
 
 @Component({
@@ -18,9 +20,11 @@ export class JoinSessionComponent implements OnDestroy {
     session: Session = new Session();
     errorMessage = "";
     private alive: boolean = true;
+    isBrowser: boolean;
 
-    constructor(private fb: FormBuilder, private repo: Repository, private router: Router, private cookieService: CookieService, private http: Http) {
+    constructor(@Inject(PLATFORM_ID) private platformId: Object, private fb: FormBuilder, private repo: Repository, private router: Router, private cookieService: CookieService, private http: Http, public auth: AuthService) {
         this.createForm();
+        this.isBrowser = isPlatformBrowser(platformId);
     }
 
     createForm() {
@@ -46,9 +50,10 @@ export class JoinSessionComponent implements OnDestroy {
                 console.log(this.session);
                 let data = {
                     score: 0,
-                    sessionParticipant: formModel.username,
+                    sessionParticipant: (this.auth.isAuthenticated) ? this.auth.name : formModel.username,
                     session: this.session.sessionId
                 };
+                console.log(data);
                 this.http.post(`${this.repo.urlBase}/api/results`, data)
                     .takeWhile(() => this.alive)
                     .subscribe(response => {

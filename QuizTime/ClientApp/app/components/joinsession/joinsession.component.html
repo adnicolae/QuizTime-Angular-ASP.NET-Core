@@ -13,7 +13,8 @@
 
                     <div class="form-group">
                         <label for="username">Username</label>
-                        <input type="text" class="form-control" formControlName="username" required/>
+                        <input *ngIf="isBrowser && !auth.isAuthenticated" type="text" class="form-control" formControlName="username" required/>
+                        <input *ngIf="isBrowser && auth.isAuthenticated" type="text" class="form-control" formControlName="username" value="{{auth.name}}" disabled />
                     </div>
 
                     <button [disabled]="joinForm.pristine" type="submit" class="btn btn-success btn-lg">Join session</button>
@@ -23,4 +24,7 @@
     </div>
 </div>
 
-<!--{{ joinForm.value | json }}-->
+{{ joinForm.value | json }}
+<!--{{ auth.name }}
+{{ this.isBrowser}}
+{{ this.auth.isAuthenticated }}-->
