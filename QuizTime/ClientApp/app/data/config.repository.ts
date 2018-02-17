@@ -1,8 +1,9 @@
 ﻿export class ResultFilter {
     search?: string;
     related: boolean = true;
-    participantId?: number;
+    participantUsername?: string;
     specific: boolean = true;
+    last: number;
 
     reset() {
         this.related = true;

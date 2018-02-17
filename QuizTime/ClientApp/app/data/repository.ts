@@ -2,13 +2,15 @@
 import { Result } from "../models/result.model";
 import { Session } from "../models/session.model";
 import { Choice } from "../models/choice.model";
-import { Injectable, Inject } from "@angular/core";
+import { Injectable, Inject, PLATFORM_ID } from "@angular/core";
 import { Http, RequestMethod, Request, Response } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/takeWhile";
 import "rxjs/add/operator/map";
 import { QuizFilter, ResultFilter } from "./config.repository";
 import { CookieService } from 'ngx-cookie';
+import { AuthService } from '../components/registration/auth.service';
+import { isPlatformServer, isPlatformBrowser } from '@angular/common';
 
 const quizzesUrl = "api/quizzes";
 const resultsUrl = "api/results";
@@ -25,16 +27,22 @@ export class Repository {
     hostedSession: Session;
     quizzes: Quiz[];
     results: Result[];
+    participantResults: Result[];
     sessions: Session[];
     latestQuiz: Quiz;
     alive: boolean = true;
     urlBase: string;
+    isBrowser: boolean;
 
-    constructor(private http: Http, @Inject('BASE_URL') baseUrl: string, private cookieService: CookieService) {
+    constructor(@Inject(PLATFORM_ID) private platformId: Object, private http: Http, @Inject('BASE_URL') baseUrl: string, private cookieService: CookieService, private auth: AuthService) {
         this.quizFilter.related = true;
         this.urlBase = baseUrl;
         this.getQuizzes(baseUrl);
-        this.getResults();
+        //this.getResults();
+        this.isBrowser = isPlatformBrowser(platformId);
+        if (this.isBrowser) {
+            this.getParticipantResults(0);
+        }
         this.getSessions();
     }
 
@@ -75,21 +83,34 @@ export class Repository {
             .subscribe(response => this.quizzes = response);
     }
 
-    getResults() {
-        let url = this.urlBase  + resultsUrl + "?specific=" + this.resultFilter.specific + "&related=" + this.resultFilter.related;
-
-        if (this.quizFilter.search) {
-            url += "&search=" + this.resultFilter.search;
+    getParticipantResults(last: number) {
+        let url = this.urlBase + resultsUrl + "?specific=" + this.resultFilter.specific + "&related=" + this.resultFilter.related;
+        if (this.auth.isAuthenticated) {
+            this.resultFilter.participantUsername = this.auth.name as string;
+            this.resultFilter.last = last;
+            url += "&participantUsername=" + this.resultFilter.participantUsername;
+            url += "&last=" + this.resultFilter.last;
+            this.sendRequest(RequestMethod.Get, url)
+                .takeWhile(() => this.alive)
+                .subscribe(response => this.participantResults = response);
         }
-
-        if (this.resultFilter.participantId) {
-            url += "&participantId=" + this.resultFilter.participantId;
-        }
-
-        this.sendRequest(RequestMethod.Get, url)
-            .takeWhile(() => this.alive)
-            .subscribe(response => this.results = response);
     }
+
+    //getResults() {
+    //    let url = this.urlBase  + resultsUrl + "?specific=" + this.resultFilter.specific + "&related=" + this.resultFilter.related;
+
+    //    if (this.quizFilter.search) {
+    //        url += "&search=" + this.resultFilter.search;
+    //    }
+
+    //    if (this.resultFilter.participantUsername) {
+    //        url += "&participantUsername=" + this.resultFilter.participantUsername;
+    //    }
+
+    //    this.sendRequest(RequestMethod.Get, url)
+    //        .takeWhile(() => this.alive)
+    //        .subscribe(response => this.results = response);
+    //}
 
     getSessions() {
         let url = this.urlBase + sessionsUrl;
@@ -189,7 +210,7 @@ export class Repository {
         this.http.patch(url + "/" + id, patch)
             .takeWhile(() => this.alive)
             .subscribe(response => {
-                this.getResults();
+                //this.getResults();
                 console.log("Updated result " + id + ";");
             }, response => {
                 console.log("Unable to update result " + id);
