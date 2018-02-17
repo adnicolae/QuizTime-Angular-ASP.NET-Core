@@ -1,5 +1,47 @@
+<link href="https://fonts.googleapis.com/css?family=Ceviche+One|Cookie|Open+Sans" rel="stylesheet">
+<!--<div id="sidebar" class="ui sidebar inverted vertical menu">
+    <a class="item">1</a><a class="item">2</a>
+</div>
+<div class="pusher">
+
+    <div class="ui inverted vertical left fixed menu tablet or lower hidden">
+        <a class="item">1</a><a class="item">2</a>
+    </div>
+
+    <div class="ui sidebar visible fixed inverted main menu screen tablet mobile only">
+        <a class="launch icon item sidebar-toggle">
+            <i class="sidebar icon"></i>
+        </a>
+    </div>
+
+    <div class="content">
+        <h1>Contents</h1>
+    </div>
+
+
+</div>-->
+<!--<div class="ui stackable large secondary vertical menu">
+    <a class="active item">
+        Account
+    </a>
+    <a class="item">
+        Settings
+    </a>
+    <div class="ui dropdown item">
+        <i class="dropdown icon"></i>
+        Display Options
+        <div class="menu">
+            <div class="header">Text Size</div>
+            <a class="item">Small</a>
+            <a class="item">Medium</a>
+            <a class="item">Large</a>
+        </div>
+    </div>
+</div>-->
+
+ 
 <div class='main-nav'>
-    <div class='navbar navbar-inverse'>
+    <div class='navbar navbar'>
         <div class='navbar-header'>
             <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'>
                 <span class='sr-only'>Toggle navigation</span>
@@ -7,26 +49,17 @@
                 <span class='icon-bar'></span>
                 <span class='icon-bar'></span>
             </button>
-            <a class='navbar-brand' [routerLink]="['/home']">QuizTime</a>
+            <a class='navbar-brand' [routerLink]="['/home']" style="font-family:Cookie; font-size:40px">quiztime<span style="font-family:'Ceviche One'">!</span></a>
         </div>
         <div class='clearfix'></div>
         <div class='navbar-collapse collapse'>
-            <ul class='nav navbar-nav'>
+            <ul class='nav navbar-nav' style="font-family:'Open Sans'">
                 <li [routerLinkActive]="['link-active']">
                     <a [routerLink]="['/home']">
                         <span class='glyphicon glyphicon-home'></span> Home
                     </a>
                 </li>
-                <!--<li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/counter']">
-                        <span class='glyphicon glyphicon-education'></span> Counter
-                    </a>
-                </li>
-                <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/fetch-data']">
-                        <span class='glyphicon glyphicon-th-list'></span> Fetch data
-                    </a>
-                </li>-->
+
                 <li [routerLinkActive]="['link-active']">
                     <a [routerLink]="['/fetch-quizzes']">
                         <span class='glyphicon glyphicon-question-sign'></span> Fetch quizzes
@@ -34,10 +67,30 @@
                 </li>
                 <li [routerLinkActive]="['link-active']">
                     <a [routerLink]="['/fetch-results']">
-                        <span class='glyphicon glyphicon-th-list'></span> Fetch results
+                        <span class='glyphicon glyphicon-th-list'></span> My Results
+                    </a>
+                </li>
+
+                <li *ngIf="isBrowser && !auth.isAuthenticated">
+                    <a [routerLink]="['/login']">
+                        <span class='glyphicon glyphicon-log-in'></span> Login
+                    </a>
+                </li>
+
+                <li *ngIf="isBrowser && !auth.isAuthenticated">
+                    <a [routerLink]="['/register']">
+                        <span class='glyphicon glyphicon-user'></span> Register
+                    </a>
+                </li>
+
+                <li *ngIf="isBrowser && auth.isAuthenticated">
+                    <a [routerLink]="['/home']" (click)="auth.logout()">
+                        <span class='glyphicon glyphicon-log-out'></span> Logout
                     </a>
                 </li>
             </ul>
         </div>
     </div>
 </div>
+
+
