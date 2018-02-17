@@ -1,0 +1,28 @@
+﻿<h1>New QuizTime Account</h1>
+
+<div class="row">
+    <div class="col-xs-8">
+        <div class="well well-lg" style="text-align:center">
+            <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input [ngClass]="{'error' : isValid('username')}" type="text" class="form-control" formControlName="username" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input [ngClass]="{'error' : isValid('password')}" type="password" class="form-control" formControlName="password" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="passwordConfirmation">Confirm password</label>
+                    <input [ngClass]="{'error' : isValid('passwordConfirmation')}" type="password" class="form-control" formControlName="passwordConfirmation" required />
+                </div>
+                <span *ngIf="registrationForm.errors?.mismatchedFields">Passwords do not match!</span>
+                <button type="submit" class="btn btn-success btn-lg">Register</button>
+            </form>
+        </div>
+    </div>
+</div>
+{{ registrationForm.value}}
+
