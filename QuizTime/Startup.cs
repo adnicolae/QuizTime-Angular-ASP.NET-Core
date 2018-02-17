@@ -25,7 +25,7 @@ namespace QuizTime
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<Context>(options => options.UseSqlServer(Configuration["Data:QuizTime:ConnectionString"]));
+            services.AddDbContext<Context>(options => options.UseSqlServer(Configuration["Data:QuizTime:ProductionString"]));
 
             services.AddSignalR();
 
@@ -68,7 +68,7 @@ namespace QuizTime
                     defaults: new { controller = "Home", action = "Index" });
             });
 
-            SeedData.SeedDatabase(context);
+            //SeedData.SeedDatabase(context);
         }
     }
 }

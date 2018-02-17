@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const AotPlugin = require('@ngtools/webpack').AotPlugin;
 const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = (env) => {
     // Configuration in common to both client-side and server-side bundles
@@ -20,7 +21,17 @@ module.exports = (env) => {
                 { test: /\.ts$/, include: /ClientApp/, use: isDevBuild ? ['awesome-typescript-loader?silent=true', 'angular2-template-loader'] : '@ngtools/webpack' },
                 { test: /\.html$/, use: 'html-loader?minimize=false' },
                 { test: /\.css$/, use: [ 'to-string-loader', isDevBuild ? 'css-loader' : 'css-loader?minimize' ] },
-                { test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' }
+                { test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' },
+                {
+                    test: /\.(js|jsx)$/,
+                    exclude: /(node_modules|bower_components)/,
+                    use: {
+                        loader: 'babel-loader',
+                        options: {  // << add options with presets env
+                            presets: ['env']
+                        }
+                    }
+                }
             ]
         },
         plugins: [new CheckerPlugin()]
@@ -43,8 +54,20 @@ module.exports = (env) => {
                 moduleFilenameTemplate: path.relative(clientBundleOutputDir, '[resourcePath]') // Point sourcemap entries to the original file locations on disk
             })
         ] : [
-            // Plugins that apply in production builds only
-            new webpack.optimize.UglifyJsPlugin(),
+                // Plugins that apply in production builds only
+                new UglifyJSPlugin({
+                    parallel: {
+                        cache: true,
+                        workers: 2
+                    }
+                }),
+                //new webpack.optimize.UglifyJsPlugin({
+                //    test: /\.js($|\?)/i,
+                //    sourceMap: true,
+                //    uglifyOptions: {
+                //        compress: true
+                //    }
+                //}),
             new AotPlugin({
                 tsConfigPath: './tsconfig.json',
                 entryModule: path.join(__dirname, 'ClientApp/app/app.module.browser#AppModule'),
