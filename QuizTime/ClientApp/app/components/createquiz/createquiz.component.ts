@@ -1,4 +1,4 @@
-﻿import { Component, OnDestroy } from '@angular/core';
+﻿import { Component, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { Repository } from '../../data/repository';
 import { Quiz } from '../../models/quiz.model';
@@ -9,6 +9,8 @@ import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/takeWhile";
 import { Router } from "@angular/router";
+import { AuthService } from '../registration/auth.service';
+import { isPlatformServer, isPlatformBrowser } from '@angular/common';
 
 @Component({
     selector: 'create-quiz',
@@ -18,13 +20,17 @@ export class CreateQuizComponent implements OnDestroy{
     quizForm: FormGroup;
     latestQuiz: Quiz;
     quizTimeLimit: number = 30;
+    quizAssignedPoints: number = 0;
+    quizDeducedPoints: number = 0;
     private thisBaseUrl: string;
     errorMessage = "";
     private alive: boolean = true;
+    isBrowser: boolean;
 
-    constructor(private router: Router, private formBuilder: FormBuilder, private repo: Repository, private http: Http, @Inject('BASE_URL') baseUrl: string) {
+    constructor( @Inject(PLATFORM_ID) private platformId: Object, private router: Router, private formBuilder: FormBuilder, private repo: Repository, private http: Http, @Inject('BASE_URL') baseUrl: string, public auth: AuthService) {
         this.thisBaseUrl = baseUrl;
         this.createForm();
+        this.isBrowser = isPlatformBrowser(platformId);
     }
 
     setChoices(choices: Choice[]) {
@@ -50,9 +56,8 @@ export class CreateQuizComponent implements OnDestroy{
             title: formModel.title as string,
             timeLimit: this.quizTimeLimit,
             dateCreated: new Date(),
-            assignedPoints: formModel.assignedPoints as number,
-            deducedPoints: formModel.deducedPoints as number,
-            creator: this.repo.quizzes[1].creator
+            assignedPoints: this.quizAssignedPoints,
+            deducedPoints: this.quizDeducedPoints
         };
 
         let data = {
@@ -61,8 +66,9 @@ export class CreateQuizComponent implements OnDestroy{
             assignedPoints: newQuiz.assignedPoints,
             deducedPoints: newQuiz.deducedPoints,
             dateCreated: newQuiz.dateCreated,
-            creator: newQuiz.creator ? newQuiz.creator.userId : 0
+            creator: this.auth.name
         };
+        console.log(data);
 
         this.http
             .post(`${this.repo.urlBase}/api/quizzes`, data)
@@ -88,6 +94,7 @@ export class CreateQuizComponent implements OnDestroy{
             }, response => {
                 this.errorMessage = "Unable to insert quiz.";
                 console.log(this.errorMessage);
+                console.log(response);
             });
     }
 
@@ -110,11 +117,33 @@ export class CreateQuizComponent implements OnDestroy{
         this.choices.removeAt(index);
     }
 
+    increaseAssignedPoints() {
+        this.quizAssignedPoints += 5;
+    }
+
+    increaseDeducedPoints() {
+        this.quizDeducedPoints += 5;
+    }
+
+    decreaseAssignedPoints() {
+        if (this.quizAssignedPoints >= 5) {
+            this.quizAssignedPoints -= 5;
+        }
+    }
+
+    decreaseDeducedPoints() {
+        if (this.quizDeducedPoints >= 5) {
+            this.quizDeducedPoints -= 5;
+        }
+    }
+
     increaseTimeLimit() {
         this.quizTimeLimit += 30;
     }
 
     decreaseTimeLimit() {
-        this.quizTimeLimit -= 30;
+        if (this.quizTimeLimit >= 30) {
+            this.quizTimeLimit -= 30;
+        }
     }
 }

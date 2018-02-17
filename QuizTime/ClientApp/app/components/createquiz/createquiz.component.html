@@ -13,12 +13,18 @@
         </label>
         <div class="form-group form-inline">
             <label>
-                (+):
-                <input class="form-control small" formControlName="assignedPoints">
+                Assigned (+):
+                <!--<input class="form-control small" formControlName="assignedPoints">-->
+                <strong style="font-size:2em;">{{ quizAssignedPoints }}</strong>
+                <span class="btn btn-danger" (click)="decreaseAssignedPoints()">-</span>
+                <span class="btn btn-success" (click)="increaseAssignedPoints()">+</span>
             </label>
             <label>
-                (-):
-                <input class="form-control small" formControlName="deducedPoints">
+                Deduced (-):
+                <strong style="font-size:2em;">{{ quizDeducedPoints }}</strong>
+                <!--<input class="form-control small" formControlName="deducedPoints">-->
+                <span class="btn btn-danger" (click)="decreaseDeducedPoints()">-</span>
+                <span class="btn btn-success" (click)="increaseDeducedPoints()">+</span>
             </label>
             <label>
                 Time limit:
@@ -31,7 +37,7 @@
         <div formArrayName="choices" class="well well-lg">
             <div class="row">
                 
-                    <div *ngFor="let choice of choices.controls; let i=index" [formGroupName]="i">
+                    <div *ngFor="let choice of choices?.controls; let i=index" [formGroupName]="i">
                         <div class="col-md-3 center-block">
                         <h4>Choice #{{i+1}}</h4>
                         <div style="margin-left: 1em;">
@@ -56,12 +62,41 @@
     </form>
 </div>
 
-<div class="col-sm-6">
-    <h2>Preview</h2>
 
-    <h3>{{ quizForm.get('title').value }}</h3>
-    <h4>Maximum points: {{ quizForm.get('assignedPoints').value }}</h4>
-    <div class="col-sm-3">
+<div class="col-sm-6">
+    <div class="ui two column centered stackable grid">
+        <div class="column">
+            <h2 class="header">Preview</h2>
+            <h4 class="header">Maximum points: {{ quizAssignedPoints }}</h4>
+            <div class="row">
+                <div class="ui two cards">
+                    <div class="card" *ngFor="let choice of quizForm.get('choices')?.value; let i = index">
+                        <div class="ui dimmer">
+                            <div class="content">
+                                <div class="center">
+                                    <div class="ui inverted button">Add Friend</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="header">
+                                Choice # {{ i+1 }}
+                            </div>
+                        </div>
+                        <div *ngIf="choice.correctness != true" class="ui bottom attached red button">
+                            WRONG
+                        </div>
+                        <div *ngIf="choice.correctness == true" class="ui bottom attached green button">
+                            CORRECT
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--<div class="col-sm-3">
+
+
     <div *ngFor="let choice of quizForm.get('choices').value; let i = index">
         <div class="col-sm-6" style="background-color:orange;">
             <p>Choice # {{ i+1 }}</p>
@@ -69,7 +104,7 @@
             <span *ngIf="choice.correctness != true" style="color:red;"><strong>Wrong</strong></span>
         </div>
     </div>
-        </div>
+        </div>-->
 </div>
 
 <!--<p>Form value: {{ quizForm.value | json }}</p>
