@@ -130,10 +130,23 @@ namespace QuizTime.Controllers
             {
                 Quiz quiz = quizData.Quiz;
 
-                if (quiz.Creator != null && quiz.Creator.UserId != 0)
+                // Check if the user exists
+                User user = _context.Users.SingleOrDefault(u => u.Username == quizData.Creator);
+
+                if (user != null)
                 {
-                    _context.Attach(quiz.Creator);
+                    quiz.Creator = user;
+                    _context.Attach(user);
                 }
+                else
+                {
+                    return NotFound("Quiz creator not found.");
+                }
+
+                //if (quiz.Creator != null && quiz.Creator.UserId != 0)
+                //{
+                //    _context.Attach(quiz.Creator);
+                //}
 
                 _context.Add(quiz);
                 _context.SaveChanges();

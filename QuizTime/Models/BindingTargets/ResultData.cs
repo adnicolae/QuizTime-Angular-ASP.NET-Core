@@ -18,10 +18,10 @@ namespace QuizTime.Models.BindingTargets
         public Result Result => new Result
         {
             Score = Score,
-            SessionParticipant = SessionParticipant.Length == 0 ? null : new User
-            {
-                Username = SessionParticipant
-            },
+            //SessionParticipant = SessionParticipant.Length == 0 ? null : new User
+            //{
+            //    Username = SessionParticipant
+            //},
             Session = Session == 0 ? null : new Session
             {
                 SessionId = Session

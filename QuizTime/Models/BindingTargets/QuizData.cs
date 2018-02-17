@@ -24,7 +24,7 @@ namespace QuizTime.Models.BindingTargets
         public DateTime DateCreated { get; set; }
 
         // the key of the quiz creator
-        public long Creator { get; set; }
+        public string Creator { get; set; }
 
         public Quiz Quiz => new Quiz
         {
@@ -33,10 +33,10 @@ namespace QuizTime.Models.BindingTargets
             AssignedPoints = AssignedPoints,
             DeducedPoints = DeducedPoints,
             DateCreated = DateCreated,
-            Creator = Creator == 0 ? null : new User
-            {
-                UserId = Creator
-            }
+            //Creator = Creator == 0 ? null : new User
+            //{
+            //    UserId = Creator
+            //}
         };
     }
 }

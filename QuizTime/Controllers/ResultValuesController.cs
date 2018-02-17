@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+// OPEN XML 
 namespace QuizTime.Controllers
 {
     [Route("api/results")]
@@ -54,7 +55,7 @@ namespace QuizTime.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Result> GetResults(string search, long participantId, long sessionCreatorId, bool related = false, bool specific = false)
+        public IEnumerable<Result> GetResults(string search, string participantUsername, long sessionCreatorId, int last, bool related = false, bool specific = false)
         {
             IQueryable<Result> query = _context.Results;
 
@@ -67,9 +68,9 @@ namespace QuizTime.Controllers
 
             if (specific)
             {
-                if (participantId > 0)
+                if (participantUsername.Length > 0)
                 {
-                    query = query.Where(r => r.SessionParticipant.UserId == participantId);
+                    query = query.Where(r => r.SessionParticipant.Username == participantUsername);
                 }
 
                 if (sessionCreatorId > 0)
@@ -84,6 +85,7 @@ namespace QuizTime.Controllers
                     .Include(r => r.SessionParticipant)
                     .Include(r => r.Session)
                         .ThenInclude(r => r.Quiz)
+                        .ThenInclude(q => q.Creator)
                     .Include(r => r.Choice);
 
                 List<Result> data = query.ToList();
@@ -103,14 +105,27 @@ namespace QuizTime.Controllers
 
                     if (r.Session != null && r.Session.Quiz != null)
                     {
-                        r.Session.Quiz.Creator = null;
+                        r.Session.Quiz.Creator.Results = null;
+                        r.Session.Quiz.Creator.QuizzesCreated = null;
+                        r.Session.Quiz.Creator.Password = null;
                     }
+
+                    //if (r.Session != null && r.Session.Quiz != null)
+                    //{
+                    //    r.Session.Quiz.Creator = null;
+                    //}
 
                     if (r.Choice != null)
                     {
                         r.Choice.Quiz = null;
                     }
                 });
+
+                if (last > 0)
+                {
+                    return data.TakeLast(last);
+                }
+
                 return data;
             }
             else
@@ -126,8 +141,22 @@ namespace QuizTime.Controllers
             {
                 Result result = resultData.Result;
 
-                if (result.SessionParticipant != null && result.SessionParticipant.Username.Length > 0)
+                // Check if the user exists
+                User user = _context.Users.SingleOrDefault(u => u.Username == resultData.SessionParticipant);
+
+                // Attach the existing user to the result
+                if (user != null)
                 {
+                    result.SessionParticipant = user;
+                    _context.Attach(user);
+                } // Create a temporary user using the username provided
+                else if (resultData.SessionParticipant != null && resultData.SessionParticipant.Length > 0)
+                {
+                    result.SessionParticipant = new User
+                    {
+                        Username = resultData.SessionParticipant
+                    };
+
                     _context.Attach(result.SessionParticipant);
                 }
 
