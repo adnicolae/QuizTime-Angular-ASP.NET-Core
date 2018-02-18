@@ -12,9 +12,10 @@ using System;
 namespace QuizTime.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20180217202351_UpdateUser")]
+    partial class UpdateUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,8 +114,6 @@ namespace QuizTime.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("DefaultQuizTitle");
-
-                    b.Property<string>("Name");
 
                     b.Property<string>("Password");
 
