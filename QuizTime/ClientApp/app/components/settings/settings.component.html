@@ -1,0 +1,21 @@
+﻿<h1 class="header">Account Settings</h1>
+
+<div class="ui form warning">
+    <div class="fields">
+        <div class="six wide field">
+            <label>Default Title</label>
+            <input [(ngModel)]="settingsData.defaultQuizTitle" type="text" placeholder="joe@schmoe.com">
+
+            <div class="ui icon message">
+                <i class="small info icon"></i>
+                <div class="content">
+                    <div class="header">
+                        Info
+                    </div>
+                    <p>This is the title used by all quick quizzes you create.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ui submit button" style="margin-top:2px">Submit</div>
+</div>
