@@ -1,4 +1,126 @@
-﻿<h1>New Quiz</h1>
+﻿<h6>/<a [routerLink]="['/home']">Home</a>/New Quiz</h6>
+
+
+<div class="ui attached icon message">
+    <img class="ui tiny image" src="school.png" style="margin-right:1em">
+    <div class="content">
+        <h2 class="header">
+            Quick Quiz
+        </h2>
+        <p>Fill out the form below to create a quick quiz.</p>
+    </div>
+</div>
+<form [formGroup]="quizForm" (ngSubmit)="onSubmit()" class="ui form attached compact fluid blue segment">
+    <div class="eight wide field">
+        <label>Quiz Title</label>
+        <input placeholder="Title" formControlName="title" type="text">
+    </div>
+    <div class="field">
+        <label>Points</label>
+        <div class="ui buttons">
+            <span class="ui green icon button" (click)="increaseAssignedPoints()">
+                <i class="plus icon"></i>
+            </span>
+            <span class="ui button" data-tooltip="Adjust winning points.">
+                <i class="up arrow icon"></i>
+                +{{ quizAssignedPoints }}
+            </span>
+            <span class="ui red icon button" (click)="decreaseAssignedPoints()">
+                <i class="minus icon"></i>
+            </span>
+        </div>
+
+        <div class="ui buttons">
+            <span class="ui green icon button" (click)="increaseDeducedPoints()">
+                <i class="plus icon"></i>
+            </span>
+            <span class="ui button" data-tooltip="Adjust losing points.">
+                <i class="down arrow icon"></i>
+                -{{ quizDeducedPoints }}
+            </span>
+            <span class="ui red icon button" (click)="decreaseDeducedPoints()">
+                <i class="minus icon"></i>
+            </span>
+        </div>
+    </div>
+    <div class="field">
+        <label>Time Limit</label>
+        <div class="ui buttons">
+            <span class="ui green icon button" (click)="increaseTimeLimit()">
+                <i class="plus icon"></i>
+            </span>
+            <span class="ui button" data-tooltip="Adjust the duration of the session.">
+                <i class="clock icon"></i>
+                {{quizTimeLimit}}
+            </span>
+            <span class="ui red icon button" (click)="decreaseTimeLimit()">
+                <i class="minus icon"></i>
+            </span>
+        </div>
+    </div>
+    <h3 class="ui horizontal divider header">
+        <button type="button" class="ui icon button" (click)="addChoice()">
+            <i class="plus icon"></i>
+        </button>
+        Choices
+        <button type="button" class="ui icon button" (click)="removeChoice(0)">
+            <i class="remove icon"></i>
+        </button>
+    </h3>
+
+    <div formArrayName="choices" class="ui message">
+        <div class="ui two column centered stackable grid">
+            <div class="column">
+                <div class="row">
+                    <div class="ui two cards">
+                        <div class="card" *ngFor="let choice of choices?.controls; let i=index" [formGroupName]="i">
+                            <div class="content">
+                                <div class="header">
+                                    Choice # {{ i+1 }}
+                                </div>
+                                <input type="checkbox" formControlName="correctness" value="true" class="ui checkbox" />
+                                Is this a correct choice?
+                                <input class="form-control hidden" formControlName="title" value="Choice" />
+                            </div>
+                            <div *ngIf="choice.value.correctness != true" class="ui bottom attached red button">
+                                WRONG
+                            </div>
+                            <div *ngIf="choice.value.correctness == true" class="ui bottom attached green button">
+                                CORRECT
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="inline field">
+        <div class="ui slider checkbox">
+            <input type="checkbox" id="terms" formControlName="startSessionBool" value="true" checked>
+            <label for="terms">Start the quiz session immediately.</label>
+        </div>
+    </div>
+    <button type="submit" [disabled]="quizForm.pristine" class="ui blue submit button">Create Quiz</button>
+</form>
+<div class="ui bottom attached warning message">
+    <i class="icon help"></i>
+    Already created a quiz? <a [routerLink]="['/fetch-quizzes']">Start session</a> instead.
+</div>
+
+
+
+<!--<p>Form value: {{ quizForm.value | json }}</p>
+<p>Form status: {{ quizForm.status | json }}</p>
+<p>Quiz Title: {{ quizForm.get('title').value }}</p>
+<p>{{quizForm.get('choices').value | json}}</p>-->
+
+
+
+
+
+
+<!--
 
 <div class="col-sm-6">
     <form [formGroup]="quizForm" (ngSubmit)="onSubmit()" novalidate>
@@ -14,7 +136,7 @@
         <div class="form-group form-inline">
             <label>
                 Assigned (+):
-                <!--<input class="form-control small" formControlName="assignedPoints">-->
+                <!--<input class="form-control small" formControlName="assignedPoints">
                 <strong style="font-size:2em;">{{ quizAssignedPoints }}</strong>
                 <span class="btn btn-danger" (click)="decreaseAssignedPoints()">-</span>
                 <span class="btn btn-success" (click)="increaseAssignedPoints()">+</span>
@@ -22,7 +144,7 @@
             <label>
                 Deduced (-):
                 <strong style="font-size:2em;">{{ quizDeducedPoints }}</strong>
-                <!--<input class="form-control small" formControlName="deducedPoints">-->
+                <!--<input class="form-control small" formControlName="deducedPoints">
                 <span class="btn btn-danger" (click)="decreaseDeducedPoints()">-</span>
                 <span class="btn btn-success" (click)="increaseDeducedPoints()">+</span>
             </label>
@@ -33,32 +155,32 @@
                 <span class="btn btn-success" (click)="increaseTimeLimit()">+</span>
             </label>
         </div>
-        
+
         <div formArrayName="choices" class="well well-lg">
             <div class="row">
-                
-                    <div *ngFor="let choice of choices?.controls; let i=index" [formGroupName]="i">
-                        <div class="col-md-3 center-block">
+
+                <div *ngFor="let choice of choices?.controls; let i=index" [formGroupName]="i">
+                    <div class="col-md-3 center-block">
                         <h4>Choice #{{i+1}}</h4>
                         <div style="margin-left: 1em;">
                             <div class="form-group">
                                 <label class="center-block">
                                     <input type="checkbox" formControlName="correctness" value="true" class="checkbox-inline" />
                                     <button (click)="removeChoice(i)" type="button" class="btn btn-sm btn-danger">X</button>
-                                    <input class="form-control hidden" formControlName="title" value="Choice"/>
+                                    <input class="form-control hidden" formControlName="title" value="Choice" />
                                 </label>
                             </div>
                         </div>
-                            </div>
-                    
+                    </div>
+
                 </div>
-                        <button (click)="addChoice()" type="button" class="btn btn-lg btn-default">+</button>
-                </div>
+                <button (click)="addChoice()" type="button" class="btn btn-lg btn-default">+</button>
             </div>
+        </div>
         <button type="submit"
                 [disabled]="quizForm.pristine" class="btn btn-success btn-lg">
             Add Quiz
-        </button> 
+        </button>
     </form>
 </div>
 
@@ -94,19 +216,4 @@
             </div>
         </div>
     </div>
-    <!--<div class="col-sm-3">
-
-
-    <div *ngFor="let choice of quizForm.get('choices').value; let i = index">
-        <div class="col-sm-6" style="background-color:orange;">
-            <p>Choice # {{ i+1 }}</p>
-            <span *ngIf="choice.correctness == true" style="color:forestgreen;"><strong>Correct</strong></span>
-            <span *ngIf="choice.correctness != true" style="color:red;"><strong>Wrong</strong></span>
-        </div>
-    </div>
-        </div>-->
-</div>
-
-<!--<p>Form value: {{ quizForm.value | json }}</p>
-<p>Form status: {{ quizForm.status | json }}</p>
-<p>Quiz Title: {{ quizForm.get('title').value }}</p>-->
+    -->

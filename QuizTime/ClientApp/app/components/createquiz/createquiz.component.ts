@@ -1,4 +1,4 @@
-﻿import { Component, OnDestroy, PLATFORM_ID } from '@angular/core';
+﻿import { Component, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { Repository } from '../../data/repository';
 import { Quiz } from '../../models/quiz.model';
@@ -11,6 +11,8 @@ import "rxjs/add/operator/takeWhile";
 import { Router } from "@angular/router";
 import { AuthService } from '../registration/auth.service';
 import { isPlatformServer, isPlatformBrowser } from '@angular/common';
+
+declare var $;
 
 @Component({
     selector: 'create-quiz',
@@ -31,6 +33,12 @@ export class CreateQuizComponent implements OnDestroy{
         this.thisBaseUrl = baseUrl;
         this.createForm();
         this.isBrowser = isPlatformBrowser(platformId);
+    }
+
+    ngOnInit() {
+        $('.ui.checkbox')
+            .checkbox()
+            ;
     }
 
     setChoices(choices: Choice[]) {
@@ -90,7 +98,27 @@ export class CreateQuizComponent implements OnDestroy{
                     this.repo.createChoice(choicesCopy[c]);
                     console.log(choicesCopy[c]);
                 }
-                this.router.navigateByUrl("/new/quiz/created");
+                if (formModel.startSessionBool) {
+                    var generatedId: number = parseInt(this.generatePin());
+
+                    let sessionData = {
+                        dateCreated: new Date(),
+                        generatedHostId: generatedId,
+                        status: 1,
+                        quiz: newQuiz.quizId
+                    };
+
+                    this.http
+                        .post(`${this.repo.urlBase}/api/sessions`, sessionData)
+                        .takeWhile(() => this.alive)
+                        .subscribe(response => {
+                            // go to "/session-board/host/{id}"
+                            this.router.navigateByUrl("/session-board/host/" + generatedId);
+                        });
+                }
+                else {
+                    this.router.navigateByUrl("/new/quiz/created");
+                }
             }, response => {
                 this.errorMessage = "Unable to insert quiz.";
                 console.log(this.errorMessage);
@@ -105,7 +133,10 @@ export class CreateQuizComponent implements OnDestroy{
             assignedPoints: '0',
             deducedPoints: '0',
             choices: this.formBuilder.array([]),
+            startSessionBool: true,
         });
+        this.choices.push(this.formBuilder.group(new Choice()));
+        this.choices.push(this.formBuilder.group(new Choice()));
     }
 
 
@@ -145,5 +176,11 @@ export class CreateQuizComponent implements OnDestroy{
         if (this.quizTimeLimit >= 30) {
             this.quizTimeLimit -= 30;
         }
+    }
+
+    generatePin() {
+        var min = 1000;
+        var max = 99999;
+        return ("0" + (Math.floor(Math.random() * (max - min + 1)) + min)).substr(-4);
     }
 }
