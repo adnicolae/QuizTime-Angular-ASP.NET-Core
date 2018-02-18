@@ -26,6 +26,7 @@ import { QuizCreatedComponent } from './components/createquiz/quizcreated.compon
 import { SimpleTimer } from 'ng2-simple-timer';
 import { RegisterComponent } from './components/registration/register.component';
 import { LoginComponent } from './components/login/login.component';
+import { SettingsComponent } from './components/settings/settings.component';
 import { AuthService } from './components/registration/auth.service';
 
 @NgModule({
@@ -46,6 +47,7 @@ import { AuthService } from './components/registration/auth.service';
         ParticipantBoardComponent,
         RegisterComponent,
         LoginComponent,
+        SettingsComponent,
         HomeComponent
     ],
     imports: [
@@ -72,6 +74,7 @@ import { AuthService } from './components/registration/auth.service';
             { path: 'fetch-quizzes/detail/:id', component: QuizDetailComponent },
             { path: 'register', component: RegisterComponent },
             { path: 'login', component: LoginComponent },
+            { path: 'settings', component: SettingsComponent },
             { path: '**', redirectTo: 'home' }
         ])
     ]
