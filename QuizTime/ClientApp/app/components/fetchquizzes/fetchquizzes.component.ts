@@ -1,9 +1,11 @@
-﻿import { Component, Inject } from "@angular/core";
+﻿import { Component, Inject, OnDestroy } from "@angular/core";
 import { Quiz } from "../../models/quiz.model";
 import { Session } from "../../models/session.model";
 import { Http } from '@angular/http';
 import { Repository } from "../../data/repository";
 import { Router } from "@angular/router";
+
+const sessionsUrl = "api/sessions";
 
 @Component(
     {
@@ -12,9 +14,15 @@ import { Router } from "@angular/router";
     }
 )
 
-export class FetchQuizzesComponent {
 
-    constructor(private repo: Repository, private router: Router) { }
+
+export class FetchQuizzesComponent {
+    baseUrl: string;
+    private alive: boolean = true;
+
+    constructor(private repo: Repository, private router: Router, private http: Http, @Inject('BASE_URL') baseUrl: string) {
+        this.baseUrl = baseUrl;
+    }
 
     get quiz(): Quiz {
         return this.repo.quiz;
@@ -47,10 +55,24 @@ export class FetchQuizzesComponent {
             console.log("already a session with quiz");
         } else {
             // create a new session
-            this.repo.createSession(new Session(0, new Date(), generatedId, 1, quizz));
+            //this.repo.createSession(new Session(0, new Date(), generatedId, 1, quizz));
 
-            // go to "/session-board/host/{id}"
-            this.router.navigateByUrl("/session-board/host/" + generatedId);
+            let data = {
+                dateCreated: new Date(),
+                generatedHostId: generatedId,
+                status: 1,
+                quiz: quizz ? quizz.quizId : 0
+            };
+
+            let url = this.baseUrl + sessionsUrl;
+
+            this.http
+                .post(url, data)
+                .takeWhile(() => this.alive)
+                .subscribe(response => {
+                    // go to "/session-board/host/{id}"
+                    this.router.navigateByUrl("/session-board/host/" + generatedId);
+                });
         }
     }
 
@@ -61,8 +83,13 @@ export class FetchQuizzesComponent {
     }
 
     generatePin() {
-        var min = 0;
-        var max = 9999;
+        var min = 1000;
+        var max = 99999;
         return ("0" + (Math.floor(Math.random() * (max - min + 1)) + min)).substr(-4);
+    }
+
+    ngOnDestroy() {
+        this.alive = false;
+        //this.repo.alive = false;
     }
 }

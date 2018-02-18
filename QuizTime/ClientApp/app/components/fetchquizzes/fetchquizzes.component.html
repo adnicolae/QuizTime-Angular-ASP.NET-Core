@@ -2,7 +2,77 @@
 
 <p *ngIf="!quizzes"><em>Loading...</em></p>
 
-<div class="row">
+<table id="example" class="ui compact blue celled definition table">
+    <thead class="full-width">
+        <tr>
+            <th></th>
+            <th>Title<div class="ui pointing below label" style="margin-bottom:0; margin-left:1em">Click to detail</div></th>
+            <th>Time Limit</th>
+            <th>(+) Points</th>
+            <th>(-) Points</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let quiz of quizzes" >
+            <td class="collapsing">
+                <div class="ui small right floated primary labeled icon button" (click)="selectQuiz(quiz)">
+                    <i class="address card icon"></i> New Session
+                </div>
+            </td>
+            <td [routerLink]="['/fetch-quizzes/detail', quiz.quizId]">{{ quiz.title }}</td>
+            <td>{{ quiz.timeLimit }}</td>
+            <td>{{ quiz.assignedPoints }}</td>
+            <td>{{ quiz.deducedPoints }}</td>
+            <td>{{ quiz.dateCreated | date }}</td>
+        </tr>
+    </tbody>
+    <tfoot class="full-width">
+        <tr>
+            <th></th>
+            <th colspan="5">
+                <div class="ui right floated small primary labeled icon button" [routerLink]="['/new/quiz']">
+                    <i class="plus icon"></i> New Quiz
+                </div>
+            </th>
+        </tr>
+    </tfoot>
+</table>
+
+<!--<table class="ui compact celled blue table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Time Limit</th>
+            <th>(+) Points</th>
+            <th>(-) Points</th>
+            <th>Date</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+
+
+        <tr *ngFor="let quiz of quizzes">
+            <td>{{ quiz.title }}</td>
+            <td>{{ quiz.timeLimit }}</td>
+            <td>{{ quiz.assignedPoints }}</td>
+            <td>{{ quiz.deducedPoints }}</td>
+            <td>{{ quiz.dateCreated | date }}</td>
+            <td>
+                <div class="ui small right floated primary labeled icon button" [routerLink]="['/fetch-results']">
+                    <i class="address card icon"></i> New Session
+                </div>
+                <div class="ui small right floated labeled icon button" [routerLink]="['/fetch-results']">
+                    <i class="address card icon"></i> Details
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>-->
+
+
+<!--<div class="row">
     <div class="col-sm-8">
         <table class='table table-striped' *ngIf="quizzes">
             <thead>
@@ -36,20 +106,5 @@
             </tbody>
         </table>
 
-        <!--<table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>GeneratedHostId</th>
-                    <th>QuizId</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let session of sessions">
-                    <td>{{ session?.generatedHostId }}</td>
-                    <td>{{ session?.quiz?.quizId }}</td>
-                </tr>
-            </tbody>
-        </table>-->
-
     </div>
-</div>
+</div>-->
