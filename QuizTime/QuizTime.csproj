@@ -7,6 +7,11 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.0-alpha2-final" />
@@ -24,6 +29,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Shared\_Favicons.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="ClientApp\app\components\createquiz\createquiz.component.ts" />
     <None Remove="ClientApp\app\components\createquiz\quizcreated.component.ts" />
     <None Remove="ClientApp\app\components\fetchquizzes\fetchquizzes.component.ts" />
@@ -34,6 +43,7 @@
     <None Remove="ClientApp\app\components\registration\auth.service.ts" />
     <None Remove="ClientApp\app\components\sessionboard\board.component.ts" />
     <None Remove="ClientApp\app\components\sessionboard\sessionboard.component.ts" />
+    <None Remove="ClientApp\app\components\settings\settings.component.ts" />
     <None Remove="ClientApp\app\data\config.repository.ts" />
     <None Remove="ClientApp\app\data\repository.module.ts" />
     <None Remove="ClientApp\app\data\repository.ts" />
@@ -45,6 +55,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="ClientApp\app\components\createquiz\school.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Shared\_Favicons.cshtml" />
     <None Include="wwwroot\dist\Semantic-UI-CSS-master\.versions" />
     <None Include="wwwroot\dist\Semantic-UI-CSS-master\components\accordion.css" />
     <None Include="wwwroot\dist\Semantic-UI-CSS-master\components\accordion.js" />
@@ -215,6 +232,7 @@
     <TypeScriptCompile Include="ClientApp\app\components\registration\register.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\sessionboard\board.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\sessionboard\sessionboard.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\settings\settings.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\data\config.repository.ts" />
     <TypeScriptCompile Include="ClientApp\app\data\repository.module.ts" />
     <TypeScriptCompile Include="ClientApp\app\data\repository.ts" />
