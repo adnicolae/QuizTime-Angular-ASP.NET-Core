@@ -13,7 +13,7 @@
 <form [formGroup]="quizForm" (ngSubmit)="onSubmit()" class="ui form attached compact fluid blue segment">
     <div class="eight wide field">
         <label>Quiz Title</label>
-        <input placeholder="Title" formControlName="title" type="text">
+        <input placeholder="{{defaultTitle || 'Title'}}" formControlName="title" type="text">
     </div>
     <div class="field">
         <label>Points</label>

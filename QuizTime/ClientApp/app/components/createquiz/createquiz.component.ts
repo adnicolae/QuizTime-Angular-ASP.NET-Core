@@ -28,6 +28,7 @@ export class CreateQuizComponent implements OnDestroy{
     errorMessage = "";
     private alive: boolean = true;
     isBrowser: boolean;
+    defaultTitle: string;
 
     constructor( @Inject(PLATFORM_ID) private platformId: Object, private router: Router, private formBuilder: FormBuilder, private repo: Repository, private http: Http, @Inject('BASE_URL') baseUrl: string, public auth: AuthService) {
         this.thisBaseUrl = baseUrl;
@@ -39,6 +40,10 @@ export class CreateQuizComponent implements OnDestroy{
         $('.ui.checkbox')
             .checkbox()
             ;
+
+        this.repo.getUser().subscribe(response => {
+            this.defaultTitle = response.defaultQuizTitle;
+        });
     }
 
     setChoices(choices: Choice[]) {
@@ -61,7 +66,7 @@ export class CreateQuizComponent implements OnDestroy{
 
         const newQuiz: Quiz = {
             quizId: 0,
-            title: formModel.title as string,
+            title: (this.defaultTitle != null) ? this.defaultTitle : formModel.title as string,
             timeLimit: this.quizTimeLimit,
             dateCreated: new Date(),
             assignedPoints: this.quizAssignedPoints,
