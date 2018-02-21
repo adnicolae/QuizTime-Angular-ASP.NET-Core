@@ -1,5 +1,5 @@
-﻿import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+﻿import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Repository } from '../../data/repository';
 import { Quiz } from '../../models/quiz.model';
 import { Session } from '../../models/session.model';
@@ -19,13 +19,15 @@ export class SessionBoardComponent implements OnInit, OnDestroy {
     participant = '';
     participants: string[] = [];
     currentStatus: number = 1;
-    session: Session = new Session();
+    session: Session;
     errorMessage = "";
     timer1Id: string;
     timer2Id: string;
     counter1 = 10;
     counter2: number;
     private alive: boolean = true;
+    baseUrl: string;
+    id: number;
 
 
     constructor(
@@ -33,27 +35,27 @@ export class SessionBoardComponent implements OnInit, OnDestroy {
         private router: Router,
         private activeRoute: ActivatedRoute,
         private timer: SimpleTimer,
-        private http: Http) {
+        private http: Http,
+        @Inject('BASE_URL') baseUrl: string) {
+        this.baseUrl = baseUrl;
 
-        let id = Number.parseInt(this.activeRoute.snapshot.params["id"]);
+        this.id = Number.parseInt(this.activeRoute.snapshot.params["id"]);
 
-        if (id < 1)
+        if (this.id < 1)
             return;
-        this.loadHostedSession(id);
+        this.loadHostedSession(this.id);
     }
 
     ngOnInit() {
-        let id = Number.parseInt(this.activeRoute.snapshot.params["id"]);
-
         this._hubConnection = new HubConnection('/boardhub');
 
         this._hubConnection.on('send', (username: any) => {
-            this.loadHostedSession(id);
+            this.loadHostedSession(this.id);
         });
 
         this._hubConnection.on('update', (status: any) => {
             console.log("HOST: Session status became: " + status);
-            this.loadHostedSession(id);
+            this.loadHostedSession(this.id);
         });
 
         this._hubConnection.start()
@@ -80,11 +82,11 @@ export class SessionBoardComponent implements OnInit, OnDestroy {
     loadHostedSession(id) {
         this.errorMessage = "";
         this.http
-            .get(`${this.repo.urlBase}/api/sessions/host/${id}`)
+            .get(this.baseUrl + "/api/sessions/host/" + id)
             .takeWhile(() => this.alive)
             .subscribe(response => {
                 this.session = response.json();
-                console.log(this.session);
+                console.log("session" + this.session);
             }, response => {
                 this.errorMessage = "Unable to load session.";
             });
@@ -152,13 +154,4 @@ export class SessionBoardComponent implements OnInit, OnDestroy {
         this.repo.updateSession(this.session.sessionId as number, changes);
         this.currentStatus++;
     }
-
-    //get hostedSession(): Session {
-    //    return this.repo.hostedSession;
-    //}
-
-
-    //get quiz(): Quiz {
-    //    return this.repo.quiz;
-    //}
 }

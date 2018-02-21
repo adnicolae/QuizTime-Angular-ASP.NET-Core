@@ -1,4 +1,11 @@
-﻿<p *ngIf="!session"><em>Loading...</em></p>
+﻿<div *ngIf="!session" class="ui segment" style="padding:5em;">
+    <div class="ui active dimmer" style="background-color:#4183c4">
+        <div class="ui indeterminate large text loader">
+            Loading... <br />
+            Ask your students to go to the Join page while the session loads
+        </div>
+    </div>
+</div>
 
 <!-- STATUS: Waiting for players to join -->
 <div *ngIf="session?.status == 1">
