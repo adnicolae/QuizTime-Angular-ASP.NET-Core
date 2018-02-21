@@ -41,7 +41,7 @@
 
  
 <div class='main-nav'>
-    <div class='navbar navbar'>
+    <div class='navbar navbar-default'>
         <div class='navbar-header'>
             <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'>
                 <span class='sr-only'>Toggle navigation</span>
@@ -62,12 +62,18 @@
 
                 <li [routerLinkActive]="['link-active']">
                     <a [routerLink]="['/fetch-quizzes']">
-                        <span class='glyphicon glyphicon-question-sign'></span> Fetch quizzes
+                        <span class='glyphicon glyphicon-question-sign'></span> My Quizzes
                     </a>
                 </li>
                 <li [routerLinkActive]="['link-active']">
                     <a [routerLink]="['/fetch-results']">
                         <span class='glyphicon glyphicon-th-list'></span> My Results
+                    </a>
+                </li>
+
+                <li *ngIf="isBrowser && auth.isAuthenticated">
+                    <a [routerLink]="['/settings']">
+                        <span class='glyphicon glyphicon-wrench'></span> Settings
                     </a>
                 </li>
 
