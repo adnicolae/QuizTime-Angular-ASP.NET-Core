@@ -58,7 +58,7 @@ namespace QuizTime.Controllers
 
             return query;
         }
-
+        
         [HttpGet]
         [Route("host/{hostId:long}")]
         public Session GetHostedSession(long hostId)

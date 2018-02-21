@@ -54,6 +54,15 @@ namespace QuizTime.Controllers
             return result;
         }
 
+        //[HttpGet]
+        //public int GetResults(string userDefault)
+        //{
+        //    IQueryable<Result> query = _context.Results;
+
+        //    // Sum all results for the same quiz title where the quiz title is also the user's default 
+        //    return query.Where(r => r.Session.Quiz.Title == r.Session.Quiz.Creator.DefaultQuizTitle).Sum(r => r.Score);
+        //}
+
         [HttpGet]
         public IEnumerable<Result> GetResults(string search, string participantUsername, long sessionCreatorId, int last, bool related = false, bool specific = false)
         {
@@ -121,7 +130,7 @@ namespace QuizTime.Controllers
                     }
                 });
 
-                if (last > 0)
+                if (last > 0 && data.Count() > 0)
                 {
                     return data.TakeLast(last);
                 }
