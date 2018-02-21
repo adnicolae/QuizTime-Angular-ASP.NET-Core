@@ -1,6 +1,6 @@
-﻿import { Component } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../registration/auth.service';
+import { Repository } from '../../data/repository';
 
 @Component({
     selector: 'settings',
@@ -14,10 +14,21 @@ import { AuthService } from '../registration/auth.service';
 })
 
 export class SettingsComponent {
-    constructor(private auth: AuthService) { }
+    constructor(private repo: Repository) { }
 
     settingsData = {
+        //name:'',
         defaultQuizTitle: ''
+    }
+
+    ngOnInit() {
+        this.repo.getUser().subscribe(response => {
+            this.settingsData.defaultQuizTitle = response.defaultQuizTitle;
+        });
+    }
+
+    saveChanges(settingsData) {
+        this.repo.saveUser(settingsData).subscribe();
     }
 
 }

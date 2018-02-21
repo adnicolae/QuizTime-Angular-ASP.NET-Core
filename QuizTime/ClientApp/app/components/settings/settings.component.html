@@ -4,7 +4,7 @@
     <div class="fields">
         <div class="six wide field">
             <label>Default Title</label>
-            <input [(ngModel)]="settingsData.defaultQuizTitle" type="text" placeholder="joe@schmoe.com">
+            <input [(ngModel)]="settingsData.defaultQuizTitle" type="text" placeholder="Quiz Title">
 
             <div class="ui icon message">
                 <i class="small info icon"></i>
@@ -17,5 +17,7 @@
             </div>
         </div>
     </div>
-    <div class="ui submit button" style="margin-top:2px">Submit</div>
+    <div class="ui submit button" style="margin-top:2px" (click)="saveChanges(settingsData)">Save Changes</div>
 </div>
+
+{{ settingsData.defaultQuizTitle }}
