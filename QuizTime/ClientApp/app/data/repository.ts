@@ -43,7 +43,7 @@ export class Repository {
         if (this.isBrowser) {
             this.getParticipantResults(0);
         }
-        this.getSessions();
+        //this.getSessions();
     }
 
     getQuiz(id: number) {
@@ -95,22 +95,6 @@ export class Repository {
                 .subscribe(response => this.participantResults = response);
         }
     }
-
-    //getResults() {
-    //    let url = this.urlBase  + resultsUrl + "?specific=" + this.resultFilter.specific + "&related=" + this.resultFilter.related;
-
-    //    if (this.quizFilter.search) {
-    //        url += "&search=" + this.resultFilter.search;
-    //    }
-
-    //    if (this.resultFilter.participantUsername) {
-    //        url += "&participantUsername=" + this.resultFilter.participantUsername;
-    //    }
-
-    //    this.sendRequest(RequestMethod.Get, url)
-    //        .takeWhile(() => this.alive)
-    //        .subscribe(response => this.results = response);
-    //}
 
     getSessions() {
         let url = this.urlBase + sessionsUrl;
@@ -217,6 +201,16 @@ export class Repository {
             });
     }
 
+    getUser() {
+        console.log(this.auth.tokenHeader);
+        return this.http.get(this.urlBase + 'api/users/me', this.auth.tokenHeader).map(response => response.json());
+        //return this.sendRequest(RequestMethod.Get, this.urlBase + '/users/me', this.auth.tokenHeader);
+    }
+
+    saveUser(userData) {
+        return this.http.post(this.urlBase + 'api/users/me', userData, this.auth.tokenHeader).map(response => response.json());
+    }
+
     get resultFilter(): ResultFilter {
         return this.resultFilterObject;
     }
@@ -234,4 +228,6 @@ export class Repository {
             body: data
         })).map(response => response.json());
     }
+
+
 }

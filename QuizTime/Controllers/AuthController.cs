@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using QuizTime.Models;
 using QuizTime.Data;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace QuizTime.Controllers
 {
@@ -56,8 +59,17 @@ namespace QuizTime.Controllers
 
         JwtPacket CreateJwtPacket(User user)
         {
+            var signingKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("this is the secure phrase custom test"));
+            var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
+
+            var claims = new Claim[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString())
+            };
+
+
             // Create a raw JWT token.
-            var jwt = new JwtSecurityToken();
+            var jwt = new JwtSecurityToken(claims: claims, signingCredentials: signingCredentials);
 
             // Encode the token - returns a string
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);

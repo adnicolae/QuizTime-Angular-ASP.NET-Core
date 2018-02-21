@@ -10,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using QuizTime.Data;
 using Microsoft.EntityFrameworkCore;
 using QuizTime.Hubs;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace QuizTime
 {
@@ -26,6 +28,26 @@ namespace QuizTime
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<Context>(options => options.UseSqlServer(Configuration["Data:QuizTime:ProductionString"]));
+
+            var signingKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("this is the secure phrase custom test"));
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(config =>
+            {
+                config.RequireHttpsMetadata = false;
+                config.SaveToken = true;
+                config.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    IssuerSigningKey = signingKey,
+                    ValidateAudience = false,
+                    ValidateIssuer = false,
+                    ValidateLifetime = false,
+                    ValidateIssuerSigningKey = true  
+                };
+            });
 
             services.AddSignalR();
 
@@ -48,6 +70,8 @@ namespace QuizTime
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            app.UseAuthentication();
 
             app.UseStaticFiles();
 
