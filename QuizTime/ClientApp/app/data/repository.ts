@@ -11,6 +11,7 @@ import { QuizFilter, ResultFilter } from "./config.repository";
 import { CookieService } from 'ngx-cookie';
 import { AuthService } from '../components/registration/auth.service';
 import { isPlatformServer, isPlatformBrowser } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 
 const quizzesUrl = "api/quizzes";
 const resultsUrl = "api/results";
@@ -34,7 +35,13 @@ export class Repository {
     urlBase: string;
     isBrowser: boolean;
 
-    constructor(@Inject(PLATFORM_ID) private platformId: Object, private http: Http, @Inject('BASE_URL') baseUrl: string, private cookieService: CookieService, private auth: AuthService) {
+    constructor(
+        @Inject(PLATFORM_ID) private platformId: Object,
+        private http: Http,
+        @Inject('BASE_URL') baseUrl: string,
+        private cookieService: CookieService,
+        private auth: AuthService,
+        private router: Router) {
         this.quizFilter.related = true;
         this.urlBase = baseUrl;
         this.getQuizzes(baseUrl);
@@ -209,6 +216,34 @@ export class Repository {
 
     saveUser(userData) {
         return this.http.post(this.urlBase + 'api/users/me', userData, this.auth.tokenHeader).map(response => response.json());
+    }
+
+    joinSession(sessionId, username) {
+        let sessionToJoin: Session;
+        return this.http
+            .get(`${this.urlBase}/api/sessions/host/${sessionId}`)
+            .takeWhile(() => this.alive)
+            .subscribe(response => {
+                sessionToJoin = response.json();
+
+
+                let data = {
+                    score: 0,
+                    sessionParticipant: username,
+                    session: sessionToJoin.sessionId
+                };
+
+                this.http
+                    .post(`${this.urlBase}/api/results`, data)
+                    .takeWhile(() => this.alive)
+                    .subscribe(response => {
+                        this.cookieService.put("resultId", response.json());
+                        this.cookieService.put("participantName", username);
+                        this.router.navigateByUrl(`/session-board/participant/${parseInt(sessionId)}`);
+                    });
+            }, response => {
+                console.log("Unable to load session.");
+            });
     }
 
     get resultFilter(): ResultFilter {

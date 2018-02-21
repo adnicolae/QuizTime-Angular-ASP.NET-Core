@@ -1,60 +1,162 @@
-<h1 *ngIf="isBrowser && auth?.isAuthenticated" class="ui header" style="margin-bottom: 1em">Hello, {{ auth.name }}!</h1>
-<h1 *ngIf="isBrowser && !auth?.isAuthenticated" class="ui header" style="margin-bottom: 1em">Hello, stranger!</h1>
+<div *ngIf="isBrowser && !auth?.isAuthenticated">
+    <div class="ui grid center aligned container">
+        <div class="sixteen wide column">
+            <h1 style="font-family:Cookie; font-size:60px; margin: 22px auto 12px; color:#4189C7">quiztime<span style="font-family:'Ceviche One'">!</span></h1>
+        <h4 style="font-size:17px; margin:0 40px 40px; color: #b3b3b3">Join a quiz session or sign up to to create quizzes and track your results.</h4>
 
-
-<div class="ui two column centered stackable grid">
-    <div class="row">
-        <div class="column">
-            <div class="ui two cards">
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Quick Quiz</div>
-                        <div class="description">
-                            Test your students or friends in an interactive manner <br /> Gather results and create reports
-                        </div>
-                    </div>
-                    <div class="ui bottom attached primary button" [routerLink]="['/new/quiz']">
-                        Click here to <br /> Create a quiz!
-                    </div>
+        <div *ngIf="joinShowed">
+            <form [formGroup]="joinSessionForm" class="ui tiny form">
+                <div class="field">
+                    <label style="display:none">Quiz Session ID</label>
+                    <input formControlName="quizSessionId" style="width:300px" placeholder="Quiz Session ID" type="text" required>
                 </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Join quiz</div>
-                        <div class="description">
-                            Join a quiz session <br /> Use the session id provided <br /> No account required <br /> Use a friendly username!
-                        </div>
-                    </div>
-                    <div class="ui bottom attached yellow button" [routerLink]="['/join']">
-                        Click here to<br /> Join us!
-                    </div>
+                <div class="field">
+                    <label style="display:none">Username</label>
+                    <input formControlName="username" style="width:300px" placeholder="Username" type="text" required>
                 </div>
+                <button (click)="onSubmitJoinForm()" class="ui primary button" style="width:300px; padding:8px; margin:0">Join quiz</button>
+            </form>
+        </div>
+        <button *ngIf="!joinShowed" class="ui primary button" style="width:300px; padding:8px; margin:0" (click)="showJoinForm()">Join quiz session</button>
 
-                <!--<div class="card">
-                    <div class="content">
-                        <div class="header">Secondary button card</div>
-                        <div class="description">
-                            Requested Loan Type: <br /> Personal Loan
-                        </div>
+        <div class="ui horizontal divider">
+            Or
+        </div>
+
+        <div class="ui blue card" style="margin:auto">
+            <div class="content">
+                <img class="right floated mini ui image" src="android-chrome-192x192.png" alt="Small application logo.">
+                <div class="header left floated">
+                    <div *ngIf="!loginShowed && !registerShowed">
+                        Register a new account
                     </div>
-                    <div class="ui bottom attached orange button">
-                        Secondary <br /> Status: Approved
+                    <div *ngIf="loginShowed">
+                        User log in
                     </div>
+
+                    <div *ngIf="registerShowed">User registration</div>
                 </div>
+                <div class="meta left floated">
+                    <div *ngIf="!loginShowed && !registerShowed">Or log in with an existing account</div>
+                </div>
+                <div class="description">
+                    <div *ngIf="!loginShowed && !registerShowed">You need to be signed in to create quizzes and track results.</div>
 
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Secondary button card</div>
-                        <div class="description">
-                            Requested Loan Type: <br /> Personal Loan
+                    <!-- LOGIN FORM -->
+                    <div *ngIf="loginShowed">
+                        <div class="ui tiny form" style="margin-top:15px">
+                            <div class="field">
+                                <label style="display:none">Username</label>
+                                <input [(ngModel)]="loginData.username" style="width:250px" placeholder="Quiz Session ID" type="text" required>
+                            </div>
+                            <div class="field">
+                                <label style="display:none">Password</label>
+                                <input [(ngModel)]="loginData.password" style="width:250px" placeholder="Password" type="password" required>
+                            </div>
+                            <button (click)="onSubmitLoginForm()" class="ui primary button" style="width:250px; padding:8px; margin:0">Log in</button>
                         </div>
                     </div>
-                    <div class="ui bottom attached orange button">
-                        Secondary <br /> Status: Approved
-                    </div>
-                </div>-->
 
+                    <!-- REGISTRATION FORM -->
+                    <div *ngIf="registerShowed">
+                        <form [formGroup]="registerForm" class="ui tiny form" style="margin-top:15px">
+                            <div class="field">
+                                <label style="display:none">Username</label>
+                                <input formControlName="username" style="width:250px" placeholder="Username" type="text" required>
+                            </div>
+                            <div class="field">
+                                <label style="display:none">Password</label>
+                                <input formControlName="password" style="width:250px" placeholder="Password" type="password" required>
+                            </div>
+                            <div class="field">
+                                <label style="display:none">Password Confirmation</label>
+                                <input formControlName="passwordConfirmation" style="width:250px" placeholder="Confirm Password" type="password" required>
+                            </div>
+                            <button (click)="onSubmitRegisterForm()" class="ui primary button" style="width:250px; padding:8px; margin:0">Register</button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="extra content" *ngIf="!loginShowed && !registerShowed">
+                <div class="ui two buttons">
+                    <div class="ui basic green button" (click)="showLoginForm()">Log in</div>
+                    <div class="ui basic red button" (click)="showRegisterForm()">Register</div>
+                </div>
+            </div>
+
+            <div class="extra content" *ngIf="loginShowed">
+                No account? <div style="color:#4189C7; cursor: pointer; font-weight: bold" (click)="hideLogin()">Register here.</div>
+            </div>
+
+            <div class="extra content" *ngIf="registerShowed">
+                Have an account? <div style="color:#4189C7; cursor:pointer; font-weight: bold" (click)="hideRegister()">Login here.</div>
             </div>
         </div>
+        </div>
+    </div>
+</div>
+
+
+<div *ngIf="isBrowser && auth?.isAuthenticated">
+    <h1 *ngIf="isBrowser && auth?.isAuthenticated" class="ui header" style="margin-bottom: 1em">Hello, {{ auth.name }}!</h1>
+    <!--<h1 *ngIf="isBrowser && !auth?.isAuthenticated" class="ui header" style="margin-bottom: 1em">Hello, stranger!</h1>-->
+
+
+    <div class="ui two column centered stackable grid">
+        <div class="row">
+            <div class="column">
+                <div class="ui two cards">
+                    <div class="card">
+                        <div class="content">
+                            <div class="header">Quick Quiz</div>
+                            <div class="description">
+                                Test your students or friends in an interactive manner <br /> Gather results and create reports
+                            </div>
+                        </div>
+                        <div class="ui bottom attached primary button" [routerLink]="['/new/quiz']">
+                            Click here to <br /> Create a quiz!
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="content">
+                            <div class="header">Join quiz</div>
+                            <div class="description">
+                                Join a quiz session <br /> Use the session id provided <br /> No account required <br /> Use a friendly username!
+                            </div>
+                        </div>
+                        <div class="ui bottom attached yellow button" [routerLink]="['/join']">
+                            Click here to<br /> Join us!
+                        </div>
+                    </div>
+
+                    <!--<div class="card">
+                        <div class="content">
+                            <div class="header">Secondary button card</div>
+                            <div class="description">
+                                Requested Loan Type: <br /> Personal Loan
+                            </div>
+                        </div>
+                        <div class="ui bottom attached orange button">
+                            Secondary <br /> Status: Approved
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="content">
+                            <div class="header">Secondary button card</div>
+                            <div class="description">
+                                Requested Loan Type: <br /> Personal Loan
+                            </div>
+                        </div>
+                        <div class="ui bottom attached orange button">
+                            Secondary <br /> Status: Approved
+                        </div>
+                    </div>-->
+
+                </div>
+            </div>
             <div *ngIf="isBrowser && auth.isAuthenticated" class="column">
                 <table class="ui very basic table">
                     <thead>
@@ -88,97 +190,6 @@
                     </tfoot>
                 </table>
             </div>
+        </div>
     </div>
 </div>
-
-<!--<div class="container-fluid">
-    <div class="row">
-        <div class="col-sm-6">
-            <h2>Actions</h2>
-            <button class="btn btn-primary" [routerLink]="['/new/quiz']">New Quiz</button>
-            <button class="btn btn-warning" [routerLink]="['/join']">Join Quiz Session</button>
-
-            <div *ngFor="let result of hostedSession?.results">
-            {{ result.sessionParticipant.username }}
-                </div>
-        </div>
-        <div class="col-sm-5">
-            <h2>Recent Results</h2>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Quiz</th>
-                        <th>Date</th>
-                        <th>Score</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-
-                        </td>
-                        <td>
-
-                        </td>
-                        <td>
-
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>-->
-        <!--<div class="ui two cards">
-            <div class="card">
-                <div class="content">
-                    <div class="header">Quick Quiz</div>
-                    <div class="description">
-                        Test your students or friends in an interactive manner <br /> Gather results and create reports
-                    </div>
-                </div>
-                <div class="ui bottom attached primary button" [routerLink]="['/new/quiz']">
-                    Click here <br /> to <br /> Create a new quiz!
-                </div>
-            </div>
-            <div class="card">
-                <div class="content">
-                    <div class="header">Secondary button card</div>
-                    <div class="description">
-                        Requested Loan Type: <br /> Personal Loan
-                    </div>
-                </div>
-                <div class="ui bottom attached orange button">
-                    Secondary <br /> Status: Approved
-                </div>
-            </div>
-            <div class="card">
-                <div class="content">
-                    <div class="header">Default button card</div>
-                    <div class="description">
-                        Requested Loan Type: <br /> Car Loan
-                    </div>
-                </div>
-                <div class="ui bottom attached button">
-                    Default <br /> Status: Draft
-                </div>
-            </div>
-        </div>-->
-
-
-
-<!--<p>Welcome to your new single-page application, built with:</p>
-<ul>
-    <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>
-    <li><a href='https://angular.io/'>Angular</a> and <a href='http://www.typescriptlang.org/'>TypeScript</a> for client-side code</li>
-    <li><a href='https://webpack.github.io/'>Webpack</a> for building and bundling client-side resources</li>
-    <li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
-</ul>
-<p>To help you get started, we've also set up:</p>
-<ul>
-    <li><strong>Client-side navigation</strong>. For example, click <em>Counter</em> then <em>Back</em> to return here.</li>
-    <li><strong>Server-side prerendering</strong>. For faster initial loading and improved SEO, your Angular app is prerendered on the server. The resulting HTML is then transferred to the browser where a client-side copy of the app takes over.</li>
-    <li><strong>Webpack dev middleware</strong>. In development mode, there's no need to run the <code>webpack</code> build tool. Your client-side resources are dynamically built on demand. Updates are available as soon as you modify any file.</li>
-    <li><strong>Hot module replacement</strong>. In development mode, you don't even need to reload the page after making most changes. Within seconds of saving changes to files, your Angular app will be rebuilt and a new instance injected is into the page.</li>
-    <li><strong>Efficient production builds</strong>. In production mode, development-time features are disabled, and the <code>webpack</code> build tool produces minified static CSS and JavaScript files.</li>
-</ul>-->

@@ -37,6 +37,7 @@
     <None Remove="ClientApp\app\components\createquiz\quizcreated.component.ts" />
     <None Remove="ClientApp\app\components\fetchquizzes\fetchquizzes.component.ts" />
     <None Remove="ClientApp\app\components\fetchresults\fetchresults.component.ts" />
+    <None Remove="ClientApp\app\components\home\android-chrome-192x192.png" />
     <None Remove="ClientApp\app\components\joinsession\joinsession.component.ts" />
     <None Remove="ClientApp\app\components\login\login.component.ts" />
     <None Remove="ClientApp\app\components\quizdetail\quizdetail.component.ts" />
@@ -56,6 +57,9 @@
 
   <ItemGroup>
     <Content Include="ClientApp\app\components\createquiz\school.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="ClientApp\app\components\home\android-chrome-192x192.png">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
   </ItemGroup>

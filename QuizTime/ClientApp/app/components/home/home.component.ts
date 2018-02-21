@@ -6,6 +6,10 @@ import { HubConnection } from "@aspnet/signalr-client";
 import { Observable } from "rxjs/Observable";
 import { AuthService } from '../registration/auth.service';
 import { isPlatformServer, isPlatformBrowser } from '@angular/common';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+
+declare var $;
 
 @Component({
     selector: 'home',
@@ -17,50 +21,91 @@ export class HomeComponent implements OnInit {
     public async: any;
     message = '';
     messages: string[] = [];
-    isBrowser: boolean
+    isBrowser: boolean;
+    joinSessionForm: FormGroup;
+    loginForm: FormGroup;
+    registerForm: FormGroup;
+    joinShowed: boolean = false;
+    loginShowed: boolean = false;
+    registerShowed: boolean = false;
 
-    constructor(@Inject(PLATFORM_ID) private platformId: Object, private repo: Repository, public auth: AuthService) {
+    constructor( @Inject(PLATFORM_ID) private platformId: Object, private repo: Repository, public auth: AuthService, private fb: FormBuilder) {
         //this.repo.getHostedSession(3456);
         this.isBrowser = isPlatformBrowser(platformId);
         if (this.isBrowser && this.auth.isAuthenticated) {
             this.repo.getParticipantResults(5);
         }
+        this.createSessionForm();
+        this.createRegisterForm();
     }
 
-    //public sendMessage(): void {
-    //    const data = `Sent: ${this.message}`;
+    loginData = {
+        username: '',
+        password: ''
+    }
 
-    //    this._hubConnection.invoke('Send', data);
-    //    this.messages.push(data);
-    //}
+    createRegisterForm() {
+        this.registerForm = this.fb.group({
+            username: ['', Validators.required],
+            password: ['', Validators.required],
+            passwordConfirmation: ['', Validators.required]
+        })
+    }
+
+    createSessionForm() {
+        this.joinSessionForm = this.fb.group({
+            quizSessionId: ['', Validators.required],
+            username: ['', Validators.required]
+        });
+    }
+
+    onSubmitJoinForm() {
+        const formModel = this.joinSessionForm.value;
+        this.repo.joinSession(formModel.quizSessionId, formModel.username);
+    }
+
+    onSubmitLoginForm() {
+        this.auth.login(this.loginData);
+    }
+
+    onSubmitRegisterForm() {
+        this.auth.register(this.registerForm.value);
+    }
+
+    showJoinForm() {
+        this.joinShowed = true;
+    }
+
+    showLoginForm() {
+        this.loginShowed = true;
+    }
+
+    showRegisterForm() {
+        this.registerShowed = true;
+    }
+
+    hideLogin() {
+        this.loginShowed = false;
+        this.showRegisterForm();
+    }
+
+    hideRegister() {
+        this.registerShowed = false;
+        this.showLoginForm();
+    }
+
+    showModal() {
+        $('.ui.modal')
+            .modal('setting', 'closable', true)
+            .modal('show')
+            ;
+    }
 
     ngOnInit() {
-        //this._hubConnection = new HubConnection('/quiz');
-
-        //this._hubConnection.on('Send', (data: any) => {
-        //    const received = `Received: ${data}`;
-        //    this.messages.push(received);
-        //});
-
-        //this._hubConnection.on('send', data => {
-        //    console.log(data);
-        //});
-
-        //this._hubConnection.start()
-        //    .then(() => {
-        //        console.log("Hub connection started")
-        //    })
-        //    .catch(err => {
-        //        console.log("error while establishing hub connection")
-        //    });
         if (this.isBrowser) {
             this.repo.getUser().subscribe();
         }
     }
-
-    //get hostedSession(): Session {
-    //    return this.repo.hostedSession;
-    //}
 
     get participantResults(): Result[] {
         if (this.isBrowser && this.auth.isAuthenticated) {
