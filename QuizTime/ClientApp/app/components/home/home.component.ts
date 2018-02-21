@@ -27,12 +27,12 @@ export class HomeComponent implements OnInit {
         }
     }
 
-    public sendMessage(): void {
-        const data = `Sent: ${this.message}`;
+    //public sendMessage(): void {
+    //    const data = `Sent: ${this.message}`;
 
-        this._hubConnection.invoke('Send', data);
-        this.messages.push(data);
-    }
+    //    this._hubConnection.invoke('Send', data);
+    //    this.messages.push(data);
+    //}
 
     ngOnInit() {
         //this._hubConnection = new HubConnection('/quiz');
@@ -53,13 +53,19 @@ export class HomeComponent implements OnInit {
         //    .catch(err => {
         //        console.log("error while establishing hub connection")
         //    });
+        if (this.isBrowser) {
+            this.repo.getUser().subscribe();
+        }
     }
 
-    get hostedSession(): Session {
-        return this.repo.hostedSession;
-    }
+    //get hostedSession(): Session {
+    //    return this.repo.hostedSession;
+    //}
 
     get participantResults(): Result[] {
-        return this.repo.participantResults;
+        if (this.isBrowser && this.auth.isAuthenticated) {
+            return this.repo.participantResults;
+        }
+        else return [];
     }
 }
