@@ -10,6 +10,7 @@ export class AuthService {
     baseUrl;
     usernameKey = 'username';
     tokenKey = 'token';
+    nameKey = 'name';
     localStorage: any;
 
     constructor(private http: Http, @Inject('BASE_URL') baseUrl: string, private router: Router) {
@@ -17,6 +18,10 @@ export class AuthService {
     }
 
     get name() {
+        return localStorage.getItem(this.nameKey);
+    }
+
+    get username() {
         return localStorage.getItem(this.usernameKey);
     }
 
@@ -44,6 +49,7 @@ export class AuthService {
     logout() {
         localStorage.removeItem(this.tokenKey);
         localStorage.removeItem(this.usernameKey);
+        localStorage.removeItem(this.nameKey);
     }
 
     login(loginData) {
@@ -58,6 +64,7 @@ export class AuthService {
 
         localStorage.setItem(this.tokenKey, authenticationResponse.token)
         localStorage.setItem(this.usernameKey, authenticationResponse.username)
+        localStorage.setItem(this.nameKey, authenticationResponse.name)
 
         this.router.navigate(['/'])
     }

@@ -18,6 +18,7 @@ namespace QuizTime.Controllers
     {
         public string Token { get; set; }
         public string Username { get; set; }
+        public string Name { get; set; }
     }
 
     [Produces("application/json")]
@@ -74,7 +75,7 @@ namespace QuizTime.Controllers
             // Encode the token - returns a string
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
-            return new JwtPacket() { Token = encodedJwt, Username = user.Username };
+            return new JwtPacket() { Token = encodedJwt, Username = user.Username, Name = user.Name };
         }
     }
 }
