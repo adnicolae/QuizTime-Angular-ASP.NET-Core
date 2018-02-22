@@ -93,7 +93,7 @@ export class Repository {
     getParticipantResults(last: number) {
         let url = this.urlBase + resultsUrl + "?specific=" + this.resultFilter.specific + "&related=" + this.resultFilter.related;
         if (this.auth.isAuthenticated) {
-            this.resultFilter.participantUsername = this.auth.name as string;
+            this.resultFilter.participantUsername = this.auth.username as string;
             this.resultFilter.last = last;
             url += "&participantUsername=" + this.resultFilter.participantUsername;
             url += "&last=" + this.resultFilter.last;
@@ -101,6 +101,15 @@ export class Repository {
                 .takeWhile(() => this.alive)
                 .subscribe(response => this.participantResults = response);
         }
+    }
+
+    getResults(quizId: number) {
+        let url = this.urlBase + resultsUrl + "?specific=" + this.resultFilter.specific + "&related=" + this.resultFilter.related;
+        //if (this.auth.isAuthenticated) {
+            url += "&quizId=" + quizId;
+            return this.sendRequest(RequestMethod.Get, url)
+                .takeWhile(() => this.alive);
+        //}
     }
 
     getSessions() {

@@ -64,7 +64,7 @@ namespace QuizTime.Controllers
         //}
 
         [HttpGet]
-        public IEnumerable<Result> GetResults(string search, string participantUsername, long sessionCreatorId, int last, bool related = false, bool specific = false)
+        public IEnumerable<Result> GetResults(string search, string participantUsername, long sessionCreatorId, long quizId, int last, bool related = false, bool specific = false)
         {
             IQueryable<Result> query = _context.Results;
 
@@ -77,7 +77,7 @@ namespace QuizTime.Controllers
 
             if (specific)
             {
-                if (participantUsername.Length > 0)
+                if (participantUsername != null && participantUsername.Length > 0)
                 {
                     query = query.Where(r => r.SessionParticipant.Username == participantUsername);
                 }
@@ -85,6 +85,11 @@ namespace QuizTime.Controllers
                 if (sessionCreatorId > 0)
                 {
                     query = query.Where(r => r.Session.Quiz.Creator.UserId == sessionCreatorId);
+                }
+
+                if (quizId > 0)
+                {
+                    query = query.Where(r => r.Session.Quiz.QuizId == quizId);
                 }
             }
 
