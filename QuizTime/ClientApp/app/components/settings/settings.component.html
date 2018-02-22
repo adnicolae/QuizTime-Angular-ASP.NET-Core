@@ -1,23 +1,32 @@
-﻿<h1 class="header">Account Settings</h1>
-
-<div class="ui form warning">
-    <div class="fields">
-        <div class="six wide field">
-            <label>Default Title</label>
-            <input [(ngModel)]="settingsData.defaultQuizTitle" type="text" placeholder="Quiz Title">
-
-            <div class="ui icon message">
-                <i class="small info icon"></i>
-                <div class="content">
-                    <div class="header">
-                        Info
-                    </div>
-                    <p>This is the title used by all quick quizzes you create.</p>
-                </div>
-            </div>
+﻿<div class="ui container" style="margin-top:50px;max-width:820px!important">
+    <h4 class="ui header" style="margin-top:10px;text-align:center"><span style="font-family:Cookie; font-size:2rem; color:#4189C7">profile<span style="font-family:'Ceviche One'">!</span></span></h4>
+    <h4 class="ui header" style="margin-top:2px;margin-bottom:10px; text-align:center">Create quizzes faster by setting a default title.</h4>
+    <div class="ui attached message">
+        <div class="content">
+            <h2 class="header">
+                Update profile
+            </h2>
+            <p>Fill in the form below to update your profile.</p>
         </div>
     </div>
-    <div class="ui submit button" style="margin-top:2px" (click)="saveChanges(settingsData)">Save Changes</div>
-</div>
+    <div class="ui large form attached compact fluid blue segment">
+        <div class="field">
+            <label>First name</label>
+            <div class="ui left icon input">
+                <input [(ngModel)]="settingsData.name" type="text" placeholder="Name">
+                <i class="user icon"></i>
+            </div>
+        </div>
 
-{{ settingsData.defaultQuizTitle }}
+        <div class="field">
+            <label>Default quiz title</label>
+            <div class="ui left icon input">
+                <input [(ngModel)]="settingsData.defaultQuizTitle" type="text" placeholder="Default quiz title">
+                <i class="font icon"></i>
+            </div>
+        </div>
+
+        <div class="fluid ui large primary button" (click)="saveChanges(settingsData)">Save changes</div>
+        <div style="margin-top:15px"><i class="info icon"></i>Results will be grouped by the default title.</div>
+    </div>
+</div>

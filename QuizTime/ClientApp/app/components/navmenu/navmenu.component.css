@@ -2,71 +2,104 @@ li .glyphicon {
     margin-right: 10px;
 }
 
-/* Highlighting rules for nav menu items */
-li.link-active a,
-li.link-active a:hover,
-li.link-active a:focus {
-    background-color: #4189C7;
-    color: white;
+
+.hidden.menu {
+    display: none;
 }
 
-/* Keep the nav menu independent of scrolling and on top of other items */
-.main-nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1;
+.masthead.segment {
+    min-height: 700px;
+    padding: 1em 0em;
 }
 
-
-.navbar {
-    background-color: #ffffff;
-    border-color: #ffffff;
+.masthead .logo.item img {
+    margin-right: 1em;
 }
 
-.navbar-brand {
-    color: #4189C7;
+.masthead .ui.menu .ui.button {
+    margin-left: 0.5em;
 }
 
+.masthead h1.ui.header {
+    margin-top: 3em;
+    margin-bottom: 0em;
+    font-size: 4em;
+    font-weight: normal;
+}
 
-@media (min-width: 768px) {
-    /* On small screens, convert the nav menu to a vertical sidebar */
-    .main-nav {
-        height: 100%;
-        width: calc(25% - 20px);
+.masthead h2 {
+    font-size: 1.7em;
+    font-weight: normal;
+}
+
+.ui.vertical.stripe {
+    padding: 8em 0em;
+}
+
+    .ui.vertical.stripe h3 {
+        font-size: 2em;
     }
-    .navbar {
-        border-radius: 0px;
-        border-width: 0px;
-        height: 100%;
-        background-color: #f8f8f8;
-        border-color: #e7e7e7;
+
+    .ui.vertical.stripe .button + h3,
+    .ui.vertical.stripe p + h3 {
+        margin-top: 3em;
     }
-    .navbar-header {
-        float: none;
+
+    .ui.vertical.stripe .floated.image {
+        clear: both;
     }
-    .navbar-collapse {
-        border-top: 1px solid #4183c4;
-        padding: 0px;
+
+    .ui.vertical.stripe p {
+        font-size: 1.33em;
     }
-    .navbar ul {
-        float: none;
+
+    .ui.vertical.stripe .horizontal.divider {
+        margin: 3em 0em;
     }
-    .navbar li {
-        float: none;
-        font-size: 15px;
-        margin: 6px;
+
+.quote.stripe.segment {
+    padding: 0em;
+}
+
+    .quote.stripe.segment .grid .column {
+        padding-top: 5em;
+        padding-bottom: 5em;
     }
-    .navbar li a {
-        padding: 10px 16px;
-        border-radius: 4px;
+
+.footer.segment {
+    padding: 5em 0em;
+}
+
+.secondary.pointing.menu .toc.item {
+    display: none;
+}
+
+@media only screen and (max-width: 700px) {
+    .ui.fixed.menu {
+        display: none !important;
     }
-    .navbar a {
-        /* If a menu item's text is too long, truncate it */
-        width: 100%;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+
+    .secondary.pointing.menu .item,
+    .secondary.pointing.menu .menu {
+        display: none;
+    }
+
+    .secondary.pointing.menu .toc.item {
+        display: block;
+    }
+
+    .masthead.segment {
+        min-height: 350px;
+    }
+
+    .masthead h1.ui.header {
+        font-size: 2em;
+        margin-top: 1.5em;
+    }
+
+    .masthead h2 {
+        margin-top: 0.5em;
+        font-size: 1.5em;
     }
 }
+

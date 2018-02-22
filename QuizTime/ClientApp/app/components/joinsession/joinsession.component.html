@@ -1,30 +1,33 @@
-﻿<h1>Join session</h1>
-
-<h4>Fill the field below with the provided session id:</h4>
-
-<div class="row">
-    <div class="col-xs-8">
-        <div class="well well-lg" style="text-align:center">
-                <form [formGroup]="joinForm" (ngSubmit)="onSubmit()">
-                    <div class="form-group">
-                        <label for="sessionId">Session ID</label>
-                        <input type="text" class="form-control"  formControlName="hostedSessionId" required/>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input *ngIf="isBrowser && !auth.isAuthenticated" type="text" class="form-control" formControlName="username" required/>
-                        <input *ngIf="isBrowser && auth.isAuthenticated" type="text" class="form-control" formControlName="username" value="{{auth.name}}" disabled />
-                    </div>
-
-                    <button [disabled]="joinForm.pristine" type="submit" class="btn btn-success btn-lg">Join session</button>
-                    <!--<span class="btn btn-success" (click)="onSave()">Join session</span>-->
-                </form>
+﻿<div class="ui container" style="margin-top:50px;max-width:750px!important">
+    <h4 class="ui header" style="margin-top:10px;text-align:center">It's <span style="font-family:Cookie; font-size:2rem; color:#4189C7">quiztime<span style="font-family:'Ceviche One'">!</span></span></h4>
+    <h4 class="ui header" style="margin-top:2px;margin-bottom:10px; text-align:center">Join the challenge, gather points and compete with your friends!</h4>
+    <div class="ui attached message">
+        <!--<img class="ui tiny image" src="school.png" style="margin-right:1em">-->
+        <div class="content">
+            <h2 class="header">
+                Join quiz
+            </h2>
+            <p>Fill in the form below to join a quiz.</p>
         </div>
     </div>
+    <form [formGroup]="joinForm" (ngSubmit)="onSubmit()" class="ui large form attached compact fluid blue segment">
+        <div class="field">
+            <label style="display:none">Quiz Session ID</label>
+            <div class="ui left icon input">
+                <input type="text" placeholder="Quiz Session ID" formControlName="hostedSessionId" required>
+                <i class="hashtag icon"></i>
+            </div>
+            <!--<input type="text" name="first-name" placeholder="First Name">-->
+        </div>
+        <div class="field">
+            <label style="display:none">Username</label>
+            <div class="ui left icon input">
+                <input *ngIf="isBrowser && !auth.isAuthenticated" type="text" placeholder="Username" formControlName="username" required>
+                <input *ngIf="isBrowser && auth.isAuthenticated" type="text" placeholder="Username" formControlName="username" value="{{ auth.username }}" disabled>
+                <i class="user icon"></i>
+            </div>
+            <!--<input type="text" name="last-name" placeholder="Last Name">-->
+        </div>
+        <button class="fluid ui large primary button" type="submit">Submit</button>
+    </form>
 </div>
-
-{{ joinForm.value | json }}
-<!--{{ auth.name }}
-{{ this.isBrowser}}
-{{ this.auth.isAuthenticated }}-->

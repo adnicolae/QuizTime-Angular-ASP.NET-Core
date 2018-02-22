@@ -13,6 +13,7 @@ declare var $;
 
 @Component({
     selector: 'home',
+    inputs: ['joinShowed', 'loginShowed', 'registerShowed'],
     templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit {
@@ -47,6 +48,7 @@ export class HomeComponent implements OnInit {
     createRegisterForm() {
         this.registerForm = this.fb.group({
             username: ['', Validators.required],
+            name: ['', Validators.required],
             password: ['', Validators.required],
             passwordConfirmation: ['', Validators.required]
         })

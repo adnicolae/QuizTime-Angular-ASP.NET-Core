@@ -17,13 +17,14 @@ export class SettingsComponent {
     constructor(private repo: Repository) { }
 
     settingsData = {
-        //name:'',
+        name:'',
         defaultQuizTitle: ''
     }
 
     ngOnInit() {
         this.repo.getUser().subscribe(response => {
             this.settingsData.defaultQuizTitle = response.defaultQuizTitle;
+            this.settingsData.name = response.name;
         });
     }
 

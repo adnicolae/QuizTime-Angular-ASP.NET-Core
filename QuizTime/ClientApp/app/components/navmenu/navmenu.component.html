@@ -1,4 +1,3 @@
-
 <!--<div id="sidebar" class="ui sidebar inverted vertical menu">
     <a class="item">1</a><a class="item">2</a>
 </div>
@@ -38,9 +37,64 @@
         </div>
     </div>
 </div>-->
+<!-- Following Menu -->
+<div class="ui large top fixed hidden menu">
+    <div class="ui container">
+        <a class="active item">Home</a>
+        <a class="item">Work</a>
+        <a class="item">Company</a>
+        <a class="item">Careers</a>
+        <div class="right menu">
+            <div class="item">
+                <a class="ui button">Log in</a>
+            </div>
+            <div class="item">
+                <a class="ui primary button">Sign Up</a>
+            </div>
+        </div>
+    </div>
+</div>
 
- 
-<div class='main-nav'>
+<!-- Sidebar Menu -->
+<div class="ui vertical inverted sidebar menu">
+    <a class="item" [routerLinkActive]="['active']" [routerLink]="['/home']">Home</a>
+    <a *ngIf="isBrowser && auth.isAuthenticated" class="item" [routerLinkActive]="['active']" [routerLink]="['/fetch-quizzes']">My Quizzes</a>
+    <a *ngIf="isBrowser && auth.isAuthenticated" class="item" [routerLinkActive]="['active']" [routerLink]="['/fetch-results']">My Results</a>
+    <a *ngIf="isBrowser && auth.isAuthenticated" class="item" [routerLinkActive]="['active']" [routerLink]="['/settings']">Profile</a>
+    <a *ngIf="isBrowser && auth.isAuthenticated" class="item" [routerLink]="['/home']" (click)="auth.logout()">Logout</a>
+    <a *ngIf="isBrowser && !auth.isAuthenticated" class="item" (click)="showJoinForm()">Join quiz</a>
+    <a *ngIf="isBrowser && !auth.isAuthenticated" class="item" (click)="hideRegister()">Log in</a>
+    <a *ngIf="isBrowser && !auth.isAuthenticated" class="item" (click)="hideLogin()">Signup</a>
+</div>
+
+
+<!-- Page Contents -->
+<div class="pusher">
+    <div class="ui inverted vertical masthead segment" style="background-color: white">
+        <div class="ui container">
+            <div class="ui large secondary inverted pointing menu">
+                <a class="toc item">
+                    <i class="sidebar icon"></i>
+                </a>
+                <a *ngIf="isBrowser && auth.isAuthenticated" class="item" style="padding-bottom:0" [routerLink]="['/home']"><img src="/android-chrome-192x192.png" /></a>
+                <a *ngIf="isBrowser && auth.isAuthenticated" class="item" [routerLinkActive]="['active']" [routerLink]="['/home']">Home</a>
+                <a *ngIf="isBrowser && auth.isAuthenticated" class="item" [routerLinkActive]="['active']" [routerLink]="['/fetch-quizzes']">My Quizzes</a>
+                <a *ngIf="isBrowser && auth.isAuthenticated" class="item" [routerLinkActive]="['active']" [routerLink]="['/fetch-results']">My Results</a>
+                <a *ngIf="isBrowser && auth.isAuthenticated" class="item" [routerLinkActive]="['active']" [routerLink]="['/settings']">Profile</a>
+                <div *ngIf="isBrowser && auth.isAuthenticated" class="right item" [routerLink]="['/home']" (click)="auth.logout()">
+                    <i class="power off icon" style="cursor: pointer"></i>
+                    <!--<a class="ui inverted button">Log in</a>
+                <a class="ui inverted button">Sign Up</a>-->
+                </div>
+            </div>
+        </div>
+        <div *ngIf="isBrowser && !this.auth.isAuthenticated"><home #f [loginShowed]="loginShowed" [joinShowed]="joinShowed" [registerShowed]="registerShowed"></home></div>
+            <router-outlet *ngIf="isBrowser && auth.isAuthenticated"></router-outlet>
+    </div>
+</div>
+
+
+<!--<div class='main-nav'>
     <div class='navbar navbar-default'>
         <div class='navbar-header'>
             <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'>
@@ -97,6 +151,4 @@
             </ul>
         </div>
     </div>
-</div>
-
-
+</div>-->
