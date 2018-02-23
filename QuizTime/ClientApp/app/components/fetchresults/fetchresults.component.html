@@ -52,19 +52,19 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
+            <tr *ngFor="let res of report">
                 <td>
                     <h4 class="ui header">
                         <div class="content">
-                            Lindsay
+                            {{ res.quizTitle }}
                             <div class="sub header">
-                                Entertainment
+                                --
                             </div>
                         </div>
                     </h4>
                 </td>
                 <td>
-                    200
+                    {{ res.sumResults }}
                 </td>
             </tr>
         </tbody>

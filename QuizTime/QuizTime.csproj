@@ -50,6 +50,7 @@
     <None Remove="ClientApp\app\data\repository.ts" />
     <None Remove="ClientApp\app\models\choice.model.ts" />
     <None Remove="ClientApp\app\models\quiz.model.ts" />
+    <None Remove="ClientApp\app\models\report.model.ts" />
     <None Remove="ClientApp\app\models\result.model.ts" />
     <None Remove="ClientApp\app\models\session.model.ts" />
     <None Remove="ClientApp\app\models\user.model.ts" />
@@ -242,6 +243,7 @@
     <TypeScriptCompile Include="ClientApp\app\data\repository.ts" />
     <TypeScriptCompile Include="ClientApp\app\models\choice.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\models\quiz.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\report.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\models\result.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\models\session.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\models\user.model.ts" />

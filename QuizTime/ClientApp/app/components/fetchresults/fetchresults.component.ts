@@ -1,5 +1,6 @@
 ﻿import { Component, Inject, PLATFORM_ID } from "@angular/core";
 import { Result } from "../../models/result.model";
+import { Report } from "../../models/report.model";
 import { Http } from '@angular/http';
 import { Repository } from "../../data/repository";
 import { ResultFilter } from "../../data/config.repository";
@@ -19,6 +20,7 @@ export class FetchResultsComponent {
         this.isBrowser = isPlatformBrowser(platformId);
         if (this.isBrowser) {
             this.repo.getParticipantResults(0);
+            this.repo.getParticipantReport();
         }
     }
 
@@ -28,5 +30,9 @@ export class FetchResultsComponent {
 
     get results(): Result[] {
         return this.repo.participantResults;
+    }
+
+    get report(): Report[] {
+        return this.repo.participantReport;
     }
 }
