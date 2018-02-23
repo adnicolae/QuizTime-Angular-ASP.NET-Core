@@ -50,7 +50,7 @@ export class JoinSessionComponent implements OnDestroy {
                 console.log(this.session);
                 let data = {
                     score: 0,
-                    sessionParticipant: (this.auth.isAuthenticated) ? this.auth.name : formModel.username,
+                    sessionParticipant: (this.auth.isAuthenticated) ? this.auth.username : formModel.username,
                     session: this.session.sessionId
                 };
                 console.log(data);
