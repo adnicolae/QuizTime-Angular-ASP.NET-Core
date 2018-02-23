@@ -27,7 +27,7 @@ namespace QuizTime.Controllers
             _quizHubContext = quizHubContext;
             _boardHubContext = boardHubContext;
         }
-        
+
         [HttpGet("{id}")]
         public Result GetResult(long id)
         {
@@ -54,14 +54,22 @@ namespace QuizTime.Controllers
             return result;
         }
 
-        //[HttpGet]
-        //public int GetResults(string userDefault)
-        //{
-        //    IQueryable<Result> query = _context.Results;
+        [HttpGet]
+        [Route("user/{participantUsername}")]
+        public IEnumerable<object> GetUserReport(string participantUsername)
+        {
+            IQueryable<Result> query = _context.Results;
 
-        //    // Sum all results for the same quiz title where the quiz title is also the user's default 
-        //    return query.Where(r => r.Session.Quiz.Title == r.Session.Quiz.Creator.DefaultQuizTitle).Sum(r => r.Score);
-        //}
+            var q = from r in _context.Results
+                    where r.SessionParticipant.Username == participantUsername
+                    group r by r.Session.Quiz.Title into g
+                    select new
+                    {
+                        QuizTitle = g.Key,
+                        SumResults = g.Sum(r => r.Score)
+                    };
+            return q.ToList();
+        }
 
         [HttpGet]
         public IEnumerable<Result> GetResults(string search, string participantUsername, long sessionCreatorId, long quizId, int last, bool related = false, bool specific = false)

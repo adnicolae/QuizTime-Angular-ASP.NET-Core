@@ -2,6 +2,7 @@
 import { Result } from "../models/result.model";
 import { Session } from "../models/session.model";
 import { Choice } from "../models/choice.model";
+import { Report } from "../models/report.model";
 import { Injectable, Inject, PLATFORM_ID } from "@angular/core";
 import { Http, RequestMethod, Request, Response } from "@angular/http";
 import { Observable } from "rxjs/Observable";
@@ -29,6 +30,7 @@ export class Repository {
     quizzes: Quiz[];
     results: Result[];
     participantResults: Result[];
+    participantReport: Report[];
     sessions: Session[];
     latestQuiz: Quiz;
     alive: boolean = true;
@@ -101,6 +103,17 @@ export class Repository {
                 .takeWhile(() => this.alive)
                 .subscribe(response => this.participantResults = response);
         }
+    }
+
+    getParticipantReport() {
+        let url = this.urlBase + resultsUrl + "/user/";
+        if (this.auth.isAuthenticated) {
+            url += this.auth.username;
+            return this.sendRequest(RequestMethod.Get, url)
+                .takeWhile(() => this.alive)
+                .subscribe(response => this.participantReport = response);
+        }
+        return null;
     }
 
     getResults(quizId: number) {
