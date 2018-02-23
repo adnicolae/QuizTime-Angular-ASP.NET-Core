@@ -79,7 +79,7 @@ export class CreateQuizComponent implements OnDestroy{
             assignedPoints: newQuiz.assignedPoints,
             deducedPoints: newQuiz.deducedPoints,
             dateCreated: newQuiz.dateCreated,
-            creator: this.auth.name
+            creator: this.auth.username
         };
         console.log(data);
 
