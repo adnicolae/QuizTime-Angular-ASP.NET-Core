@@ -88,8 +88,13 @@ export class FetchQuizzesComponent {
         return ("0" + (Math.floor(Math.random() * (max - min + 1)) + min)).substr(-4);
     }
 
+    ngOnInit() {
+        this.repo.alive = true;
+    }
+
     ngOnDestroy() {
-        this.alive = false;
-        //this.repo.alive = false;
+        //this.alive = false;
+        console.log("Repo set to alive");
+        this.repo.alive = false;
     }
 }

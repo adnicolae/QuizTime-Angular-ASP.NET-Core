@@ -1,4 +1,4 @@
-﻿import { Component, Inject, PLATFORM_ID } from "@angular/core";
+﻿import { Component, Inject, PLATFORM_ID, OnDestroy } from "@angular/core";
 import { Result } from "../../models/result.model";
 import { Report } from "../../models/report.model";
 import { Http } from '@angular/http';
@@ -13,7 +13,7 @@ import { isPlatformServer, isPlatformBrowser } from '@angular/common';
     }
 )
 
-export class FetchResultsComponent {
+export class FetchResultsComponent implements OnDestroy {
     isBrowser: boolean;
 
     constructor(@Inject(PLATFORM_ID) private platformId: Object, private repo: Repository) {
@@ -22,6 +22,14 @@ export class FetchResultsComponent {
             this.repo.getParticipantResults(0);
             this.repo.getParticipantReport();
         }
+    }
+
+    ngOnInit() {
+        this.repo.alive = true;
+    }
+
+    ngOnDestroy() {
+        this.repo.alive = false;
     }
 
     get result(): Result {

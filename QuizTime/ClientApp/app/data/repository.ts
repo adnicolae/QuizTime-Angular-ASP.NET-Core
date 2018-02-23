@@ -29,6 +29,7 @@ export class Repository {
     hostedSession: Session;
     quizzes: Quiz[];
     results: Result[];
+    participantRecentResults: Result[];
     participantResults: Result[];
     participantReport: Report[];
     sessions: Session[];
@@ -51,6 +52,7 @@ export class Repository {
         this.isBrowser = isPlatformBrowser(platformId);
         if (this.isBrowser) {
             this.getParticipantResults(0);
+            this.getParticipantResults(5);
         }
         //this.getSessions();
     }
@@ -101,7 +103,7 @@ export class Repository {
             url += "&last=" + this.resultFilter.last;
             this.sendRequest(RequestMethod.Get, url)
                 .takeWhile(() => this.alive)
-                .subscribe(response => this.participantResults = response);
+                .subscribe(response => { if (last == 0) { this.participantResults = response; } else this.participantRecentResults = response; });
         }
     }
 
@@ -117,6 +119,7 @@ export class Repository {
     }
 
     getResults(quizId: number) {
+        console.log(this.alive);
         let url = this.urlBase + resultsUrl + "?specific=" + this.resultFilter.specific + "&related=" + this.resultFilter.related;
         //if (this.auth.isAuthenticated) {
             url += "&quizId=" + quizId;

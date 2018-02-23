@@ -104,6 +104,7 @@ export class HomeComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.repo.alive = true;
         if (this.isBrowser) {
             this.repo.getUser().subscribe();
         }
@@ -111,7 +112,7 @@ export class HomeComponent implements OnInit {
 
     get participantResults(): Result[] {
         if (this.isBrowser && this.auth.isAuthenticated) {
-            return this.repo.participantResults;
+            return this.repo.participantRecentResults;
         }
         else return [];
     }

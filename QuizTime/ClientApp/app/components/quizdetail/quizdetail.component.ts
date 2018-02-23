@@ -1,4 +1,4 @@
-﻿import { Component } from '@angular/core';
+﻿import { Component, OnDestroy } from '@angular/core';
 import { Repository } from "../../data/repository";
 import { Quiz } from "../../models/quiz.model";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -10,7 +10,7 @@ import { Http } from '@angular/http';
     templateUrl: "quizdetail.component.html"
 })
 
-export class QuizDetailComponent {
+export class QuizDetailComponent implements OnDestroy {
     quizResults: Result[];
     private alive: boolean = true;
 
@@ -49,6 +49,15 @@ export class QuizDetailComponent {
                 // go to "/session-board/host/{id}"
                 this.router.navigateByUrl("/session-board/host/" + generatedId);
             });
+    }
+
+    ngOnInit() {
+        this.repo.alive = true;
+    }
+
+    ngOnDestroy() {
+        this.alive = false;
+        this.repo.alive = false;
     }
 
     generatePin() {

@@ -132,6 +132,9 @@ export class ParticipantBoardComponent implements OnInit, OnDestroy{
             .takeWhile(() => this.alive)
             .subscribe(response => {
                 console.log("Updated result;");
+                this.repo.getParticipantReport();
+                this.repo.getParticipantResults(0);
+                this.repo.getParticipantResults(5);
             }, response => {
                 console.log("Unable to update result");
             });
