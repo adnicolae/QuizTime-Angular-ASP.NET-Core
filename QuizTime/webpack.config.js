@@ -28,7 +28,7 @@ module.exports = (env) => {
                     use: {
                         loader: 'babel-loader',
                         options: {  // << add options with presets env
-                            presets: ['env']
+                            presets: ['env', '@babel/preset-env', 'es2015']
                         }
                     }
                 }

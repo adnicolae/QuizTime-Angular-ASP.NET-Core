@@ -37,6 +37,9 @@
     <None Remove="ClientApp\app\components\createquiz\quizcreated.component.ts" />
     <None Remove="ClientApp\app\components\fetchquizzes\fetchquizzes.component.ts" />
     <None Remove="ClientApp\app\components\fetchresults\fetchresults.component.ts" />
+    <None Remove="ClientApp\app\components\groupmanagement\groupmanagement.component.ts" />
+    <None Remove="ClientApp\app\components\groupmanagement\groupquizzes.component.ts" />
+    <None Remove="ClientApp\app\components\groupmanagement\groupresults.component.ts" />
     <None Remove="ClientApp\app\components\home\android-chrome-192x192.png" />
     <None Remove="ClientApp\app\components\joinsession\joinsession.component.ts" />
     <None Remove="ClientApp\app\components\login\login.component.ts" />
@@ -49,6 +52,8 @@
     <None Remove="ClientApp\app\data\repository.module.ts" />
     <None Remove="ClientApp\app\data\repository.ts" />
     <None Remove="ClientApp\app\models\choice.model.ts" />
+    <None Remove="ClientApp\app\models\group.model.ts" />
+    <None Remove="ClientApp\app\models\groupResults.model.ts" />
     <None Remove="ClientApp\app\models\quiz.model.ts" />
     <None Remove="ClientApp\app\models\report.model.ts" />
     <None Remove="ClientApp\app\models\result.model.ts" />
@@ -229,6 +234,9 @@
     <TypeScriptCompile Include="ClientApp\app\components\createquiz\quizcreated.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\fetchquizzes\fetchquizzes.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\fetchresults\fetchresults.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\groupmanagement\groupresults.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\groupmanagement\groupquizzes.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\groupmanagement\groupmanagement.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\joinsession\joinsession.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\joinsession\participantboard.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\login\login.component.ts" />
@@ -242,6 +250,8 @@
     <TypeScriptCompile Include="ClientApp\app\data\repository.module.ts" />
     <TypeScriptCompile Include="ClientApp\app\data\repository.ts" />
     <TypeScriptCompile Include="ClientApp\app\models\choice.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\group.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\groupResults.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\models\quiz.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\models\report.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\models\result.model.ts" />
