@@ -43,7 +43,7 @@ export class NavMenuComponent {
         this.showLoginForm();
     }
     ngOnInit() {
-        $('.ui.sidebar')
+        $('.ui.labeled.icon.sidebar')
             .sidebar('attach events', '.toc.item')
             ;
     }
