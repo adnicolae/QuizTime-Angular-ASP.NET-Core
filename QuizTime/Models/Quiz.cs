@@ -20,6 +20,7 @@ namespace QuizTime.Models
         public int DeducedPoints { get; set; }
         public DateTime DateCreated { get; set; }
 
+        public Group Group { get; set; }
         public User Creator { get; set; }
         public List<Choice> Choices { get; set; }
     }

@@ -25,6 +25,8 @@ namespace QuizTime.Models.BindingTargets
 
         // the key of the quiz creator
         public string Creator { get; set; }
+        // the key of the group
+        public long Group { get; set; }
 
         public Quiz Quiz => new Quiz
         {

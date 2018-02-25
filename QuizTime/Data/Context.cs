@@ -14,6 +14,7 @@ namespace QuizTime.Data
         public DbSet<Choice> Choices { get; set; }
         public DbSet<Session> Sessions { get; set; }
         public DbSet<Result> Results { get; set; }
+        public DbSet<Group> Groups { get; set; }
 
         public Context(DbContextOptions<Context> options) : base(options)
         {
