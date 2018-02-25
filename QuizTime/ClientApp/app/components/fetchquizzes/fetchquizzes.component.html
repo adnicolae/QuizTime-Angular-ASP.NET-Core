@@ -1,12 +1,13 @@
 ﻿<div class="ui container" style="margin-top:50px;max-width:820px!important">
 
-    <p *ngIf="!quizzes"><em>Loading...</em></p>
     <h4 class="ui header" style="text-align:center"><span style="font-family:Cookie; font-size:2rem; color:#4189C7">quizzes<span style="font-family:'Ceviche One'">!</span></span></h4>
     <h4 class="ui header" style="margin-top:2px;margin-bottom:10px; text-align:center">Manage and keep track of the quizzes you created.</h4>
-    <table id="example" class="ui blue celled striped table">
+    <!--{{ groups}}-->
+    
+    <!--<table id="example" class="ui blue celled striped table">
         <thead class="full-width">
             <tr>
-                <!--<th></th>-->
+
                 <th class="five wide">Title<div class="ui pointing below label" style="margin-bottom:0; margin-left:1em">Click to detail</div></th>
                 <th class="two wide"><i class="clock icon"></i>Time Limit</th>
                 <th class="one wide"><i class="plus icon"></i> Points</th>
@@ -16,11 +17,6 @@
         </thead>
         <tbody>
             <tr *ngFor="let quiz of quizzes">
-                <!--<td class="collapsing">
-                    <div class="ui small right floated primary labeled icon button" (click)="selectQuiz(quiz)">
-                        <i class="right arrow icon"></i> Start
-                    </div>
-                </td>-->
                 <td style="color:#4189C7; cursor: pointer; font-weight: bold" [routerLink]="['/fetch-quizzes/detail', quiz.quizId]">{{ quiz.title }}</td>
                 <td>{{ quiz.timeLimit }}</td>
                 <td>{{ quiz.assignedPoints }}</td>
@@ -31,78 +27,11 @@
         <tfoot class="full-width">
             <tr>
                 <th colspan="5">
-                    <div class="ui right floated small primary labeled icon button" [routerLink]="['/new/quiz']">
+                    <div class="ui right floated small primary labeled icon button" (click)="createCSV()">
                         <i class="plus icon"></i> New Quiz
                     </div>
                 </th>
             </tr>
         </tfoot>
-    </table>
-</div>
-    <!--<table class="ui compact celled blue table">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Time Limit</th>
-                <th>(+) Points</th>
-                <th>(-) Points</th>
-                <th>Date</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-
-
-            <tr *ngFor="let quiz of quizzes">
-                <td>{{ quiz.title }}</td>
-                <td>{{ quiz.timeLimit }}</td>
-                <td>{{ quiz.assignedPoints }}</td>
-                <td>{{ quiz.deducedPoints }}</td>
-                <td>{{ quiz.dateCreated | date }}</td>
-                <td>
-                    <div class="ui small right floated primary labeled icon button" [routerLink]="['/fetch-results']">
-                        <i class="address card icon"></i> New Session
-                    </div>
-                    <div class="ui small right floated labeled icon button" [routerLink]="['/fetch-results']">
-                        <i class="address card icon"></i> Details
-                    </div>
-                </td>
-            </tr>
-        </tbody>
     </table>-->
-    <!--<div class="row">
-        <div class="col-sm-8">
-            <table class='table table-striped' *ngIf="quizzes">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Title</th>
-                        <th>Time Limit</th>
-                        <th>+ Points</th>
-                        <th>- Points</th>
-                        <th>Date</th>
-                        <th>Created By</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let quiz of quizzes">
-                        <td>{{ quiz.quizId }}</td>
-                        <td>{{ quiz.title }}</td>
-                        <td>{{ quiz.timeLimit }}</td>
-                        <td>{{ quiz.assignedPoints }}</td>
-                        <td>{{ quiz.deducedPoints }}</td>
-                        <td>{{ quiz.dateCreated | date }}</td>
-                        <td>{{ quiz.creator.username }}</td>
-                        <td>
-                            <button class="btn btn-default btn-sm" [routerLink]="['/fetch-quizzes/detail', quiz.quizId]">
-                                Details
-                            </button>
-                            <button class="btn btn-primary btn-sm" (click)="selectQuiz(quiz)">Session Start</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-        </div>
-    </div>-->
+</div>
