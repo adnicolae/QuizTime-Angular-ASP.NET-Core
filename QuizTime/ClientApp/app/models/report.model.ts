@@ -1,6 +1,8 @@
-﻿export class Report {
+﻿import { Group } from "./group.model";
+
+export class Report {
     constructor(
-        public quizTitle?: string,
-        public sumResults?: number
+        public group?: Group,
+        public result?: number
     ) {}
 }

@@ -3,6 +3,9 @@ import { Result } from "../models/result.model";
 import { Session } from "../models/session.model";
 import { Choice } from "../models/choice.model";
 import { Report } from "../models/report.model";
+import { Group } from "../models/group.model";
+import { User } from "../models/user.model";
+import { GroupResults } from "../models/groupResults.model";
 import { Injectable, Inject, PLATFORM_ID } from "@angular/core";
 import { Http, RequestMethod, Request, Response } from "@angular/http";
 import { Observable } from "rxjs/Observable";
@@ -18,6 +21,7 @@ const quizzesUrl = "api/quizzes";
 const resultsUrl = "api/results";
 const sessionsUrl = "api/sessions";
 const choicesUrl = "api/choices";
+const groupsUrl = "api/groups";
 
 @Injectable()
 export class Repository {
@@ -33,7 +37,13 @@ export class Repository {
     participantResults: Result[];
     participantReport: Report[];
     sessions: Session[];
+    userGroups: Group[];
+    group: Group;
     latestQuiz: Quiz;
+    groupResults: GroupResults[];
+    private currentUser = {
+        id: ''
+    };
     alive: boolean = true;
     urlBase: string;
     isBrowser: boolean;
@@ -45,17 +55,25 @@ export class Repository {
         private cookieService: CookieService,
         private auth: AuthService,
         private router: Router) {
+
         this.quizFilter.related = true;
         this.urlBase = baseUrl;
-        this.getQuizzes(baseUrl);
+        this.getQuizzes(true, 0);
         //this.getResults();
         this.isBrowser = isPlatformBrowser(platformId);
+
+        this.initialise();
+    }
+
+    initialise() {
         if (this.isBrowser) {
             this.getParticipantResults(0);
             this.getParticipantResults(5);
+            this.getParticipantReport();
+            this.getGroups();
         }
-        //this.getSessions();
     }
+
 
     getQuiz(id: number) {
         this.sendRequest(RequestMethod.Get, this.urlBase + quizzesUrl + "/" + id)
@@ -83,14 +101,20 @@ export class Repository {
             .subscribe(response => { this.hostedSession = response; });
     }
 
-    getQuizzes(baseUrl: string, related = true) {
-        let url = baseUrl + quizzesUrl + "?related=" + this.quizFilter.related;
+
+    getQuizzes(related = true, groupId: number) {
+        let url = this.urlBase + quizzesUrl + "?related=" + this.quizFilter.related;
 
         if (this.quizFilter.search) {
             url += "&search=" + this.quizFilter.search;
         }
 
+        if (groupId > 0) {
+            url += "&groupId=" + groupId;
+        }
+
         this.sendRequest(RequestMethod.Get, url)
+            .takeWhile(() => this.alive)
             .subscribe(response => this.quizzes = response);
     }
 
@@ -103,7 +127,13 @@ export class Repository {
             url += "&last=" + this.resultFilter.last;
             this.sendRequest(RequestMethod.Get, url)
                 .takeWhile(() => this.alive)
-                .subscribe(response => { if (last == 0) { this.participantResults = response; } else this.participantRecentResults = response; });
+                .subscribe(response => {
+                    if (last == 0) {
+                        this.participantResults = response;
+                    } else {
+                        this.participantRecentResults = response;
+                    }
+                });
         }
     }
 
@@ -113,7 +143,9 @@ export class Repository {
             url += this.auth.username;
             return this.sendRequest(RequestMethod.Get, url)
                 .takeWhile(() => this.alive)
-                .subscribe(response => this.participantReport = response);
+                .subscribe(response => {
+                    this.participantReport = response
+                });
         }
         return null;
     }
@@ -239,8 +271,43 @@ export class Repository {
         //return this.sendRequest(RequestMethod.Get, this.urlBase + '/users/me', this.auth.tokenHeader);
     }
 
+    // Returns the groups owned by the logged user
+    // check for null inside components.
+    getGroups() {
+        return this.http
+            .get(this.urlBase + groupsUrl + '/user', this.auth.tokenHeader)
+            .map(res => res.json())
+            .takeWhile(() => this.alive)
+            .subscribe(res => {
+                this.userGroups = res;
+            });
+    }
+
     saveUser(userData) {
         return this.http.post(this.urlBase + 'api/users/me', userData, this.auth.tokenHeader).map(response => response.json());
+    }
+
+    createGroup(groupData) {
+        groupData.dateCreated = new Date();
+        return this.http
+            .post(this.urlBase + groupsUrl, groupData)
+            .map(response => response.json())
+            .subscribe(res => this.userGroups.push(res));
+    }
+
+    getGroup(groupId) {
+        return this.http
+            .get(this.urlBase + groupsUrl + "/" + groupId + "?username=" + this.auth.username)
+            .map(res => res.json())
+            .takeWhile(() => this.alive)
+    }
+
+    getGroupResults(groupId: number) {
+        let url = this.urlBase + resultsUrl + "/group/" + groupId;
+        console.log(url);
+        return this.http.get(url, this.auth.tokenHeader)
+            .map(res => res.json())
+            .subscribe(res => this.groupResults = res);
     }
 
     joinSession(sessionId, username) {
@@ -288,6 +355,4 @@ export class Repository {
             body: data
         })).map(response => response.json());
     }
-
-
 }
