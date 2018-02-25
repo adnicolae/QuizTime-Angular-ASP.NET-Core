@@ -1,0 +1,81 @@
+﻿<div class="ui container" style="margin-top:50px;max-width:820px!important">
+    <!-- ============= HEADER =============  -->
+    <h4 class="ui header" style="margin-top:10px;text-align:center"><span style="font-family:Cookie; font-size:2rem; color:#4189C7">class time<span style="font-family:'Ceviche One'">!</span></span></h4>
+    <h4 class="ui header" style="margin-top:2px;margin-bottom:10px; text-align:center">Create and manage your class groups.</h4>
+
+    <!-- ============= CREATE GROUP FORM =============  -->
+    <div *ngIf="groupShowed" style="text-align:center">
+        <div class="ui tiny form">
+            <div class="field">
+                <label style="display:none">Group title</label>
+                <input [(ngModel)]="groupData.title" style="width:300px" placeholder="Group title" type="text" required>
+            </div>
+
+            <button class="ui primary button" style="width:300px; padding:8px; margin:0" type="button" (click)="createGroup()">Create group</button>
+        </div>
+    </div>
+    <button *ngIf="!groupShowed" class="ui fluid primary button" style=" padding:8px" (click)="showGroupForm()">Create new group</button>
+
+    <!-- ============= GROUPS TABLE =============  -->
+    <table *ngIf="groups != null" class="ui very basic collapsing celled table" style="margin-left:auto; margin-right:auto">
+        <thead>
+            <tr>
+                <th>Class</th>
+                <th>Results</th>
+                <th>Quizzes</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let group of groups.reverse()">
+                <td>
+                    <h4 class="ui image header">
+                        <i class="users icon"></i>
+                        <div class="content">
+                            {{ group.title }}
+                            <div class="sub header">
+                                Created on {{ group.dateCreated | date:'mediumDate'}}
+                            </div>
+                        </div>
+                    </h4>
+                </td>
+                <td>
+                    <button type="button" class="ui inverted primary button" [routerLink]="['/groups/results/',group.groupId]">Results</button>
+                </td>
+                <td style="text-align:center;" [routerLink]="['/groups/quizzes/',group.groupId]">
+                    <a class="ui orange circular label">{{ group.quizzes.length }}</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ============= GROUPS TABLE =============  -->
+    <!--<table class="ui celled blue table">
+        <thead>
+            <tr>
+                <th class="two wide"><i class="font icon"></i>Title</th>
+                <th class="two wide"><i class="calendar icon"></i>Date Created</th>
+                <th class="three wide"><i class="hashtag icon"></i>Members</th>
+                <th class="two wide"><i class="user icon"></i>Quizzes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let group of groups">
+                <td style="color:#4189C7; cursor: pointer; font-weight: bold">{{ group.title }}</td>
+                <td>{{ group.dateCreated }}</td>
+                <td>{{ group.members.length }}</td>
+                <td>{{ group.quizzes.length }}</td>
+            </tr>
+
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="5">
+                    <div class="ui right floated small primary labeled icon button">
+                        <i class="plus icon"></i> New Group
+                    </div>
+                </th>
+            </tr>
+        </tfoot>
+    </table>-->
+</div>
