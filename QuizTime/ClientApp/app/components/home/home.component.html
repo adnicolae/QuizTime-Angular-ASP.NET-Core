@@ -109,6 +109,18 @@
         <h3 class="ui header" style="margin-top:35px;margin-bottom:2px; text-align:center">Welcome, {{ auth.name }}!</h3>
         <h4 class="ui header" style="margin-top:0;text-align:center">It's <span style="font-family:Cookie; font-size:2rem; color:#4189C7">quiztime<span style="font-family:'Ceviche One'">!</span></span></h4>
         <div class="ui two cards" style="margin-top:35px">
+
+            <div class="card">
+                <div class="content">
+                    <div class="header">Join quiz</div>
+                    <div class="description">
+                        Join a quiz session <br /> Use the session id provided <br /> No account required <br /> Use a friendly username!
+                    </div>
+                </div>
+                <div class="ui bottom attached orange button" [routerLink]="['/join']">
+                    Click here to<br /> Join us!
+                </div>
+            </div>
             <div class="card">
                 <div class="content">
                     <div class="header">Quick Quiz</div>
@@ -118,17 +130,6 @@
                 </div>
                 <div class="ui bottom attached primary button" [routerLink]="['/new/quiz']">
                     Click here to <br /> Create a quiz!
-                </div>
-            </div>
-            <div class="card">
-                <div class="content">
-                    <div class="header">Join quiz</div>
-                    <div class="description">
-                        Join a quiz session <br /> Use the session id provided <br /> No account required <br /> Use a friendly username!
-                    </div>
-                </div>
-                <div class="ui bottom attached yellow button" [routerLink]="['/join']">
-                    Click here to<br /> Join us!
                 </div>
             </div>
         </div>
