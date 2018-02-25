@@ -3,6 +3,7 @@ import { FormControl, FormGroup, FormBuilder, Validators, FormArray } from '@ang
 import { Repository } from '../../data/repository';
 import { Quiz } from '../../models/quiz.model';
 import { Choice } from '../../models/choice.model';
+import { Group } from '../../models/group.model';
 import { Injectable, Inject } from "@angular/core";
 import { Http, RequestMethod, Request, Response } from "@angular/http";
 import { Observable } from "rxjs/Observable";
@@ -29,21 +30,36 @@ export class CreateQuizComponent implements OnDestroy{
     private alive: boolean = true;
     isBrowser: boolean;
     defaultTitle: string;
+    selectedGroup;
 
     constructor( @Inject(PLATFORM_ID) private platformId: Object, private router: Router, private formBuilder: FormBuilder, private repo: Repository, private http: Http, @Inject('BASE_URL') baseUrl: string, public auth: AuthService) {
         this.thisBaseUrl = baseUrl;
         this.createForm();
         this.isBrowser = isPlatformBrowser(platformId);
+        //this.groups = this.groups.slice(this.groups.length - 5, this.groups.length)
     }
 
     ngOnInit() {
         $('.ui.checkbox')
             .checkbox()
             ;
+        $('#select')
+            .dropdown()
+            ;
 
         this.repo.getUser().subscribe(response => {
             this.defaultTitle = response.defaultQuizTitle;
         });
+
+        this.selectedGroup = this.groups[0];
+    }
+
+    get groups() {
+        return this.repo.userGroups.slice(0, 4);
+    }
+
+    onChangeSelect(newGroup) {
+        this.selectedGroup = newGroup;
     }
 
     setChoices(choices: Choice[]) {
@@ -56,6 +72,14 @@ export class CreateQuizComponent implements OnDestroy{
         return this.quizForm.get('choices') as FormArray;
     }
 
+    setTrue(choice) {
+        choice.value.correctness = true;
+    }
+
+    setFalse(choice) {
+        choice.value.correctness = false;
+    }
+
     ngOnDestroy() {
         this.alive = false;
         this.repo.alive = false;
@@ -63,10 +87,13 @@ export class CreateQuizComponent implements OnDestroy{
 
     onSubmit() {
         const formModel = this.quizForm.value;
-
+        const groupQuizId = this.selectedGroup.quizzes.length + 1;
+        console.log(groupQuizId);
+        console.log("Quiz " + groupQuizId);
         const newQuiz: Quiz = {
             quizId: 0,
-            title: (this.defaultTitle != null) ? this.defaultTitle : formModel.title as string,
+            group: this.selectedGroup,
+            title: ("Quiz #" + groupQuizId) as string,
             timeLimit: this.quizTimeLimit,
             dateCreated: new Date(),
             assignedPoints: this.quizAssignedPoints,
@@ -74,6 +101,7 @@ export class CreateQuizComponent implements OnDestroy{
         };
 
         let data = {
+            group: this.selectedGroup.groupId,
             title: newQuiz.title,
             timeLimit: newQuiz.timeLimit,
             assignedPoints: newQuiz.assignedPoints,
@@ -90,7 +118,9 @@ export class CreateQuizComponent implements OnDestroy{
                 console.log("New quiz with id: " + response.json());
                 newQuiz.quizId = response.json();
                 console.log(newQuiz);
+
                 this.repo.quizzes.push(newQuiz);
+
                 const ch: any = formModel.choices
                     .map((choice: Choice) => choice.choiceId = 0);
                 const ch2: any = formModel.choices
@@ -133,7 +163,6 @@ export class CreateQuizComponent implements OnDestroy{
 
     createForm() {
         this.quizForm = this.formBuilder.group({
-            title: ['', Validators.required],
             timeLimit: '30',
             assignedPoints: '0',
             deducedPoints: '0',

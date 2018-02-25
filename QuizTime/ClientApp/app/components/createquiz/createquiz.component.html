@@ -12,10 +12,15 @@
         </div>
     </div>
     <form [formGroup]="quizForm" (ngSubmit)="onSubmit()" class="ui form attached compact fluid blue segment">
+        
         <div class="field">
-            <label>Quiz Title</label>
-            <input placeholder="{{defaultTitle || 'Title'}}" formControlName="title" type="text">
+            <label>Class</label>
+            <select [ngModel]="selectedGroup" (ngModelChange)="onChangeSelect($event)" name="Class" class="ui left dropdown" id="select" [ngModelOptions]="{standalone: true}">
+                <option *ngFor="let group of groups" [ngValue]="group">{{group.title}}</option>
+            </select>
         </div>
+
+
         <div class="field">
             <label>Points</label>
             <div class="ui buttons">
@@ -76,17 +81,17 @@
                         <div class="ui two cards">
                             <div class="card" *ngFor="let choice of choices?.controls; let i=index" [formGroupName]="i">
                                 <div class="content">
-                                    <div class="header">
+                                    <div class="header" style="margin-bottom:5px;margin-top:5px;text-align:center">
                                         Choice # {{ i+1 }}
                                     </div>
-                                    <input type="checkbox" formControlName="correctness" value="true" class="ui checkbox" />
-                                    Is this a correct choice?
+                                    <!--<input style="display:none" type="checkbox" formControlName="correctness" value="true" class="ui checkbox" />-->
+                                    <!--Is this a correct choice?-->
                                     <input class="form-control hidden" formControlName="title" value="Choice" />
                                 </div>
-                                <div *ngIf="choice.value.correctness != true" class="ui bottom attached red button">
+                                <div *ngIf="choice.value.correctness != true" class="ui bottom attached red button" (click)="setTrue(choice)">
                                     WRONG
                                 </div>
-                                <div *ngIf="choice.value.correctness == true" class="ui bottom attached green button">
+                                <div *ngIf="choice.value.correctness == true" class="ui bottom attached green button" (click)="setFalse(choice)">
                                     CORRECT
                                 </div>
                             </div>
@@ -102,7 +107,7 @@
                 <label for="terms">Start the quiz session immediately.</label>
             </div>
         </div>
-        <button type="submit" [disabled]="quizForm.pristine" class="ui blue submit button">Create Quiz</button>
+        <button type="submit" class="circular ui large green submit button">Start</button>
     </form>
     <div class="ui bottom attached warning message">
         <i class="icon help"></i>
@@ -111,7 +116,7 @@
 </div>
 
 
-
+    {{ quizForm.value | json}}
 
 <!--<p>Form value: {{ quizForm.value | json }}</p>
 <p>Form status: {{ quizForm.status | json }}</p>
