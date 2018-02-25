@@ -28,6 +28,9 @@ import { RegisterComponent } from './components/registration/register.component'
 import { LoginComponent } from './components/login/login.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { AuthService } from './components/registration/auth.service';
+import { GroupManagementComponent } from './components/groupmanagement/groupmanagement.component';
+import { GroupQuizzesComponent } from './components/groupmanagement/groupquizzes.component';
+import { GroupResultsComponent } from './components/groupmanagement/groupresults.component';
 
 @NgModule({
     providers: [SimpleTimer, AuthService],
@@ -48,6 +51,9 @@ import { AuthService } from './components/registration/auth.service';
         RegisterComponent,
         LoginComponent,
         SettingsComponent,
+        GroupManagementComponent,
+        GroupQuizzesComponent,
+        GroupResultsComponent,
         HomeComponent
     ],
     imports: [
@@ -71,10 +77,13 @@ import { AuthService } from './components/registration/auth.service';
             { path: 'session-board/participant/:id', component: ParticipantBoardComponent },
             { path: 'join', component: JoinSessionComponent },
             { path: 'fetch-quizzes/detail', component: QuizDetailComponent },
-            { path: 'fetch-quizzes/detail/:id', component: QuizDetailComponent },
+            { path: 'quizzes/detail/:id', component: QuizDetailComponent },
             { path: 'register', component: RegisterComponent },
             { path: 'login', component: LoginComponent },
             { path: 'settings', component: SettingsComponent },
+            { path: 'groups', component: GroupManagementComponent },
+            { path: 'groups/quizzes/:id', component: GroupQuizzesComponent },
+            { path: 'groups/results/:id', component: GroupResultsComponent },
             { path: '**', redirectTo: 'home' }
         ])
     ]
