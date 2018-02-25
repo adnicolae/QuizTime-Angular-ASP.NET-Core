@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.JsonPatch;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -58,16 +59,40 @@ namespace QuizTime.Controllers
         [Route("user/{participantUsername}")]
         public IEnumerable<object> GetUserReport(string participantUsername)
         {
-            IQueryable<Result> query = _context.Results;
-
             var q = from r in _context.Results
-                    where r.SessionParticipant.Username == participantUsername
-                    group r by r.Session.Quiz.Title into g
+                    where r.SessionParticipant.Username == participantUsername && r.Session.Quiz.Group != null
+                    group r by r.Session.Quiz.Group into g
                     select new
                     {
-                        QuizTitle = g.Key,
-                        SumResults = g.Sum(r => r.Score)
+                        Group = g.Key,
+                        Result = g.Sum(r => r.Score)
                     };
+            if (q != null)
+            {
+                return q.ToList();
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("group/{groupId:long}")]
+        public IEnumerable<object> GetGroupResults(long groupId)
+        {
+            //IQueryable<Result> query = _context.Results.Include(r => r.Session).ThenInclude(s => s.Quiz).ThenInclude(qz => qz.Group).ThenInclude(g => g.Owner);
+
+            var q = from r in _context.Results
+                    where r.Session.Quiz.Group.GroupId == groupId
+                    group r by r.SessionParticipant.Username into g
+                    select new
+                    {
+                        Username = g.Key,
+                        Result = g.Sum(r => r.Score)
+                    };
+
             return q.ToList();
         }
 
@@ -108,6 +133,10 @@ namespace QuizTime.Controllers
                     .Include(r => r.Session)
                         .ThenInclude(r => r.Quiz)
                         .ThenInclude(q => q.Creator)
+                        .Include(r => r.Session)
+                        .ThenInclude(s => s.Quiz)
+                        .ThenInclude(r => r.Group)
+                        .ThenInclude(q => q.Owner)
                     .Include(r => r.Choice);
 
                 List<Result> data = query.ToList();
@@ -123,6 +152,14 @@ namespace QuizTime.Controllers
                     if (r.Session != null)
                     {
                         r.Session.Results = null;
+                    }
+
+                    if (r.Session != null && r.Session.Quiz != null && r.Session.Quiz.Group != null)
+                    {
+                        r.Session.Quiz.Group.Quizzes = null;
+                        r.Session.Quiz.Group.Owner.Results = null;
+                        r.Session.Quiz.Group.Owner.QuizzesCreated = null;
+                        r.Session.Quiz.Group.Owner.Password = null;
                     }
 
                     if (r.Session != null && r.Session.Quiz != null)

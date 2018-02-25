@@ -78,7 +78,7 @@ namespace QuizTime.Controllers
 
 
         [HttpGet]
-        public IEnumerable<Quiz> GetQuizzes(string search, int creatorId = 1, bool related = false)
+        public IEnumerable<Quiz> GetQuizzes(string search, long groupId, int creatorId = 1, bool related = false)
         {
             IQueryable<Quiz> query = _context.Quizzes;
             //query = query.Where(q => q.Creator.UserId == creatorId);
@@ -90,16 +90,28 @@ namespace QuizTime.Controllers
                 query = query.Where(q => q.Title.ToLower().Contains(search));
             }
 
+            if (groupId != 0)
+            {
+                query = query.Where(q => q.Group.GroupId == groupId);
+            }
+
             if (related)
             {
                 query = query
                     .Include(q => q.Creator)
-                    .Include(q => q.Choices);
+                    .Include(q => q.Choices)
+                    .Include(q => q.Group);
 
                 List<Quiz> data = query.ToList();
 
                 data.ForEach(q =>
                 {
+                    if (q.Group != null)
+                    {
+                        q.Group.Quizzes = null;
+                        q.Group.Owner.QuizzesCreated = null;
+                    }
+
                     if (q.Choices != null)
                     {
                         foreach (Choice choice in q.Choices)
@@ -132,6 +144,7 @@ namespace QuizTime.Controllers
 
                 // Check if the user exists
                 User user = _context.Users.SingleOrDefault(u => u.Username == quizData.Creator);
+                Group group = _context.Groups.SingleOrDefault(g => g.GroupId == quizData.Group);
 
                 if (user != null)
                 {
@@ -141,6 +154,16 @@ namespace QuizTime.Controllers
                 else
                 {
                     return NotFound("Quiz creator not found.");
+                }
+
+                if (group != null)
+                {
+                    quiz.Group = group;
+                    _context.Attach(group);
+                }
+                else
+                {
+                    return NotFound("Group not found.");
                 }
 
                 //if (quiz.Creator != null && quiz.Creator.UserId != 0)
