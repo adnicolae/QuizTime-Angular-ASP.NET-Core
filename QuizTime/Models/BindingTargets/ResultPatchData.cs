@@ -49,6 +49,24 @@ namespace QuizTime.Models.BindingTargets
             }
         }
 
+        public bool? ParticipatedSelection
+        {
+            get => Result.ParticipatedSelection;
+            set
+            {
+                Result.ParticipatedSelection = value.Value;
+            }
+        }
+
+        public bool? PositiveVote
+        {
+            get => Result.PositiveVote;
+            set
+            {
+                Result.PositiveVote = value.Value;
+            }
+        }
+
         public long? Choice {
             get => Result.Choice?.ChoiceId ?? null;
             set

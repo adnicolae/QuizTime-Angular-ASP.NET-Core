@@ -124,6 +124,7 @@ namespace QuizTime.Controllers
         public IActionResult UpdateSession(long id, [FromBody]JsonPatchDocument<SessionData> patch)
         {
             Session session = _context.Sessions
+                .Include(s => s.SelectedToExplain)
                 .Include(s => s.Quiz)
                 .First(s => s.SessionId == id);
 
@@ -133,6 +134,15 @@ namespace QuizTime.Controllers
 
             if (ModelState.IsValid && TryValidateModel(sessionData))
             {
+                if (session.SelectedToExplain != null && session.SelectedToExplain.UserId != 0)
+                {
+                    User user = _context.Users.SingleOrDefault(u => u.UserId == sessionData.SelectedToExplain);
+                    if (user != null)
+                    {
+                        session.SelectedToExplain = user;
+                        _context.Attach(session.SelectedToExplain);
+                    }
+                }
                 if (session.Quiz != null && session.Quiz.QuizId != 0)
                 {
                     _context.Attach(session.Quiz);

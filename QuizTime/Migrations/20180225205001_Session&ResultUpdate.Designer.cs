@@ -12,9 +12,10 @@ using System;
 namespace QuizTime.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20180225205001_Session&ResultUpdate")]
+    partial class SessionResultUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,8 +95,6 @@ namespace QuizTime.Migrations
 
                     b.Property<bool>("ParticipatedSelection");
 
-                    b.Property<bool>("PositiveVote");
-
                     b.Property<int>("Score");
 
                     b.Property<long?>("SessionId");
@@ -124,15 +123,11 @@ namespace QuizTime.Migrations
 
                     b.Property<long?>("QuizId");
 
-                    b.Property<long?>("SelectedToExplainUserId");
-
                     b.Property<int>("Status");
 
                     b.HasKey("SessionId");
 
                     b.HasIndex("QuizId");
-
-                    b.HasIndex("SelectedToExplainUserId");
 
                     b.ToTable("Sessions");
                 });
@@ -204,10 +199,6 @@ namespace QuizTime.Migrations
                     b.HasOne("QuizTime.Models.Quiz", "Quiz")
                         .WithMany()
                         .HasForeignKey("QuizId");
-
-                    b.HasOne("QuizTime.Models.User", "SelectedToExplain")
-                        .WithMany()
-                        .HasForeignKey("SelectedToExplainUserId");
                 });
 
             modelBuilder.Entity("QuizTime.Models.User", b =>

@@ -9,7 +9,8 @@ namespace QuizTime.Models
     {
         public long ResultId { get; set; }
         public int Score { get; set; }
-
+        public bool ParticipatedSelection { get; set; }
+        public bool PositiveVote { get; set; }
         // The user who obtained that score
         public User SessionParticipant { get; set; }
         // The session where he obtained that score

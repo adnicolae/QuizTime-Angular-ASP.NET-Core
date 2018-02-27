@@ -276,7 +276,7 @@ namespace QuizTime.Controllers
 
                 _context.SaveChanges();
                 //_boardHubContext.Clients.All.InvokeAsync("send", "Updating results");
-
+                _boardHubContext.Clients.All.InvokeAsync("Send", "Updated result for user " + result.SessionParticipant.Username);
                 return Ok();
             }
             else

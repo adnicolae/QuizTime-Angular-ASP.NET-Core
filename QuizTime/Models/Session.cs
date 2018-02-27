@@ -11,6 +11,7 @@ namespace QuizTime.Models
         public DateTime DateCreated { get; set; }
         public long GeneratedHostId { get; set; }
         public SessionStatus Status { get; set; }
+        public User SelectedToExplain { get; set; }
 
         // the results of all users that participated
         public ICollection<Result> Results { get; set; }
@@ -25,6 +26,8 @@ namespace QuizTime.Models
         TimerBeforeQuestion,
         DisplayQuestionOrChoices,
         DisplayCorrectResult,
-        ShowLeaderboard
+        ExplainAnswer,
+        Voting,
+        QuizEnd
     }
 }

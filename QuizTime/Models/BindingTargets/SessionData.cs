@@ -17,6 +17,25 @@ namespace QuizTime.Models.BindingTargets
         [Required]
         public SessionStatus Status { get => Session.Status; set => Session.Status = value; }
 
+        public long? SelectedToExplain
+        {
+            get => Session.SelectedToExplain?.UserId ?? null; set
+            {
+                if (!value.HasValue)
+                {
+                    Session.SelectedToExplain = null;
+                }
+                else
+                {
+                    if (Session.SelectedToExplain == null)
+                    {
+                        Session.SelectedToExplain = new User();
+                    }
+                    Session.SelectedToExplain.UserId = value.Value;
+                }
+            }
+        }
+
         public long? Quiz { get => Session.Quiz?.QuizId ?? null; set {
                 if (!value.HasValue)
                 {

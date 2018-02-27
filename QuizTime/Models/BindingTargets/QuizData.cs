@@ -24,6 +24,7 @@ namespace QuizTime.Models.BindingTargets
         public DateTime DateCreated { get; set; }
 
         // the key of the quiz creator
+        [Required]
         public string Creator { get; set; }
         // the key of the group
         public long Group { get; set; }

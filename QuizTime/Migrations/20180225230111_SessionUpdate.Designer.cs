@@ -12,9 +12,10 @@ using System;
 namespace QuizTime.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20180225230111_SessionUpdate")]
+    partial class SessionUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,8 +94,6 @@ namespace QuizTime.Migrations
                     b.Property<long?>("ChoiceId");
 
                     b.Property<bool>("ParticipatedSelection");
-
-                    b.Property<bool>("PositiveVote");
 
                     b.Property<int>("Score");
 
