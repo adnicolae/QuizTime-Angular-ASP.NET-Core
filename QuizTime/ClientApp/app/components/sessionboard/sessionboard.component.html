@@ -1,77 +1,280 @@
-﻿<div *ngIf="!session" class="ui segment" style="padding:5em;">
-    <div class="ui active dimmer" style="background-color:#4183c4">
-        <div class="ui indeterminate large text loader">
-            Loading... <br />
-            Ask your students to go to the Join page while the session loads
-        </div>
-    </div>
-</div>
-
-<!-- STATUS: Waiting for players to join -->
-<div *ngIf="session?.status == 1">
-        <div class="well well-lg" style="text-align:center; margin-top: 20px">
-            <h1>Session created!</h1>
-            <h3>Join our quiz using the ID: <strong>{{ session?.generatedHostId }}</strong></h3>
-            <button class="btn btn-lg btn-success" (click)="updateSession(session?.quiz.timeLimit)">Let's start</button>
-    </div>
-
-    <div class="col-xs-8">
-        <h3>Participants: {{ session?.results.length }}</h3>
-        <h4>Let's welcome the following:</h4>
-        <ul *ngFor="let result of session?.results">
-            <li>{{ result.sessionParticipant.username }}</li>
-        </ul>
-    </div>
-</div>
-
-<!-- STATUS: Timer before question -->
-<div *ngIf="session?.status == 2">
-    <h3>The quiz will start in: {{ counter1 }}</h3>
-</div>
-
-<!-- STATUS: Display question and timer -->
-<div *ngIf="session?.status == 3">
-    <h1>{{ session?.quiz?.title }}</h1>
-    <h4>Time remaining: {{ counter2 }}</h4>
-    <div *ngFor="let choice of session?.quiz?.choices" class="col-md-6">
-        <div class="well">
-        <h3>{{ choice.title }}</h3>
-        </div>
-    </div>
-</div>
-
-<!-- STATUS: Display correct answer -->
-<div *ngIf="session?.status == 4">
-    <!--<div class="col-xs-8">-->
-        <div class="well well-lg" style="text-align:center; margin-top:20px">
-            <h1>The correct answer was:</h1>
-            <div *ngFor="let choice of session?.quiz?.choices">
-                <h3 *ngIf="choice.correctness == true">{{ choice.title }}</h3>
+﻿<div class="ui container" id="thiswrapper">
+    <div *ngIf="!session" class="ui segment" style="padding:5em;">
+        <div class="ui active dimmer" style="background-color:#4183c4">
+            <div class="ui indeterminate large text loader">
+                Loading... <br />
+                Ask your students to go to the Join page while the quiz loads
             </div>
-            <button class="btn btn-lg btn-success" (click)="updateSessionWithNoTimer()">Leaderboard</button>
         </div>
-    <!--</div>-->
-</div>
+    </div>
 
-<!-- STATUS: Show Leaderboard -->
-<div *ngIf="session?.status == 5">
-    <div class="row">
-        <div class="col-sm-6">
-            <h1>Leaderboard</h1>
-            <table class='table table-striped' *ngIf="session?.results">
-                <thead>
-                    <tr>
-                        <th>Student</th>
-                        <th>Score</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let result of session?.results">
-                        <td>{{ result.sessionParticipant.username }}</td>
-                        <td>{{ result.score }}</td>
-                    </tr>
-                </tbody>
-            </table>
+    <!-- STATUS: Waiting for players to join -->
+    <div *ngIf="session?.status == 1">
+        <h2 class="ui center aligned icon header">
+            <div (mouseenter)="setGreen()" (mouseleave)="setBlack()">
+                <i *ngIf="!greenIcon" class="circular hand point down outline icon"></i>
+                <div *ngIf="!greenIcon" class="ui pointing label">
+                    Push to start!
+                </div>
+                <i (click)="updateSession(session?.quiz.timeLimit)" *ngIf="greenIcon" class="circular plug outline green icon"></i>
+                <div *ngIf="greenIcon" class="ui pointing green label">
+                    Push to start!
+                </div>
+            </div>
+
+            <div class="ui center aligned header" style="margin-top:0;margin-bottom: 5px;text-align:center">It's <span style="font-family:Cookie; font-size:4rem; color:#4189C7">quiztime<span style="font-family:'Ceviche One'">!</span></span></div>
+        </h2>
+
+        <!--<h3 style="text-align:center; margin-top:0">(<i class="plus green icon"></i> {{session?.quiz.assignedPoints}} <i class="minus red icon"></i>{{session?.quiz.deducedPoints}} <i class="clock black icon"></i>{{session?.quiz.timeLimit}}s)</h3>-->
+
+        <div class="ui attached message">
+            <i class="red close icon" [routerLink]="['/home']"></i>
+            <div class="header" style="font-size:2em">
+                Welcome to {{ session?.quiz.title }}!
+            </div>
+            <p style="font-size:2em">Join by going to <span style="color:#4189C7; font-weight:bold">/join</span> using the id <i class="hashtag icon"></i><span style="font-weight:bold">{{session?.generatedHostId}}</span></p>
+
+            <div class="ui statistics">
+                <div class="statistic">
+                    <div class="value">
+                        <i class="green plus icon"></i> {{session?.quiz.assignedPoints}}
+                    </div>
+                    <div class="label">
+                        Points
+                    </div>
+                </div>
+                <div class="statistic">
+                    <div class="value">
+                        <i class="red minus icon"></i> {{session?.quiz.deducedPoints}}
+                    </div>
+                    <div class="label">
+                        Points
+                    </div>
+                </div>
+                <div class="statistic">
+                    <div class="value">
+                        <i class="black clock icon"></i> {{session?.quiz.timeLimit}}
+                    </div>
+                    <div class="label">
+                        Seconds
+                    </div>
+                </div>
+                <div class="statistic">
+                    <div class="value">
+                        <i class="black users icon"></i>
+                        {{ session?.results.length }}
+                    </div>
+                    <div class="label">
+                        Participants
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui attached blue segment">
+            <div class="ui horizontal list" *ngFor="let result of session?.results">
+                <a class="ui image label" *ngIf="result.resultId%2 == 0">
+                    <img src="/joe.jpg">
+                    {{result.sessionParticipant.username}}
+                </a>
+                <a class="ui image label" *ngIf="result.resultId%2 == 1">
+                    <img src="/stevie.jpg">
+                    {{result.sessionParticipant.username}}
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- STATUS = 2: Timer before question -->
+    <div *ngIf="session?.status == 2">
+        <div class="ui center aligned header" style="margin-top:30px;margin-bottom: 5px;text-align:center"><span style="font-family:Cookie; font-size:4rem; color:#4189C7">quiztime<span style="font-family:'Ceviche One'">!</span></span> <br />starts in</div>
+
+        <div class="ui huge statistics">
+            <div class="red statistic" style="margin-left:auto; margin-right: auto; margin-top: 20px">
+                <div class="value">
+                    {{counter1}}
+                </div>
+                <div class="label">
+                    SECONDS
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- STATUS = 3: Display question and timer -->
+    <div *ngIf="session?.status == 3">
+        <div class="ui center aligned header" style="margin-top:30px;margin-bottom: 5px;text-align:center"><span style="font-family:Cookie; font-size:4rem; color:#4189C7">{{ session?.quiz?.title }}<span style="font-family:'Ceviche One'">!</span></span> <br />ends in</div>
+
+        <div class="ui huge statistics">
+            <div *ngIf="counter2 > session.quiz.timeLimit/2" class="green statistic" style="margin-left:auto; margin-right: auto; margin-top: 20px">
+                <div class="value">
+                    {{counter2}}
+                </div>
+                <div class="label">
+                    SECONDS
+                </div>
+            </div>
+            <div *ngIf="counter2 <= session.quiz.timeLimit/2" class="red statistic" style="margin-left:auto; margin-right: auto; margin-top: 20px">
+                <div class="value">
+                    {{counter2}}
+                </div>
+                <div class="label">
+                    SECONDS
+                </div>
+            </div>
+        </div>
+
+        <div class="ui attached message">
+            <i class="red close icon" [routerLink]="['/home']"></i>
+            <p style="font-size:2em">Pick one of the choices below!</p>
+        </div>
+
+        <div class="ui attached blue segment">
+            <div class="ui two column centered stackable grid" style="margin-top:5em; margin-bottom:5em">
+                <div class="column">
+                    <div class="row">
+                        <div class="ui two cards">
+                            <div class="orange card" *ngFor="let choice of session?.quiz?.choices.sort(compare)">
+                                <div class="content">
+                                    <div class="header" style="margin-bottom:5px;margin-top:5px;text-align:center; font-size:20px">
+                                        {{ choice.title }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- STATUS = 4: Display correct answer -->
+    <div *ngIf="session?.status == 4">
+        <div class="ui center aligned header" style="margin-top:30px;margin-bottom: 5px;text-align:center"><span style="font-family:Cookie; font-size:4rem; color:#4189C7">Challenge<span style="font-family:'Ceviche One'">!</span></span> <br />starts in</div>
+
+        <div class="ui huge statistics">
+            <div *ngIf="counter3 > 5" class="green statistic" style="margin-left:auto; margin-right: auto; margin-top: 20px">
+                <div class="value">
+                    {{counter3}}
+                </div>
+                <div class="label">
+                    SECONDS
+                </div>
+            </div>
+            <div *ngIf="counter3 <= 5" class="red statistic" style="margin-left:auto; margin-right: auto; margin-top: 20px">
+                <div class="value">
+                    {{counter3}}
+                </div>
+                <div class="label">
+                    SECONDS
+                </div>
+            </div>
+        </div>
+
+        <!-- HEADER: WOULD YOU LIKE TO WIN MORE POINTS?  -->
+        <div class="ui attached message">
+            <i class="red close icon" [routerLink]="['/home']"></i>
+            <div class="header" style="font-size:2em">
+                Would you like to win more points?
+            </div>
+            <p style="font-size:2em">Join the challenge by pressing join!</p>
+        </div>
+
+        <!-- SEGMENT: CORRECT ANSWER WAS -->
+        <div class="ui attached blue segment">
+            <h1 class="ui center aligned header" style="margin-top:5em">The correct answer was:</h1>
+            <div class="ui two column centered stackable grid">
+                <div class="column">
+                    <div class="row">
+                        <div class="ui two cards">
+                            <div class="orange card" *ngFor="let choice of session?.quiz?.choices.sort(compare)">
+                                <div class="content" *ngIf="choice.correctness == true">
+                                    <div class="ui green header" style="margin-bottom:5px;margin-top:5px;text-align:center; font-size:25px">
+                                        {{ choice.title }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h4 class="ui center aligned header" style="margin-top:5em">Challenge: A random participant will be chosen to explain the answer and the others will vote on how well he explained!</h4>
+        </div>
+    </div>
+    <!--</div>-->
+    <!-- STATUS = 5: Timer 30 seconds -->
+    <div *ngIf="session?.status == 5">
+        <div class="ui center aligned header" style="margin-top:30px;margin-bottom: 5px;text-align:center"><span style="font-family:Cookie; font-size:4rem; color:#4189C7">challenge<span style="font-family:'Ceviche One'">!</span></span> <br />ends in</div>
+
+        <div class="ui huge statistics">
+            <div *ngIf="counter4 > 15" class="green statistic" style="margin-left:auto; margin-right: auto; margin-top: 20px">
+                <div class="value">
+                    {{counter4}}
+                </div>
+                <div class="label">
+                    SECONDS
+                </div>
+            </div>
+
+            <div *ngIf="counter4 <= 15" class="red statistic" style="margin-left:auto; margin-right: auto; margin-top: 20px">
+                <div class="value">
+                    {{counter4}}
+                </div>
+                <div class="label">
+                    SECONDS
+                </div>
+            </div>
+        </div>
+
+        <h2 class="ui center aligned  header">
+            <img src="/patrick.png" class="ui circular image">
+            <span style="color:#4189C7">{{selectedParticipant?.name}} - {{selectedParticipant?.username}}</span> <br />
+            Please explain your judgement! <br />
+            Your peers will decide if you win or lose points!
+        </h2>
+    </div>
+
+    <!-- STATUS = 6: Voting for 10 seconds -->
+    <div *ngIf="session?.status == 6">
+        <div class="ui center aligned header" style="margin-top:30px;margin-bottom: 5px;text-align:center"><span style="font-family:Cookie; font-size:4rem; color:#4189C7">voting<span style="font-family:'Ceviche One'">!</span></span> <br />ends in</div>
+
+        <div class="ui huge statistics">
+            <div class="green statistic" style="margin-left:auto; margin-right: auto; margin-top: 20px">
+                <div class="value">
+                    {{counter5}}
+                </div>
+                <div class="label">
+                    SECONDS
+                </div>
+            </div>
+        </div>
+        <h2 class="ui center aligned header">Please vote! <br /> Did you understand the explanation?</h2>
+    </div>
+
+    <!-- Show votes && leaderboard -->
+    <div *ngIf="session?.status == 7">
+        <div class="well well-lg" style="text-align:center; margin-top:20px">
+            <h1>Yes: {{ yesVotes }}</h1>
+            <h1>No: {{ noVotes }}</h1>
+            <h1 *ngIf="yesVotes >= noVotes">Congrats, {{ selectedParticipant?.username }}! You win 10 more points!</h1>
+            <h1 *ngIf="yesVotes < noVotes">Sorry, {{ selectedParticipant?.username }}! You lose all your points!</h1>
+            <!--<div class="row">
+                <div class="col-sm-6">
+                    <h1>Leaderboard</h1>
+                    <table class='table table-striped' *ngIf="session?.results">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let result of session?.results">
+                                <td>{{ result.sessionParticipant.username }}</td>
+                                <td>{{ result.score }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>-->
         </div>
     </div>
 </div>

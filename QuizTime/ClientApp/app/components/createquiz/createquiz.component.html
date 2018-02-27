@@ -11,6 +11,7 @@
             <p>Fill out the form below to create a quick quiz.</p>
         </div>
     </div>
+    {{ selectedGroup }}
     <form [formGroup]="quizForm" (ngSubmit)="onSubmit()" class="ui form attached compact fluid blue segment">
         
         <div class="field">
