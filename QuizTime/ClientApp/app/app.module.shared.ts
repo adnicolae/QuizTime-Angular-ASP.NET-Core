@@ -22,7 +22,6 @@ import { QuizDetailComponent } from './components/quizdetail/quizdetail.componen
 import { JoinSessionComponent } from './components/joinsession/joinsession.component';
 import { ParticipantBoardComponent } from './components/joinsession/participantboard.component';
 import { CreateQuizComponent } from './components/createquiz/createquiz.component';
-import { QuizCreatedComponent } from './components/createquiz/quizcreated.component';
 import { SimpleTimer } from 'ng2-simple-timer';
 import { RegisterComponent } from './components/registration/register.component';
 import { LoginComponent } from './components/login/login.component';
@@ -46,7 +45,6 @@ import { GroupResultsComponent } from './components/groupmanagement/groupresults
         QuizDetailComponent,
         JoinSessionComponent,
         CreateQuizComponent,
-        QuizCreatedComponent,
         ParticipantBoardComponent,
         RegisterComponent,
         LoginComponent,
@@ -70,7 +68,6 @@ import { GroupResultsComponent } from './components/groupmanagement/groupresults
             { path: 'fetch-data', component: FetchDataComponent },
             { path: 'fetch-quizzes', component: FetchQuizzesComponent },
             { path: 'new/quiz', component: CreateQuizComponent },
-            { path: 'new/quiz/created', component: QuizCreatedComponent },
             { path: 'fetch-results', component: FetchResultsComponent },
             { path: 'session-board', component: SessionBoardComponent },
             { path: 'session-board/host/:id', component: SessionBoardComponent },
