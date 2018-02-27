@@ -30,7 +30,6 @@ export class CreateQuizComponent implements OnDestroy{
     private alive: boolean = true;
     isBrowser: boolean;
     defaultTitle: string;
-    last5Groups: Group[];
     selectedGroup;
 
     constructor( @Inject(PLATFORM_ID) private platformId: Object, private router: Router, private formBuilder: FormBuilder, private repo: Repository, private http: Http, @Inject('BASE_URL') baseUrl: string, public auth: AuthService) {
@@ -38,7 +37,6 @@ export class CreateQuizComponent implements OnDestroy{
         this.createForm();
         this.isBrowser = isPlatformBrowser(platformId);
         //this.groups = this.groups.slice(this.groups.length - 5, this.groups.length)
-        console.log(this.repo.userGroups);
     }
 
     ngOnInit() {
@@ -48,28 +46,16 @@ export class CreateQuizComponent implements OnDestroy{
         $('#select')
             .dropdown()
             ;
-        this.repo.getGroups();
 
         this.repo.getUser().subscribe(response => {
             this.defaultTitle = response.defaultQuizTitle;
         });
 
-        if (this.groups != null) {
-            this.last5Groups = this.groups.reverse().slice(0, 4);
-            console.log("Im here");
-            console.log(this.groups[0]);
-            this.selectedGroup = this.groups[0];
-        }
-        
-        //this.selectedGroup = this.repo.userGroups.reverse().slice(0, 4)[0];
+        this.selectedGroup = this.groups[0];
     }
 
-    //get groups() {
-    //    return (this.repo.userGroups != null) ? this.repo.userGroups.reverse().slice(0, 4) : [];
-    //}
-
     get groups() {
-        return this.repo.userGroups
+        return this.repo.userGroups.slice(0, 4);
     }
 
     onChangeSelect(newGroup) {
