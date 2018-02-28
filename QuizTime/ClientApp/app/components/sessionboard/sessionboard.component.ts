@@ -184,7 +184,8 @@ export class SessionBoardComponent implements OnInit, OnDestroy {
             console.log(cleanUsers);
 
             if (cleanUsers.length > 0) {
-                let randIdx = Math.floor((Math.random() * (users.length - 1)) + 0);
+                let randIdx = Math.floor((Math.random() * (cleanUsers.length - 1)) + 0);
+                console.log("Random index is: " + randIdx);
                 this.selectedParticipant = cleanUsers[randIdx];
             }
             let changes = new Map<string, any>();
