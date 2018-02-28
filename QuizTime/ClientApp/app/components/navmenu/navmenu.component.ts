@@ -12,17 +12,12 @@ declare var $;
 
 export class NavMenuComponent {
     isBrowser: boolean;
-    joinShowed: boolean = false;
     loginShowed: boolean = false;
     registerShowed: boolean = false;
 
     constructor( @Inject(PLATFORM_ID) private platformId: Object, public auth: AuthService) {
         this.isBrowser = isPlatformBrowser(platformId);
 
-    }
-
-    showJoinForm() {
-        this.joinShowed = true;
     }
 
     showLoginForm() {

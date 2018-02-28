@@ -1,42 +1,4 @@
-<!--<div id="sidebar" class="ui sidebar inverted vertical menu">
-    <a class="item">1</a><a class="item">2</a>
-</div>
-<div class="pusher">
 
-    <div class="ui inverted vertical left fixed menu tablet or lower hidden">
-        <a class="item">1</a><a class="item">2</a>
-    </div>
-
-    <div class="ui sidebar visible fixed inverted main menu screen tablet mobile only">
-        <a class="launch icon item sidebar-toggle">
-            <i class="sidebar icon"></i>
-        </a>
-    </div>
-
-    <div class="content">
-        <h1>Contents</h1>
-    </div>
-
-
-</div>-->
-<!--<div class="ui stackable large secondary vertical menu">
-    <a class="active item">
-        Account
-    </a>
-    <a class="item">
-        Settings
-    </a>
-    <div class="ui dropdown item">
-        <i class="dropdown icon"></i>
-        Display Options
-        <div class="menu">
-            <div class="header">Text Size</div>
-            <a class="item">Small</a>
-            <a class="item">Medium</a>
-            <a class="item">Large</a>
-        </div>
-    </div>
-</div>-->
 <!-- Following Menu -->
 <div class="ui large top fixed hidden menu">
     <div class="ui container">
@@ -48,7 +10,7 @@
             <i class="right arrow icon"></i>
             Join quiz
         </a>
-        <a *ngIf="isBrowser && auth.isAuthenticated" class="item" [routerLinkActive]="['active']" [routerLink]="['/create']">
+        <a *ngIf="isBrowser && auth.isAuthenticated" class="item" [routerLinkActive]="['active']" [routerLink]="['/new/quiz']">
             <i class="plus icon"></i>
             Create quiz
         </a>
@@ -68,7 +30,7 @@
             <i class="user icon"></i>
             Profile
         </a>
-        <a *ngIf="isBrowser && auth.isAuthenticated" class="item" [routerLink]="['/home']" (click)="auth.logout()">
+        <a *ngIf="isBrowser && auth.isAuthenticated" class="item" [routerLink]="['/welcome']" (click)="auth.logout()">
             <i class="user times icon"></i>
             Logout
         </a>
@@ -88,7 +50,7 @@
         <i class="right arrow icon"></i>
         Join quiz
     </a>
-    <a *ngIf="isBrowser && auth.isAuthenticated" class="item" [routerLinkActive]="['active']" [routerLink]="['/create']">
+    <a *ngIf="isBrowser && auth.isAuthenticated" class="item" [routerLinkActive]="['active']" [routerLink]="['/new/quiz']">
         <i class="plus icon"></i>
         Create quiz
     </a>
@@ -108,13 +70,12 @@
         <i class="user icon"></i>
         Profile
     </a>
-    <a *ngIf="isBrowser && auth.isAuthenticated" class="item" [routerLink]="['/home']" (click)="auth.logout()">
+    <a *ngIf="isBrowser && auth.isAuthenticated" class="item" [routerLink]="['/welcome']" (click)="auth.logout()">
         <i class="user times icon"></i>
         Logout
     </a>
-    <a *ngIf="isBrowser && !auth.isAuthenticated" class="item" (click)="showJoinForm()">Join quiz</a>
-    <a *ngIf="isBrowser && !auth.isAuthenticated" class="item" (click)="hideRegister()">Log in</a>
-    <a *ngIf="isBrowser && !auth.isAuthenticated" class="item" (click)="hideLogin()">Signup</a>
+    <a *ngIf="isBrowser && !auth.isAuthenticated" class="item" (click)="hideRegister()"><i class="right arrow icon"></i>Log in</a>
+    <a *ngIf="isBrowser && !auth.isAuthenticated" class="item" (click)="hideLogin()"><i class="plus icon"></i>Signup</a>
 </div>
 
 
@@ -132,74 +93,15 @@
                 <a *ngIf="isBrowser && auth.isAuthenticated" class="item" [routerLinkActive]="['active']" [routerLink]="['/fetch-quizzes']">My Quizzes</a>
                 <a *ngIf="isBrowser && auth.isAuthenticated" class="item" [routerLinkActive]="['active']" [routerLink]="['/fetch-results']">My Results</a>
                 <a *ngIf="isBrowser && auth.isAuthenticated" class="item" [routerLinkActive]="['active']" [routerLink]="['/settings']">Profile</a>
-                <div *ngIf="isBrowser && auth.isAuthenticated" class="right item" [routerLink]="['/home']" (click)="auth.logout()">
+                <div *ngIf="isBrowser && auth.isAuthenticated" class="right item" [routerLink]="['/welcome']" (click)="auth.logout()">
                     <i class="power off icon" style="cursor: pointer"></i>
                     <!--<a class="ui inverted button">Log in</a>
         <a class="ui inverted button">Sign Up</a>-->
                 </div>
             </div>
         </div>
-        <div *ngIf="isBrowser && !this.auth.isAuthenticated"><home #f [loginShowed]="loginShowed" [joinShowed]="joinShowed" [registerShowed]="registerShowed"></home></div>
+        <div *ngIf="isBrowser && !this.auth.isAuthenticated"><welcome #f [loginShowed]="loginShowed" [registerShowed]="registerShowed"></welcome></div>
             <router-outlet *ngIf="isBrowser && auth.isAuthenticated"></router-outlet>
     </div>
 </div>
 
-
-<!--<div class='main-nav'>
-    <div class='navbar navbar-default'>
-        <div class='navbar-header'>
-            <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'>
-                <span class='sr-only'>Toggle navigation</span>
-                <span class='icon-bar'></span>
-                <span class='icon-bar'></span>
-                <span class='icon-bar'></span>
-            </button>
-            <a class='navbar-brand' [routerLink]="['/home']" style="font-family:Cookie; font-size:40px">quiztime<span style="font-family:'Ceviche One'">!</span></a>
-        </div>
-        <div class='clearfix'></div>
-        <div class='navbar-collapse collapse'>
-            <ul class='nav navbar-nav' style="font-family:'Open Sans'">
-                <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/home']">
-                        <span class='glyphicon glyphicon-home'></span> Home
-                    </a>
-                </li>
-
-                <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/fetch-quizzes']">
-                        <span class='glyphicon glyphicon-question-sign'></span> My Quizzes
-                    </a>
-                </li>
-                <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/fetch-results']">
-                        <span class='glyphicon glyphicon-th-list'></span> My Results
-                    </a>
-                </li>
-
-                <li *ngIf="isBrowser && auth.isAuthenticated">
-                    <a [routerLink]="['/settings']">
-                        <span class='glyphicon glyphicon-wrench'></span> Settings
-                    </a>
-                </li>
-
-                <li *ngIf="isBrowser && !auth.isAuthenticated">
-                    <a [routerLink]="['/login']">
-                        <span class='glyphicon glyphicon-log-in'></span> Login
-                    </a>
-                </li>
-
-                <li *ngIf="isBrowser && !auth.isAuthenticated">
-                    <a [routerLink]="['/register']">
-                        <span class='glyphicon glyphicon-user'></span> Register
-                    </a>
-                </li>
-
-                <li *ngIf="isBrowser && auth.isAuthenticated">
-                    <a [routerLink]="['/home']" (click)="auth.logout()">
-                        <span class='glyphicon glyphicon-log-out'></span> Logout
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>-->
