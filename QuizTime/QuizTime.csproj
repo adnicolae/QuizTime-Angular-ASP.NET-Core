@@ -42,7 +42,6 @@
     <None Remove="ClientApp\app\components\groupmanagement\groupresults.component.ts" />
     <None Remove="ClientApp\app\components\home\android-chrome-192x192.png" />
     <None Remove="ClientApp\app\components\joinsession\joinsession.component.ts" />
-    <None Remove="ClientApp\app\components\login\login.component.ts" />
     <None Remove="ClientApp\app\components\quizdetail\quizdetail.component.ts" />
     <None Remove="ClientApp\app\components\registration\auth.service.ts" />
     <None Remove="ClientApp\app\components\sessionboard\board.component.ts" />
@@ -238,7 +237,6 @@
     <TypeScriptCompile Include="ClientApp\app\components\groupmanagement\groupmanagement.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\joinsession\joinsession.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\joinsession\participantboard.component.ts" />
-    <TypeScriptCompile Include="ClientApp\app\components\login\login.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\quizdetail\quizdetail.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\registration\auth.service.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\registration\register.component.ts" />

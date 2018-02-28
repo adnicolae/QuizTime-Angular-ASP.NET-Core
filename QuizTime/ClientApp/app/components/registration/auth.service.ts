@@ -66,6 +66,6 @@ export class AuthService {
         localStorage.setItem(this.usernameKey, authenticationResponse.username)
         localStorage.setItem(this.nameKey, authenticationResponse.name)
 
-        this.router.navigate(['/'])
+        this.router.navigate(['/home'])
     }
 }

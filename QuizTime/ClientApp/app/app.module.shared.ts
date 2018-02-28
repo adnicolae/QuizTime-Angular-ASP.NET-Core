@@ -10,12 +10,10 @@ import { CookieModule } from 'ngx-cookie';
 import { AppComponent } from './components/app/app.component';
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { HomeComponent } from './components/home/home.component';
-import { FetchDataComponent } from './components/fetchdata/fetchdata.component';
-import { CounterComponent } from './components/counter/counter.component';
 import { FetchQuizzesComponent } from './components/fetchquizzes/fetchquizzes.component';
 import { FetchResultsComponent } from './components/fetchresults/fetchresults.component';
 import { SessionBoardComponent } from './components/sessionboard/sessionboard.component';
-
+import { WelcomeComponent } from './components/welcome/welcome.component';
 import { BoardComponent } from './components/sessionboard/board.component';
 
 import { QuizDetailComponent } from './components/quizdetail/quizdetail.component';
@@ -24,7 +22,6 @@ import { ParticipantBoardComponent } from './components/joinsession/participantb
 import { CreateQuizComponent } from './components/createquiz/createquiz.component';
 import { SimpleTimer } from 'ng2-simple-timer';
 import { RegisterComponent } from './components/registration/register.component';
-import { LoginComponent } from './components/login/login.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { AuthService } from './components/registration/auth.service';
 import { GroupManagementComponent } from './components/groupmanagement/groupmanagement.component';
@@ -36,8 +33,7 @@ import { GroupResultsComponent } from './components/groupmanagement/groupresults
     declarations: [
         AppComponent,
         NavMenuComponent,
-        CounterComponent,
-        FetchDataComponent,
+        WelcomeComponent,
         FetchQuizzesComponent,
         FetchResultsComponent,
         SessionBoardComponent,
@@ -47,7 +43,6 @@ import { GroupResultsComponent } from './components/groupmanagement/groupresults
         CreateQuizComponent,
         ParticipantBoardComponent,
         RegisterComponent,
-        LoginComponent,
         SettingsComponent,
         GroupManagementComponent,
         GroupQuizzesComponent,
@@ -64,8 +59,7 @@ import { GroupResultsComponent } from './components/groupmanagement/groupresults
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
-            { path: 'counter', component: CounterComponent },
-            { path: 'fetch-data', component: FetchDataComponent },
+            { path: 'welcome', component: WelcomeComponent },
             { path: 'fetch-quizzes', component: FetchQuizzesComponent },
             { path: 'new/quiz', component: CreateQuizComponent },
             { path: 'fetch-results', component: FetchResultsComponent },
@@ -76,7 +70,6 @@ import { GroupResultsComponent } from './components/groupmanagement/groupresults
             { path: 'fetch-quizzes/detail', component: QuizDetailComponent },
             { path: 'quizzes/detail/:id', component: QuizDetailComponent },
             { path: 'register', component: RegisterComponent },
-            { path: 'login', component: LoginComponent },
             { path: 'settings', component: SettingsComponent },
             { path: 'groups', component: GroupManagementComponent },
             { path: 'groups/quizzes/:id', component: GroupQuizzesComponent },
