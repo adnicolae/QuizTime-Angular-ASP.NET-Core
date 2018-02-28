@@ -17,7 +17,20 @@
     <button *ngIf="!groupShowed" class="ui fluid primary button" style=" padding:8px" (click)="showGroupForm()">Create new group</button>
 
     <!-- ============= GROUPS TABLE =============  -->
-    <table *ngIf="groups != null" class="ui very basic collapsing celled table" style="margin-left:auto; margin-right:auto">
+
+    <div *ngIf="groups != null" class="ui middle aligned selection divided list">
+        <div [routerLink]="['/groups/results/',group.groupId]" *ngFor="let group of groups" class="item">
+            <a [routerLink]="['/groups/quizzes/',group.groupId]" class="ui orange large circular label">{{ group.quizzes.length }}</a>
+            <div class="content" style="display:inline-block;margin-left:10px">
+                <a class="header">{{group.title}}</a>
+                <div class="description">Created on {{ group.dateCreated | date:'mediumDate'}}</div>
+            </div>
+        </div>
+
+
+
+
+    <!--<table *ngIf="groups != null" class="ui very basic collapsing celled table" style="margin-left:auto; margin-right:auto">
         <thead>
             <tr>
                 <th>Class</th>
@@ -47,7 +60,7 @@
                 </td>
             </tr>
         </tbody>
-    </table>
+    </table>-->
 
     <!-- ============= GROUPS TABLE =============  -->
     <!--<table class="ui celled blue table">

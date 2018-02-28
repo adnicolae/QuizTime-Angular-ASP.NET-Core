@@ -66,7 +66,7 @@ export class Repository {
     }
 
     initialise() {
-        if (this.isBrowser) {
+        if (this.isBrowser && this.auth.isAuthenticated) {
             this.getParticipantResults(0);
             this.getParticipantResults(5);
             this.getParticipantReport();
@@ -129,9 +129,9 @@ export class Repository {
                 .takeWhile(() => this.alive)
                 .subscribe(response => {
                     if (last == 0) {
-                        this.participantResults = response;
+                        this.participantResults = response.reverse();
                     } else {
-                        this.participantRecentResults = response;
+                        this.participantRecentResults = response.reverse();
                     }
                 });
         }
@@ -268,7 +268,6 @@ export class Repository {
     getUser() {
         console.log(this.auth.tokenHeader);
         return this.http.get(this.urlBase + 'api/users/me', this.auth.tokenHeader).map(response => response.json());
-        //return this.sendRequest(RequestMethod.Get, this.urlBase + '/users/me', this.auth.tokenHeader);
     }
 
     // Returns the groups owned by the logged user
@@ -279,7 +278,7 @@ export class Repository {
             .map(res => res.json())
             .takeWhile(() => this.alive)
             .subscribe(res => {
-                this.userGroups = res;
+                this.userGroups = res.reverse();
             });
     }
 

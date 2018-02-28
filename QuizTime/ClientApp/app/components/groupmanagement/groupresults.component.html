@@ -5,13 +5,21 @@
     <!-- ============= EXCEL BUTTON =============  -->
     <button class="ui fluid green button" style=" padding:8px" (click)="downloadExcel()">Download Excel Report</button>
 
+
+    <div *ngIf="groupResults?.length == 0" class="ui warning message">
+        <div class="header">
+            There are no results for this class!
+        </div>
+        Start by <a style="font-weight:bold" [routerLink]="['/new/quiz']">creating a quiz</a>, then try again.
+    </div>
+
     <!-- ============= GROUPS TABLE =============  -->
-    <table id="example" class="ui blue celled striped tiny table">
+    <table *ngIf="groupResults?.length > 0" class="ui blue celled striped tiny table">
         <thead>
             <tr>
                 <!--<th></th>-->
-                <th class="two wide"><i class="clock icon"></i>Username</th>
-                <th class="one wide"><i class="plus icon"></i>Result</th>
+                <th class="two wide"><i class="user icon"></i>Username</th>
+                <th class="one wide"><i class="calculator icon"></i>Result</th>
             </tr>
         </thead>
         <tbody>

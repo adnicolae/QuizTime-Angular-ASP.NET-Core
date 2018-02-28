@@ -29,6 +29,10 @@ export class GroupResultsComponent {
         }
     }
 
+    ngOnDestroy() {
+        this.repo.groupResults = [];
+    }
+
     get groupResults() {
         return this.repo.groupResults;
     }

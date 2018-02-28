@@ -40,5 +40,6 @@ export class GroupQuizzesComponent {
 
     ngOnDestroy() {
         this.repo.alive = false;
+        this.repo.quizzes = [];
     }
 }
