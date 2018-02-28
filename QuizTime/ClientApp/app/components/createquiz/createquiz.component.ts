@@ -38,6 +38,7 @@ export class CreateQuizComponent implements OnDestroy{
         this.createForm();
         this.isBrowser = isPlatformBrowser(platformId);
         //this.groups = this.groups.slice(this.groups.length - 5, this.groups.length)
+        this.repo.getGroups();
         console.log(this.repo.userGroups);
     }
 
@@ -48,14 +49,13 @@ export class CreateQuizComponent implements OnDestroy{
         $('#select')
             .dropdown()
             ;
-        this.repo.getGroups();
 
         this.repo.getUser().subscribe(response => {
             this.defaultTitle = response.defaultQuizTitle;
         });
 
         if (this.groups != null) {
-            this.last5Groups = this.groups.reverse().slice(0, 4);
+            this.last5Groups = this.groups.slice(0, 4);
             console.log("Im here");
             console.log(this.groups[0]);
             this.selectedGroup = this.groups[0];

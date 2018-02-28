@@ -11,9 +11,9 @@
             <p>Fill out the form below to create a quick quiz.</p>
         </div>
     </div>
-    {{ selectedGroup }}
+
     <form [formGroup]="quizForm" (ngSubmit)="onSubmit()" class="ui form attached compact fluid blue segment">
-        
+
         <div class="field">
             <label>Class</label>
             <select [ngModel]="selectedGroup" (ngModelChange)="onChangeSelect($event)" name="Class" class="ui left dropdown" id="select" [ngModelOptions]="{standalone: true}">
@@ -21,35 +21,40 @@
             </select>
         </div>
 
-
-        <div class="field">
-            <label>Points</label>
-            <div class="ui buttons">
-                <span class="ui green icon button" (click)="increaseAssignedPoints()">
-                    <i class="plus icon"></i>
-                </span>
-                <span class="ui button" data-tooltip="Adjust winning points.">
-                    <i class="up arrow icon"></i>
-                    +{{ quizAssignedPoints }}
-                </span>
-                <span class="ui red icon button" (click)="decreaseAssignedPoints()">
-                    <i class="minus icon"></i>
-                </span>
+        <div class="fields">
+            <div class="field">
+                <label>Winning points</label>
+                <div class="ui buttons">
+                    <span class="ui green icon button" (click)="increaseAssignedPoints()">
+                        <i class="plus icon"></i>
+                    </span>
+                    <span class="ui button" data-tooltip="Adjust winning points.">
+                        <i class="plus icon"></i>
+                        {{ quizAssignedPoints }}
+                    </span>
+                    <span class="ui red icon button" (click)="decreaseAssignedPoints()">
+                        <i class="minus icon"></i>
+                    </span>
+                </div>
             </div>
 
-            <div class="ui buttons">
-                <span class="ui green icon button" (click)="increaseDeducedPoints()">
-                    <i class="plus icon"></i>
-                </span>
-                <span class="ui button" data-tooltip="Adjust losing points.">
-                    <i class="down arrow icon"></i>
-                    -{{ quizDeducedPoints }}
-                </span>
-                <span class="ui red icon button" (click)="decreaseDeducedPoints()">
-                    <i class="minus icon"></i>
-                </span>
+            <div class="field">
+                <label>Losing points</label>
+                <div class="ui buttons">
+                    <span class="ui red icon button" (click)="increaseDeducedPoints()">
+                        <i class="minus icon"></i>
+                    </span>
+                    <span class="ui button" data-tooltip="Adjust losing points.">
+                        <i class="minus icon"></i>
+                        {{ quizDeducedPoints }}
+                    </span>
+                    <span class="ui green icon button" (click)="decreaseDeducedPoints()">
+                        <i class="plus icon"></i>
+                    </span>
+                </div>
             </div>
         </div>
+
         <div class="field">
             <label>Time Limit</label>
             <div class="ui buttons">
@@ -102,13 +107,14 @@
             </div>
         </div>
 
-        <div class="inline field">
+        <!--<div class="inline field">
             <div class="ui slider checkbox">
                 <input type="checkbox" id="terms" formControlName="startSessionBool" value="true" checked>
                 <label for="terms">Start the quiz session immediately.</label>
             </div>
-        </div>
-        <button type="submit" class="circular ui large green submit button">Start</button>
+        </div>-->
+
+        <button style="margin-top: 15px;margin-left:auto!important; margin-right:auto!important; display:block" type="submit" class="circular ui huge green submit button">Start</button>
     </form>
     <div class="ui bottom attached warning message">
         <i class="icon help"></i>
@@ -117,7 +123,7 @@
 </div>
 
 
-    {{ quizForm.value | json}}
+    <!--{{ quizForm.value | json}}-->
 
 <!--<p>Form value: {{ quizForm.value | json }}</p>
 <p>Form status: {{ quizForm.status | json }}</p>
