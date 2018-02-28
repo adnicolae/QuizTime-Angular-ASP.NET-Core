@@ -1,0 +1,80 @@
+<div *ngIf="isBrowser && !auth?.isAuthenticated">
+    <div class="ui grid center aligned container">
+        <div class="sixteen wide column">
+            <h1 style="font-family:Cookie; font-size:60px; margin: 22px auto 12px; color:#4189C7">quiztime<span style="font-family:'Ceviche One'">!</span></h1>
+            <h4 style="font-size:17px; margin:0 40px 40px; color: #b3b3b3">Join a quiz session or sign up to create quizzes and track your results.</h4>
+
+            <!-- LOGIN FORM -->
+            <div *ngIf="loginShowed">
+                <div class="ui tiny form" style="margin-top:15px">
+                    <div class="field">
+                        <label style="display:none">Username</label>
+                        <input [(ngModel)]="loginData.username" style="width:250px" placeholder="Username" type="text" required>
+                    </div>
+                    <div class="field">
+                        <label style="display:none">Password</label>
+                        <input [(ngModel)]="loginData.password" style="width:250px" placeholder="Password" type="password" required>
+                    </div>
+                    <button (click)="onSubmitLoginForm()" class="ui primary button" style="width:250px; padding:8px; margin:0">Log in</button>
+                </div>
+            </div>
+            <button *ngIf="!loginShowed" class="ui primary button" style="width:300px; padding:8px; margin:0" (click)="showLoginForm()">Log in</button>
+
+            <div class="ui horizontal divider">
+                Or
+            </div>
+
+            <div class="ui blue card" style="margin:auto">
+                <div class="content">
+                    <img class="right floated mini ui image" src="/android-chrome-192x192.png" alt="Small application logo.">
+                    <div class="header left floated">
+                        <div>
+                            Register a new account
+                        </div>
+                    </div>
+                    <div class="meta left floated">
+                        <div *ngIf="!registerShowed">Or log in with an existing account</div>
+                    </div>
+                    <div class="description">
+                        <div *ngIf="!registerShowed">You need to be signed in to create quizzes and track results.</div>
+
+                        <!-- REGISTRATION FORM -->
+                        <div *ngIf="registerShowed">
+                            <form [formGroup]="registerForm" class="ui tiny form" style="margin-top:15px">
+                                <div class="field">
+                                    <label style="display:none">Username</label>
+                                    <input formControlName="username" style="width:250px" placeholder="Username" type="text" required>
+                                </div>
+                                <div class="field">
+                                    <label style="display:none">Name</label>
+                                    <input formControlName="name" style="width:250px" placeholder="First Name" type="text" required>
+                                </div>
+                                <div class="field">
+                                    <label style="display:none">Password</label>
+                                    <input formControlName="password" style="width:250px" placeholder="Password" type="password" required>
+                                </div>
+                                <div class="field">
+                                    <label style="display:none">Password Confirmation</label>
+                                    <input formControlName="passwordConfirmation" style="width:250px" placeholder="Confirm Password" type="password" required>
+                                </div>
+                                <button (click)="onSubmitRegisterForm()" class="ui primary button" style="width:250px; padding:8px; margin:0">Register</button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="extra content" *ngIf="!registerShowed">
+                    <div class="ui two buttons">
+                        <div class="ui basic green button" (click)="showLoginForm()">Log in</div>
+                        <div class="ui basic red button" (click)="showRegisterForm()">Register</div>
+                    </div>
+                </div>
+
+                <div class="extra content" *ngIf="registerShowed">
+                    Have an account? <div style="color:#4189C7; cursor:pointer; font-weight: bold" (click)="hideRegister()">Login here.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
