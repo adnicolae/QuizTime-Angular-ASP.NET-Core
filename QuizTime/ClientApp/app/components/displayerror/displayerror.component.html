@@ -1,0 +1,5 @@
+﻿<div *ngIf="error != null && error.length > 0" class="ui error message" style="margin-bottom:1em">
+    <div class="header">Action Forbidden</div>
+    <p *ngFor="let e of error">{{ e }}</p>
+    <button class="ui default button" (click)="clearError()">Dismiss</button>
+</div>
