@@ -284,5 +284,20 @@ namespace QuizTime.Controllers
                 return BadRequest(ModelState);
             }
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(long id)
+        {
+            var result = _context.Results.FirstOrDefault(r => r.ResultId == id);
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            _context.Results.Remove(result);
+            _context.SaveChanges();
+            _boardHubContext.Clients.All.InvokeAsync("Send", "Removed result for user");
+            return new NoContentResult();
+        }
     }
 }

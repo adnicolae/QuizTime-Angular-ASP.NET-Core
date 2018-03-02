@@ -95,6 +95,12 @@ namespace QuizTime.Controllers
             if (ModelState.IsValid)
             {
                 Group group = groupData.Group;
+                Group findGroup = _context.Groups.SingleOrDefault(g => g.Title == group.Title && g.Owner.Username == groupData.Owner);
+
+                if (findGroup != null)
+                {
+                    return BadRequest("Sorry, you already have a class group called " + group.Title + ". Please use that group or choose a different name.");
+                }
 
                 User user = _context.Users.SingleOrDefault(u => u.Username == groupData.Owner);
 
@@ -124,5 +130,23 @@ namespace QuizTime.Controllers
             var id = HttpContext.User.Claims.First().Value;
             return _context.Users.SingleOrDefault(u => u.UserId.ToString().Equals(id));
         }
+
+        //    [HttpDelete("{id}")]
+        //    public IActionResult Delete(long id)
+        //    {
+        //        var group = _context.Groups.FirstOrDefault(g => g.GroupId == id);
+        //        var quizzes = _context.Quizzes.Where(q => q.Group.GroupId == id);
+        //        if (group == null)
+        //        {
+        //            return NotFound();
+        //        }
+
+        //        quizzes.ToList().ForEach(q => _context.Quizzes.Remove(q));
+
+        //        _context.Groups.Remove(group);
+        //        _context.SaveChanges();
+        //        return new NoContentResult();
+        //    }
+        //}
     }
 }

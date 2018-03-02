@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace QuizTime.Controllers
 {
+    [Produces("application/json")]
     [Route("api/sessions")]
     public class SessionValuesController : Controller
     {
@@ -61,36 +62,49 @@ namespace QuizTime.Controllers
         
         [HttpGet]
         [Route("host/{hostId:long}")]
-        public Session GetHostedSession(long hostId)
+        public IActionResult GetHostedSession(long? hostId)
         {
-            Session session = _context.Sessions
-                .Include(s => s.Results)
-                    .ThenInclude(r => r.SessionParticipant)
-                .Include(s => s.Quiz)
-                    .ThenInclude(q => q.Choices)
-                .FirstOrDefault(s => (s.GeneratedHostId == hostId));
-
-            if (session != null)
+            if (ModelState.IsValid)
             {
-                if (session.Results != null)
-                {
-                    foreach (Result result in session.Results)
-                    {
-                        result.Session = null;
-                        result.SessionParticipant.Results = null;
-                    }
-                }
+                Session session = _context.Sessions
+                                    .Include(s => s.Results)
+                                        .ThenInclude(r => r.SessionParticipant)
+                                    .Include(s => s.Quiz)
+                                        .ThenInclude(q => q.Choices)
+                                    .FirstOrDefault(s => (s.GeneratedHostId == hostId));
 
-                if (session.Quiz != null)
+                if (session == null)
                 {
-                    foreach (Choice choice in session.Quiz.Choices)
+                    return BadRequest("Cannot find quiz session with the provided id. Please double-check the session id.");
+                }
+                else if (session != null)
+                {
+                    //if (session.Status == SessionStatus.QuizEnd)
+                    //{
+                    //    return BadRequest("Sorry, the session you requested appears to have ended. Please ask your tutor to create a new one.");
+                    //}
+                    if (session.Results != null)
                     {
-                        choice.Quiz = null;
+                        foreach (Result result in session.Results)
+                        {
+                            result.Session = null;
+                            result.SessionParticipant.Results = null;
+                        }
+                    }
+
+                    if (session.Quiz != null)
+                    {
+                        foreach (Choice choice in session.Quiz.Choices)
+                        {
+                            choice.Quiz = null;
+                        }
                     }
                 }
+                return Ok(session);
+            } else
+            {
+                return BadRequest(ModelState);
             }
-
-            return session;
         }
 
         [HttpPost]
@@ -99,6 +113,13 @@ namespace QuizTime.Controllers
             if (ModelState.IsValid)
             {
                 Session s = sessionData.Session;
+
+                Session findSession = _context.Sessions.SingleOrDefault(session => session.GeneratedHostId == s.GeneratedHostId);
+
+                if (findSession != null)
+                {
+                    return BadRequest("Sorry, the random id generator created a clash with an existing session. Please re-try creating the quiz session.");
+                }
 
                 if (s.Quiz != null && s.Quiz.QuizId != 0)
                 {

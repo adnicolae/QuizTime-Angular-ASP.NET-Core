@@ -10,6 +10,8 @@ using QuizTime.Data;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.ComponentModel.DataAnnotations;
+using QuizTime.Models.BindingTargets;
 
 namespace QuizTime.Controllers
 {
@@ -34,28 +36,55 @@ namespace QuizTime.Controllers
 
         public class LoginData
         {
+            [Required]
+            [MaxLength(10, ErrorMessage = "Username cannot exceed 10 characters.")]
             public string Username { get; set; }
+            [Required]
             public string Password { get; set; }
         }
 
         [HttpPost("login")]
         public ActionResult Login([FromBody] LoginData loginData)
         {
-            var user = _context.Users.SingleOrDefault(u => u.Username == loginData.Username && u.Password == loginData.Password);
+            //var user = _context.Users.SingleOrDefault(u => u.Username == loginData.Username && u.Password == loginData.Password);
+            if (ModelState.IsValid)
+            {
+                var user = _context.Users.SingleOrDefault(u => u.Username == loginData.Username);
 
-            if (user == null)
-                return NotFound("username of password incorrect");
+                if (user == null)
+                {
+                    return BadRequest("The username provided doesn't belong to an account. Please check the username and try again.");
+                } else if (user.Password != loginData.Password)
+                {
+                    return BadRequest("Sorry, the password provided is incorrect. Please double-check your password.");
+                }
 
-            return Ok(CreateJwtPacket(user));
+                return Ok(CreateJwtPacket(user));
+            } else
+            {
+                return BadRequest(ModelState);
+            }
+            
         }
 
         [HttpPost("register")]
-        public JwtPacket Register([FromBody] User user)
+        public ActionResult Register([FromBody] User user)
         {
-            _context.Users.Add(user);
-            _context.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                var findUser = _context.Users.SingleOrDefault(u => u.Username == user.Username);
+                if (findUser != null)
+                {
+                    return BadRequest("Sorry, the username already exists. Please log in or choose a different username.");
+                }
+                _context.Users.Add(user);
+                _context.SaveChanges();
 
-            return CreateJwtPacket(user);
+                return Ok(CreateJwtPacket(user));
+            } else
+            {
+                return BadRequest(ModelState);
+            }
         }
 
         JwtPacket CreateJwtPacket(User user)
