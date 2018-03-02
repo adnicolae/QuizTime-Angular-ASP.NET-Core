@@ -20,5 +20,10 @@ namespace QuizTime.Data
         {
 
         }
+
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.Entity<Result>().HasOne<User>(r => r.SessionParticipant).WithOne(u => )
+        //}
     }
 }

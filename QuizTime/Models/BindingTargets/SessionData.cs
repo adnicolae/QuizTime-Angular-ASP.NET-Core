@@ -11,6 +11,7 @@ namespace QuizTime.Models.BindingTargets
         [Required]
         public DateTime DateCreated { get => Session.DateCreated; set => Session.DateCreated = value; }
 
+        [Required]
         [Range(0, 9999, ErrorMessage = "Generated id should be less than 9999")]
         public long GeneratedHostId { get => Session.GeneratedHostId; set => Session.GeneratedHostId = value; }
 
