@@ -10,24 +10,30 @@
             <p>Fill in the form below to join a quiz.</p>
         </div>
     </div>
-    <form [formGroup]="joinForm" (ngSubmit)="onSubmit()" class="ui large form attached compact fluid blue segment">
-        <div class="field">
+
+    <form [formGroup]="joinForm" (ngSubmit)="onSubmit()" class="ui large error form attached compact fluid blue segment" name="joinForm">
+        <div [ngClass]="{'error' : isValid('hostedSessionId')}" class="field">
             <label style="display:none">Quiz Session ID</label>
             <div class="ui left icon input">
                 <input type="text" placeholder="Quiz Session ID" formControlName="hostedSessionId" required>
                 <i class="hashtag icon"></i>
             </div>
-            <!--<input type="text" name="first-name" placeholder="First Name">-->
         </div>
-        <div class="field">
-            <label style="display:none">Username</label>
-            <div class="ui left icon input">
-                <input *ngIf="isBrowser && !auth.isAuthenticated" type="text" placeholder="Username" formControlName="username" required>
-                <input *ngIf="isBrowser && auth.isAuthenticated" type="text" placeholder="Username" formControlName="username" value="{{ auth.username }}" disabled>
-                <i class="user icon"></i>
-            </div>
-            <!--<input type="text" name="last-name" placeholder="Last Name">-->
+
+        <div *ngIf="joinForm.invalid && (joinForm.dirty || joinForm.touched)" class="ui error message">
+            <div class="header">Action Forbidden</div>
+            <p *ngIf="hostedIdInput.errors.maxlength">
+                The quiz session id cannot exceed 4 characters.
+            </p>
+            <p *ngIf="hostedIdInput.errors.required">
+                The quiz session id is required.
+            </p>
         </div>
-        <button class="fluid ui large primary button" type="submit">Submit</button>
+
+        <err (sendingFormFailed)="sendingFormFailed($event)"></err>
+
+        <button [disabled]="joinForm.status == 'INVALID'" [ngClass]="{'disabled loading' : sendingForm}" class="fluid ui large primary button" type="submit" style="padding:8px">Join now</button>
     </form>
+    {{ joinForm.status | json }}
+    {{ joinForm.pristine | json}}
 </div>
