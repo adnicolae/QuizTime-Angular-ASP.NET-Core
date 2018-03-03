@@ -19,6 +19,7 @@ namespace QuizTime.Models
         public string Username { get; set; }
         public string Password { get; set; }
         public string DefaultQuizTitle { get; set; }
+        public byte[] Salt { get; set; }
 
         public ICollection<Quiz> QuizzesCreated { get; set; }
         public ICollection<Result> Results { get; set; }

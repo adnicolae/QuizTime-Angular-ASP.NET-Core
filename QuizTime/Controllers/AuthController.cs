@@ -12,6 +12,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
 using QuizTime.Models.BindingTargets;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace QuizTime.Controllers
 {
@@ -54,7 +56,7 @@ namespace QuizTime.Controllers
                 if (user == null)
                 {
                     return BadRequest("The username provided doesn't belong to an account. Please check the username and try again.");
-                } else if (user.Password != loginData.Password)
+                } else if (user.Password != this.HashPassword(loginData.Password, user.Salt))
                 {
                     return BadRequest("Sorry, the password provided is incorrect. Please double-check your password.");
                 }
@@ -73,6 +75,23 @@ namespace QuizTime.Controllers
             if (ModelState.IsValid)
             {
                 var findUser = _context.Users.SingleOrDefault(u => u.Username == user.Username);
+                string password = user.Password;
+
+                byte[] salt = new byte[128 / 8];
+                using (var rng = RandomNumberGenerator.Create())
+                {
+                    rng.GetBytes(salt);
+                }
+
+                string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                    password: password,
+                    salt: salt,
+                    prf: KeyDerivationPrf.HMACSHA1,
+                    iterationCount: 10000,
+                    numBytesRequested: 256 / 8));
+                user.Password = hashed;
+                user.Salt = salt;
+
                 if (findUser != null)
                 {
                     return BadRequest("Sorry, the username already exists. Please log in or choose a different username.");
@@ -85,6 +104,19 @@ namespace QuizTime.Controllers
             {
                 return BadRequest(ModelState);
             }
+        }
+        
+        string HashPassword(string password, byte[] salt)
+        {
+            // derive a 256-bit subkey (use HMACSHA1 with 10,000 iterations)
+            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: password,
+                salt: salt,
+                prf: KeyDerivationPrf.HMACSHA1,
+                iterationCount: 10000,
+                numBytesRequested: 256 / 8));
+
+            return hashed;
         }
 
         JwtPacket CreateJwtPacket(User user)
