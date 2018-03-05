@@ -5,16 +5,17 @@
     ViewData["Title"] = "Home Page";
 }
 <link rel="stylesheet" type="text/css" href="~/dist/Semantic-UI-CSS-master/semantic.min.css" />
-<app asp-prerender-module="ClientApp/dist/main-server">Loading...</app>
+<app></app>
+@*<app asp-prerender-module="ClientApp/dist/main-server">Loading...</app>*@
 
 
 
 
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-<script type="text/javascript" src="~/dist/Semantic-UI-CSS-master/semantic.min.js"></script>
+@*<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script type="text/javascript" src="~/dist/Semantic-UI-CSS-master/semantic.min.js"></script>*@
 <script src="~/dist/vendor.js" asp-append-version="true"></script>
 @section scripts {
     <script src="~/dist/main-client.js" asp-append-version="true"></script>
-    <script type="text/javascript" src="~/dist/Semantic-UI-CSS-master/semantic.min.js"></script>
+    @*<script type="text/javascript" src="~/dist/Semantic-UI-CSS-master/semantic.min.js"></script>*@
 }
