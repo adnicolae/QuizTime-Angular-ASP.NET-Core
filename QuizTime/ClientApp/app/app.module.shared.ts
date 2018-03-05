@@ -27,9 +27,27 @@ import { AuthService } from './components/registration/auth.service';
 import { GroupManagementComponent } from './components/groupmanagement/groupmanagement.component';
 import { GroupQuizzesComponent } from './components/groupmanagement/groupquizzes.component';
 import { GroupResultsComponent } from './components/groupmanagement/groupresults.component';
+import { ErrorHandler } from "@angular/core";
+import { ErrorHandlerService } from "./errorHandler.service";
+import { DisplayErrorComponent } from "./components/displayerror/displayerror.component";
+import { SuiModule } from 'ng2-semantic-ui';
+import { ChartsModule } from 'ng2-charts';
+import { SidebarModule } from 'ng-sidebar';
+// Create handler object to override ng behaviour such that
+// all errors are handled using the custom handler service
+const eHandler = new ErrorHandlerService();
+
+export function handler() {
+    return eHandler;
+}
 
 @NgModule({
-    providers: [SimpleTimer, AuthService],
+    providers: [
+        SimpleTimer,
+        AuthService,
+        { provide: ErrorHandlerService, useFactory: handler },
+        { provide: ErrorHandler, useFactory: handler }, 
+    ],
     declarations: [
         AppComponent,
         NavMenuComponent,
@@ -47,6 +65,7 @@ import { GroupResultsComponent } from './components/groupmanagement/groupresults
         GroupManagementComponent,
         GroupQuizzesComponent,
         GroupResultsComponent,
+        DisplayErrorComponent,
         HomeComponent
     ],
     imports: [
@@ -55,6 +74,9 @@ import { GroupResultsComponent } from './components/groupmanagement/groupresults
         FormsModule,
         ReactiveFormsModule,
         RepositoryModule,
+        SuiModule,
+        ChartsModule,
+        SidebarModule.forRoot(),
         CookieModule.forRoot(),
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
