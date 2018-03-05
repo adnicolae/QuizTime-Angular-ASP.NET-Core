@@ -192,6 +192,7 @@ export class ParticipantBoardComponent implements OnInit, OnDestroy{
         this.alive = false;
         this.repo.alive = false;
         this._hubConnection.stop();
+        if (this.session.status != null && this.session.status <= 3) { this.repo.deleteResult(parseInt(this.getCookie("resultId"))); }
         this.clearCookies();
         this.timerIds.map((timerId) => this.timer.unsubscribe(timerId));
     }
@@ -199,6 +200,7 @@ export class ParticipantBoardComponent implements OnInit, OnDestroy{
     noParticipationAction() {
         this.promptAnswered = true;
         this.joiningSelection = false;
+        this.updateResult();
     }
 
     participationAction() {

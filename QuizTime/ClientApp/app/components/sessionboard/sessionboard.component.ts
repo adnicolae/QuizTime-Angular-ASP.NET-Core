@@ -44,6 +44,19 @@ export class SessionBoardComponent implements OnInit, OnDestroy {
     audio = new Audio();
     selectedParticipant: User;
     greenIcon: boolean = false;
+    public barChartOptions: any = {
+        scaleShowVerticalLines: false,
+        responsive: true
+    };
+    public barChartLabels: string[] = ['Challenge votes'];
+    public barChartType: string = 'bar';
+    public barChartLegend: boolean = true;
+
+    public barChartData: any[] = [
+        { data: [20], label: 'No' },
+        { data: [20], label: 'Yes' }
+        //{ data: [(this.session != null && this.session.results != null) ? this.session.results.length : 0 ], label: 'Participants' }
+    ];
 
 
 
@@ -94,6 +107,7 @@ export class SessionBoardComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         console.log("destroyed " + this.session.generatedHostId)
+        this.cancelSession();
         this.alive = false;
         this.repo.alive = false;
         this._hubConnection.stop();
@@ -125,6 +139,12 @@ export class SessionBoardComponent implements OnInit, OnDestroy {
 
     setBlack() {
         this.greenIcon = false;
+    }
+
+    cancelSession() {
+        let changes = new Map<string, any>();
+        changes.set("status", 0);
+        this.repo.updateSession(this.session.sessionId as number, changes);
     }
 
     updateSession(timeLimit: number) {
@@ -192,9 +212,7 @@ export class SessionBoardComponent implements OnInit, OnDestroy {
             changes.set("selectedToExplain", this.selectedParticipant.userId);
             this.repo.updateSession(this.session.sessionId as number, changes);
             console.log(this.selectedParticipant);
-        } else {
-            this.selectedParticipant = new User();
-        }
+        } 
 
         if (this.currentStatus == 7 && this.session.results != null) {
             let votes = this.session.results.map(this.getVotes);
@@ -202,7 +220,9 @@ export class SessionBoardComponent implements OnInit, OnDestroy {
             let negVotes = votes.filter((vote) => vote == false);
             console.log("Votes: " + votes + " posvotes: " + posVotes + "negVotes: " + negVotes);
             this.yesVotes = posVotes.length;
-            this.noVotes = negVotes.length - 1;
+            this.noVotes = (negVotes.length > 0) ? negVotes.length - 1 : negVotes.length;
+            this.barChartData[0].data[0] = this.noVotes;
+            this.barChartData[1].data[0] = this.yesVotes;
         }
     }
 

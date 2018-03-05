@@ -10,19 +10,11 @@
 
     <!-- STATUS: Waiting for players to join -->
     <div *ngIf="session?.status == 1">
-        <h2 class="ui center aligned icon header">
-            <div (mouseenter)="setGreen()" (mouseleave)="setBlack()">
-                <i *ngIf="!greenIcon" class="circular hand point down outline icon"></i>
-                <div *ngIf="!greenIcon" class="ui pointing label">
-                    Push to start!
-                </div>
-                <i (click)="updateSession(session?.quiz.timeLimit)" *ngIf="greenIcon" class="circular plug outline green icon"></i>
-                <div *ngIf="greenIcon" class="ui pointing green label">
-                    Push to start!
-                </div>
-            </div>
+        <h2 class="ui center aligned header">
 
             <div class="ui center aligned header" style="margin-top:0;margin-bottom: 5px;text-align:center">It's <span style="font-family:Cookie; font-size:4rem; color:#4189C7">quiztime<span style="font-family:'Ceviche One'">!</span></span></div>
+
+            <button (click)="updateSession(session?.quiz.timeLimit)" style="margin-top: 15px;margin-left:auto!important; margin-right:auto!important; display:block" type="button" class="circular ui huge green submit button">Start</button>
         </h2>
 
         <!--<h3 style="text-align:center; margin-top:0">(<i class="plus green icon"></i> {{session?.quiz.assignedPoints}} <i class="minus red icon"></i>{{session?.quiz.deducedPoints}} <i class="clock black icon"></i>{{session?.quiz.timeLimit}}s)</h3>-->
@@ -251,30 +243,20 @@
 
     <!-- Show votes && leaderboard -->
     <div *ngIf="session?.status == 7">
-        <div class="well well-lg" style="text-align:center; margin-top:20px">
-            <h1>Yes: {{ yesVotes }}</h1>
-            <h1>No: {{ noVotes }}</h1>
-            <h1 *ngIf="yesVotes >= noVotes">Congrats, {{ selectedParticipant?.username }}! You win 10 more points!</h1>
-            <h1 *ngIf="yesVotes < noVotes">Sorry, {{ selectedParticipant?.username }}! You lose all your points!</h1>
-            <!--<div class="row">
-                <div class="col-sm-6">
-                    <h1>Leaderboard</h1>
-                    <table class='table table-striped' *ngIf="session?.results">
-                        <thead>
-                            <tr>
-                                <th>Student</th>
-                                <th>Score</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let result of session?.results">
-                                <td>{{ result.sessionParticipant.username }}</td>
-                                <td>{{ result.score }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>-->
+        <div class="ui center aligned header" style="margin-top:30px;margin-bottom: 5px;text-align:center"><span style="font-family:Cookie; font-size:4rem; color:#4189C7">voting results<span style="font-family:'Ceviche One'">!</span></span> <br /> <br />The quiz is now over!</div>
+
+        <h4 *ngIf="yesVotes >= noVotes" class="ui header" style="margin-top:35px; text-align:center">Congratulations, {{ session?.selectedToExplain.username }}! You <span style="color:green">win</span> 10 more points!</h4>
+        <h4 *ngIf="yesVotes < noVotes" class="ui header" style="margin-top:35px; text-align:center">Sorry, {{ session?.selectedToExplain.username }}! You <span style="color:red">lose</span> all your points!</h4>
+
+        <div>
+            <div style="display: block; width:500px; margin-left:auto; margin-right:auto; margin-top:10px">
+                <canvas baseChart
+                        [datasets]="barChartData"
+                        [labels]="barChartLabels"
+                        [options]="barChartOptions"
+                        [legend]="barChartLegend"
+                        [chartType]="barChartType"></canvas>
+            </div>
         </div>
     </div>
 </div>

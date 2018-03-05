@@ -1,7 +1,19 @@
 ﻿<div class="ui container" id="showChoicesWrapper">
+    <!-- STATUS: SESSION CANCELLED -->
+    <div *ngIf="session?.status == 0">
+        <div class="ui message" style="margin-top:20px">
+            <i class="red close icon" [routerLink]="['/home']"></i>
+            <h3 class="ui header" style="margin-top:35px;margin-bottom:2px; text-align:center">Sorry, {{ auth.name }}</h3>
+            <h4 class="ui red header" style="margin-top:0;text-align:center"><span style="font-family:Cookie; font-size:2rem">cancelled<span style="font-family:'Ceviche One'">!</span></span></h4>
+            <h4 class="ui header" style="margin-top:35px;text-align:center">This quiz session has been cancelled.</h4>
+            <h4 class="ui header" style="margin-top:10px;text-align:center">Please press the X button in the top-right corner or use the sidebar menu to return to the Home page.</h4>
+        </div>
+    </div>
+
     <!-- STATUS: Waiting for players to join -->
     <div *ngIf="session?.status == 1">
         <div class="ui message" style="margin-top:20px">
+            <i class="red close icon" [routerLink]="['/home']"></i>
             <h3 class="ui header" style="margin-top:35px;margin-bottom:2px; text-align:center">Welcome, {{ auth.name }}!</h3>
             <h4 class="ui header" style="margin-top:0;text-align:center">It's <span style="font-family:Cookie; font-size:2rem; color:#4189C7">quiztime<span style="font-family:'Ceviche One'">!</span></span></h4>
             <h4 class="ui header" style="margin-top:35px;text-align:center">Can you spot your name on the board?</h4>
@@ -13,6 +25,7 @@
     <!-- STATUS: Timer before question -->
     <div *ngIf="session?.status == 2">
         <div class="ui message" style="margin-top:20px">
+            <i class="red close icon" [routerLink]="['/home']"></i>
             <h4 class="ui header" style="margin-top:0;text-align:center"><span style="font-family:Cookie; font-size:2rem; color:#4189C7">quiztime<span style="font-family:'Ceviche One'">!</span></span> <br /> starts in </h4>
             <div class="ui huge statistics">
                 <div class="red statistic" style="margin-left:auto; margin-right: auto; margin-top: 20px">
@@ -31,6 +44,7 @@
     <!-- STATUS: Display timer and choices -->
     <div *ngIf="session?.status == 3">
         <div class="ui message" style="margin-top:20px">
+            <i class="red close icon" [routerLink]="['/home']"></i>
             <h4 class="ui header" style="margin-top:0;text-align:center"><span style="font-family:Cookie; font-size:2rem; color:#4189C7">{{session?.quiz?.title}}<span style="font-family:'Ceviche One'">!</span></span> <br /> ends in </h4>
 
             <div class="ui small statistics">
@@ -58,7 +72,7 @@
                 <div class="column">
                     <div class="row">
                         <div class="ui two cards">
-                            <div (click)="selectAnswer(choice.choiceId, choice.correctness, session?.quiz.assignedPoints, session?.quiz.deducedPoints)" class="card" *ngFor="let choice of session?.quiz?.choices.sort(compare)">
+                            <div (click)="selectAnswer(choice.choiceId, choice.correctness, session?.quiz.assignedPoints, session?.quiz.deducedPoints)" class="card" *ngFor="let choice of session?.quiz?.choices.sort(compare)" style="cursor:pointer">
                                 <div class="content">
                                     <div class="header" style="margin-bottom:10px;margin-top:10px;text-align:center; font-size:20px">
                                         {{ choice.title }}
@@ -78,6 +92,7 @@
     <!-- STATUS: Display individual scores and timer for voting -->
     <div *ngIf="session?.status == 4">
         <div class="ui message" style="margin-top:20px">
+            <i class="red close icon" [routerLink]="['/home']"></i>
             <div *ngIf="result == 'won'">
                 <h4 class="ui green header" style="margin-top:0;text-align:center"><span style="font-family:Cookie; font-size:2rem;">congratulations<span style="font-family:'Ceviche One'">!</span></span> <br /></h4>
                 <h4 class="ui header" style="margin-top:5px;text-align:center">You scored <i class="green small plus icon"></i>{{ session?.quiz.assignedPoints }}</h4>
@@ -102,13 +117,13 @@
                     </div>
                 </div>
 
-                <div *ngIf="!promptAnswered">
+                <!--<div *ngIf="!promptAnswered">-->
                     <button type="button" style="padding:8px; margin:0" class="ui fluid green button" (click)="participationAction()">Yes</button>
                     <div class="ui horizontal divider">
                         Or
                     </div>
                     <button type="button" style="padding:8px; margin:0" class="ui fluid red button" (click)="noParticipationAction()">No</button>
-                </div>
+                <!--</div>-->
 
                 <div *ngIf="promptAnswered && !joiningSelection">
                     <h4 class="ui header" style="margin-top:35px;text-align:center"><i class="frown icon"></i> You will have to vote next!</h4>
@@ -126,7 +141,7 @@
         </div>
     </div>
 
-        <!-- STATUS: Timer 30 seconds in which the person has to explain -->
+    <!-- STATUS: Timer 30 seconds in which the person has to explain -->
     <div *ngIf="session?.status == 5">
         <div class="ui message" style="margin-top:20px">
             <h4 class="ui header" style="margin-top:0;text-align:center"><span style="font-family:Cookie; font-size:2rem; color:#4189C7">challenge<span style="font-family:'Ceviche One'">!</span></span> <br /> ends in </h4>
@@ -159,9 +174,10 @@
         </div>
     </div>
 
-            <!-- STATUS: Voting for 10 seconds -->
+    <!-- STATUS: Voting for 10 seconds -->
     <div *ngIf="session?.status == 6">
         <div class="ui message" style="margin-top:20px">
+            <i class="red close icon" [routerLink]="['/home']"></i>
             <h4 class="ui header" style="margin-top:0;text-align:center"><span style="font-family:Cookie; font-size:2rem; color:#4189C7">voting<span style="font-family:'Ceviche One'">!</span></span> <br /> ends in </h4>
             <div class="ui small statistics">
                 <div *ngIf="counters[4] > 5" class="green statistic" style="margin-left:auto; margin-right: auto; margin-top: 10px">
@@ -186,18 +202,29 @@
             </div>
 
             <div *ngIf="!selected">
-                <h4 class="ui header" style="margin-top:5px;text-align:center">Did you understand the explanation?</h4>
-                <button type="button" style="padding:8px;" class="ui fluid green button" (click)="voteYes()">Yes</button>
-                <div class="ui horizontal divider">
-                    Or
+                <div *ngIf="!voted">
+                    <h4 class="ui header" style="margin-top:5px;text-align:center">Did you understand the explanation?</h4>
+                    <button type="button" style="padding:8px;" class="ui fluid green button" (click)="voteYes()">Yes</button>
+                    <div class="ui horizontal divider">
+                        Or
+                    </div>
+                    <button type="button" style="padding:8px;" class="ui fluid red button" (click)="voteNo()">No</button>
                 </div>
-                <button type="button" style="padding:8px;" class="ui fluid red button" (click)="voteNo()">No</button>
+                <div *ngIf="voted">
+                    <div *ngIf="!vote">
+                        <h4 class="ui header" style="margin-top:35px;text-align:center"><i class="frown icon"></i> You voted no!</h4>
+                    </div>
+                    <div *ngIf="vote">
+                        <h4 class="ui header" style="margin-top:35px;text-align:center"><i class="smile icon"></i>You voted yes!</h4>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-        <!-- STATUS: Show voting result -->
+    <!-- STATUS: Show voting result -->
     <div *ngIf="session?.status == 7">
+        <i class="red close icon" [routerLink]="['/home']"></i>
         <div class="ui message" style="margin-top:20px">
             <h4 class="ui header" style="margin-top:0;text-align:center"><span style="font-family:Cookie; font-size:2rem; color:#4189C7">thank you<span style="font-family:'Ceviche One'">!</span></span> <br /> The quiz has ended! </h4>
             <h4 class="ui header" style="margin-top:35px;text-align:center">Thank you for playing! <br /> Your final score is: {{ score }}</h4>
