@@ -12,13 +12,29 @@
         </div>
     </div>
 
-    <form [formGroup]="quizForm" (ngSubmit)="onSubmit()" class="ui form attached compact fluid blue segment">
+    <form [formGroup]="quizForm" (ngSubmit)="onSubmit()" class="ui form attached compact fluid blue segment" [ngClass]="{'warning' : noGroupError}">
 
-        <div class="field">
+        <div class="field" [ngClass]="{'error' : noGroupError}">
             <label>Class</label>
+            <!--<sui-select class="selection"
+                        form[ngModel]="selectedGroup"
+                        [options]="groups"
+                        labelField="title"
+                        #select>
+                <sui-select-option *ngFor="let option of select.filteredOptions"
+                                   [value]="option">
+                </sui-select-option>
+            </sui-select>-->
             <select [ngModel]="selectedGroup" (ngModelChange)="onChangeSelect($event)" name="Class" class="ui left dropdown" id="select" [ngModelOptions]="{standalone: true}">
-                <option *ngFor="let group of groups" [ngValue]="group">{{group.title}}</option>
-            </select>
+        <option *ngFor="let group of groups" [ngValue]="group">{{group.title}}</option>
+    </select>
+        </div>
+
+        <div class="ui warning message">
+            <div class="header">Could you check something?</div>
+            <ul class="list">
+                <li>Please <a style="font-weight:bold" [routerLink]="['/groups']">create a new class group</a> before getting started.</li>
+            </ul>
         </div>
 
         <div class="fields">
@@ -108,127 +124,16 @@
         </div>
 
         <!--<div class="inline field">
-            <div class="ui slider checkbox">
-                <input type="checkbox" id="terms" formControlName="startSessionBool" value="true" checked>
-                <label for="terms">Start the quiz session immediately.</label>
-            </div>
-        </div>-->
+        <div class="ui slider checkbox">
+            <input type="checkbox" id="terms" formControlName="startSessionBool" value="true" checked>
+            <label for="terms">Start the quiz session immediately.</label>
+        </div>
+    </div>-->
 
-        <button style="margin-top: 15px;margin-left:auto!important; margin-right:auto!important; display:block" type="submit" class="circular ui huge green submit button">Start</button>
+        <button [disabled]="noGroupError" [ngClass]="{'disabled loading' : sendingForm}" style="margin-top: 15px;margin-left:auto!important; margin-right:auto!important; display:block" type="submit" class="circular ui huge green submit button">Start</button>
     </form>
     <div class="ui bottom attached warning message">
         <i class="icon help"></i>
         Already created a quiz? <a [routerLink]="['/fetch-quizzes']">Start session</a> instead.
     </div>
 </div>
-
-
-    <!--{{ quizForm.value | json}}-->
-
-<!--<p>Form value: {{ quizForm.value | json }}</p>
-<p>Form status: {{ quizForm.status | json }}</p>
-<p>Quiz Title: {{ quizForm.get('title').value }}</p>
-<p>{{quizForm.get('choices').value | json}}</p>-->
-
-
-
-
-
-
-<!--
-
-<div class="col-sm-6">
-    <form [formGroup]="quizForm" (ngSubmit)="onSubmit()" novalidate>
-        <div class="form-group">
-            <label class="center-block">
-                Title:
-                <input class="form-control" formControlName="title">
-            </label>
-        </div>
-        <label class="center-block">
-            Points:
-        </label>
-        <div class="form-group form-inline">
-            <label>
-                Assigned (+):
-                <!--<input class="form-control small" formControlName="assignedPoints">
-                <strong style="font-size:2em;">{{ quizAssignedPoints }}</strong>
-                <span class="btn btn-danger" (click)="decreaseAssignedPoints()">-</span>
-                <span class="btn btn-success" (click)="increaseAssignedPoints()">+</span>
-            </label>
-            <label>
-                Deduced (-):
-                <strong style="font-size:2em;">{{ quizDeducedPoints }}</strong>
-                <!--<input class="form-control small" formControlName="deducedPoints">
-                <span class="btn btn-danger" (click)="decreaseDeducedPoints()">-</span>
-                <span class="btn btn-success" (click)="increaseDeducedPoints()">+</span>
-            </label>
-            <label>
-                Time limit:
-                <strong style="font-size:2em;">{{ quizTimeLimit }}</strong>
-                <span class="btn btn-danger" (click)="decreaseTimeLimit()">-</span>
-                <span class="btn btn-success" (click)="increaseTimeLimit()">+</span>
-            </label>
-        </div>
-
-        <div formArrayName="choices" class="well well-lg">
-            <div class="row">
-
-                <div *ngFor="let choice of choices?.controls; let i=index" [formGroupName]="i">
-                    <div class="col-md-3 center-block">
-                        <h4>Choice #{{i+1}}</h4>
-                        <div style="margin-left: 1em;">
-                            <div class="form-group">
-                                <label class="center-block">
-                                    <input type="checkbox" formControlName="correctness" value="true" class="checkbox-inline" />
-                                    <button (click)="removeChoice(i)" type="button" class="btn btn-sm btn-danger">X</button>
-                                    <input class="form-control hidden" formControlName="title" value="Choice" />
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                <button (click)="addChoice()" type="button" class="btn btn-lg btn-default">+</button>
-            </div>
-        </div>
-        <button type="submit"
-                [disabled]="quizForm.pristine" class="btn btn-success btn-lg">
-            Add Quiz
-        </button>
-    </form>
-</div>
-
-
-<div class="col-sm-6">
-    <div class="ui two column centered stackable grid">
-        <div class="column">
-            <h2 class="header">Preview</h2>
-            <h4 class="header">Maximum points: {{ quizAssignedPoints }}</h4>
-            <div class="row">
-                <div class="ui two cards">
-                    <div class="card" *ngFor="let choice of quizForm.get('choices')?.value; let i = index">
-                        <div class="ui dimmer">
-                            <div class="content">
-                                <div class="center">
-                                    <div class="ui inverted button">Add Friend</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="content">
-                            <div class="header">
-                                Choice # {{ i+1 }}
-                            </div>
-                        </div>
-                        <div *ngIf="choice.correctness != true" class="ui bottom attached red button">
-                            WRONG
-                        </div>
-                        <div *ngIf="choice.correctness == true" class="ui bottom attached green button">
-                            CORRECT
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    -->

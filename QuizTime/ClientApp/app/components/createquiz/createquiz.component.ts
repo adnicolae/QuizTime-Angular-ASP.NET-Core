@@ -13,7 +13,6 @@ import { Router } from "@angular/router";
 import { AuthService } from '../registration/auth.service';
 import { isPlatformServer, isPlatformBrowser } from '@angular/common';
 
-declare var $;
 
 @Component({
     selector: 'create-quiz',
@@ -32,33 +31,28 @@ export class CreateQuizComponent implements OnDestroy{
     defaultTitle: string;
     last5Groups: Group[];
     selectedGroup;
+    sendingForm: boolean = false;
+    noGroupError: boolean;
 
     constructor( @Inject(PLATFORM_ID) private platformId: Object, private router: Router, private formBuilder: FormBuilder, private repo: Repository, private http: Http, @Inject('BASE_URL') baseUrl: string, public auth: AuthService) {
+        this.repo.getGroups()
         this.thisBaseUrl = baseUrl;
         this.createForm();
         this.isBrowser = isPlatformBrowser(platformId);
         //this.groups = this.groups.slice(this.groups.length - 5, this.groups.length)
-        this.repo.getGroups();
         console.log(this.repo.userGroups);
     }
 
     ngOnInit() {
-        $('.ui.checkbox')
-            .checkbox()
-            ;
-        $('#select')
-            .dropdown()
-            ;
 
-        this.repo.getUser().subscribe(response => {
-            this.defaultTitle = response.defaultQuizTitle;
-        });
-
+        this.repo.getGroups();
         if (this.groups != null) {
             this.last5Groups = this.groups.slice(0, 4);
             console.log("Im here");
             console.log(this.groups[0]);
             this.selectedGroup = this.groups[0];
+        } else {
+            this.noGroupError = true;
         }
         
         //this.selectedGroup = this.repo.userGroups.reverse().slice(0, 4)[0];
@@ -100,6 +94,7 @@ export class CreateQuizComponent implements OnDestroy{
     }
 
     onSubmit() {
+        this.sendingForm = true;
         const formModel = this.quizForm.value;
         const groupQuizId = this.selectedGroup.quizzes.length + 1;
         console.log(groupQuizId);
