@@ -6,7 +6,6 @@ import { Repository } from "../../data/repository";
 import { ResultFilter } from "../../data/config.repository";
 import { isPlatformServer, isPlatformBrowser } from '@angular/common';
 
-declare var $;
 
 @Component(
     {
@@ -28,9 +27,6 @@ export class FetchResultsComponent implements OnDestroy {
 
     ngOnInit() {
         this.repo.alive = true;
-        $('.menu .item')
-            .tab()
-            ;
     }
 
     ngOnDestroy() {

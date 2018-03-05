@@ -4,119 +4,94 @@
     <h4 class="ui header" style="text-align:center"><span style="font-family:Cookie; font-size:2rem; color:#4189C7">results<span style="font-family:'Ceviche One'">!</span></span></h4>
     <h4 class="ui header" style="margin-top:2px;margin-bottom:10px; text-align:center">Keep track of your results.</h4>
 
-    <!-- ============== TAB MENU  ============== -->
-    <div class="ui top attached tabular menu">
-        <a class="item active" data-tab="first">Class results</a>
-        <a class="item" data-tab="second">All results</a>
-    </div>
-    <!-- ============== FIRST TAB / OVERALL  ============== -->
-    <div class="ui bottom attached tab segment active" data-tab="first">
 
-        <div *ngIf="report?.length == 0" class="ui warning message">
-            <div class="header">
-                There are no class results to show at the moment!
-            </div>
-            You can <a [routerLink]="['/join']">join a quiz here</a>, then try again.
+    <sui-tabset>
+        <div class="ui top attached tabular menu">
+            <a class="item" suiTabHeader="1">Class results</a>
+            <a class="item" suiTabHeader="2">All results</a>
         </div>
-
-        <table *ngIf="report?.length > 0" class="ui very basic collapsing celled table">
-            <thead>
-                <tr>
-                    <th>Class</th>
-                    <th>Overall Score</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let res of report">
-                    <td>
-                        <h4 class="ui header">
-                            <div class="content">
-                                {{ res?.group.title }}
-                                <!--<div class="sub header">
-                                    {{ res?.group.dateCreated | date:'yyyy'}}'s Class
-                                </div>-->
-                            </div>
-                        </h4>
-                    </td>
-                    <td>
-                        {{ res?.result }}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- ============== SECOND TAB / ALL RESULTS  ============== -->
-    <div class="ui bottom attached tab segment" data-tab="second">
-
-        <div *ngIf="results?.length == 0" class="ui warning message">
-            <div class="header">
-                There are no results to show at the moment!
+        <div class="ui bottom attached segment" suiTabContent="1">
+            <div *ngIf="report?.length == 0" class="ui warning message">
+                <div class="header">
+                    There are no class results to show at the moment!
+                </div>
+                You can <a [routerLink]="['/join']">join a quiz here</a>, then try again.
             </div>
-            You can <a [routerLink]="['/join']">join a quiz here</a>, then try again.
-        </div>
 
-        <table *ngIf="results?.length > 0" class="ui celled blue table">
-            <thead>
-                <tr>
-                    <th class="two wide"><i class="calculator icon"></i>Score</th>
-                    <th class="two wide"><i class="calendar icon"></i>Date</th>
-                    <th class="three wide"><i class="question circle icon"></i>Quiz</th>
-                    <th class="three wide"><i class="users icon"></i>Class</th>
-                    <th class="two wide"><i class="user icon"></i>By</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let result of results?.reverse()">
-                    <td>{{ result?.score }} out of {{ result?.session.quiz.assignedPoints }}</td>
-                    <td>{{ result?.session.dateCreated | date}}</td>
-                    <td>{{ result?.session.quiz.title }}</td>
-                    <td>{{ (result?.session.quiz.group !== undefined) ? (result?.session.quiz.group.title) : "Out of class." }}</td>
-                    <td>{{ result?.session.quiz.creator.username }}</td>
-                </tr>
-
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th colspan="5">
-                        <div class="ui right floated pagination menu">
-                            <a class="icon item">
-                                <i class="left chevron icon"></i>
-                            </a>
-                            <a class="item">1</a>
-                            <a class="item">2</a>
-                            <a class="item">3</a>
-                            <a class="item">4</a>
-                            <a class="icon item">
-                                <i class="right chevron icon"></i>
-                            </a>
-                        </div>
-                    </th>
-                </tr>
-            </tfoot>
-        </table>
-    </div>  
-</div>
-
-    <!--<div class="row">
-        <div class="col-sm-6">
-            <table class='table table-striped' *ngIf="results">
+            <table *ngIf="report?.length > 0" class="ui very basic collapsing celled table">
                 <thead>
                     <tr>
-                        <th>Id</th>
-                        <th>Participant</th>
-                        <th>Score</th>
-                        <th>Quiz Title</th>
+                        <th>Class</th>
+                        <th>Overall Score</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let result of results">
-                        <td>{{ result?.resultId }}</td>
-                        <td>{{ result?.sessionParticipant.username }}</td>
-                        <td>{{ result?.score }} out of {{ result?.session.quiz.assignedPoints }}</td>
-                        <td>{{ result?.session.quiz.title }}</td>
+                    <tr *ngFor="let res of report">
+                        <td>
+                            <h4 class="ui header">
+                                <div class="content">
+                                    {{ res?.group.title }}
+                                    <!--<div class="sub header">
+                                {{ res?.group.dateCreated | date:'yyyy'}}'s Class
+                            </div>-->
+                                </div>
+                            </h4>
+                        </td>
+                        <td>
+                            {{ res?.result }}
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-    </div>-->
+        <div class="ui bottom attached segment" suiTabContent="2">
+            <div *ngIf="results?.length == 0" class="ui warning message">
+                <div class="header">
+                    There are no results to show at the moment!
+                </div>
+                You can <a [routerLink]="['/join']">join a quiz here</a>, then try again.
+            </div>
+
+
+            <table *ngIf="results?.length > 0" class="ui celled blue table" cellspacing="0" data-page-length='5'>
+                <thead>
+                    <tr>
+                        <th class="two wide"><i class="calculator icon"></i>Score</th>
+                        <th class="two wide"><i class="calendar icon"></i>Date</th>
+                        <th class="three wide"><i class="question circle icon"></i>Quiz</th>
+                        <th class="three wide"><i class="users icon"></i>Class</th>
+                        <th class="two wide"><i class="user icon"></i>By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let result of results?.reverse()">
+                        <td>{{ result?.score }} out of {{ result?.session.quiz.assignedPoints }}</td>
+                        <td>{{ result?.session.dateCreated | date}}</td>
+                        <td>{{ result?.session.quiz.title }}</td>
+                        <td>{{ (result?.session.quiz.group !== undefined) ? (result?.session.quiz.group.title) : "Out of class." }}</td>
+                        <td>{{ result?.session.quiz.creator.username }}</td>
+                    </tr>
+
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="5">
+                            <div class="ui right floated pagination menu">
+                                <a class="icon item">
+                                    <i class="left chevron icon"></i>
+                                </a>
+                                <a class="item">1</a>
+                                <a class="item">2</a>
+                                <a class="item">3</a>
+                                <a class="item">4</a>
+                                <a class="icon item">
+                                    <i class="right chevron icon"></i>
+                                </a>
+                            </div>
+                        </th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </sui-tabset>
+</div>
