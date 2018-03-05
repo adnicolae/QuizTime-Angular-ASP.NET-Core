@@ -17,6 +17,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     constructor( @Inject(PLATFORM_ID) private platformId: Object, private repo: Repository, public auth: AuthService) {
         this.isBrowser = isPlatformBrowser(platformId);
         if (this.isBrowser && this.auth.isAuthenticated) {
+            this.repo.initialise();
             this.repo.getParticipantResults(5);
         }
     }
