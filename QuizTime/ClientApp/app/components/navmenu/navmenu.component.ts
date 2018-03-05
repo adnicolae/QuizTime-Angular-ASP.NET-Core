@@ -2,7 +2,7 @@ import { Component, PLATFORM_ID, Inject, OnInit } from '@angular/core';
 import { isPlatformServer, isPlatformBrowser } from '@angular/common';
 import { AuthService } from '../registration/auth.service';
 
-declare var $;
+//declare var $;
 
 @Component({
     selector: 'nav-menu',
@@ -18,6 +18,12 @@ export class NavMenuComponent {
     constructor( @Inject(PLATFORM_ID) private platformId: Object, public auth: AuthService) {
         this.isBrowser = isPlatformBrowser(platformId);
 
+    }
+
+    _opened: boolean = false;
+
+    _toggleSidebar() {
+        this._opened = !this._opened;
     }
 
     showLoginForm() {
@@ -37,9 +43,9 @@ export class NavMenuComponent {
         this.registerShowed = false;
         this.showLoginForm();
     }
-    ngOnInit() {
-        $('.ui.labeled.icon.sidebar')
-            .sidebar('attach events', '.toc.item')
-            ;
-    }
+    //ngOnInit() {
+    //    $('.ui.labeled.icon.sidebar')
+    //        .sidebar('attach events', '.toc.item')
+    //        ;
+    //}
 }

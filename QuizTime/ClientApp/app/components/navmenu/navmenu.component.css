@@ -3,6 +3,14 @@ li .glyphicon {
 }
 
 
+.ui.visible.left.sidebar~.fixed, .ui.visible.left.sidebar~.pusher {
+    position:fixed;
+}
+
+a.item:hover {
+    color: #4189C7 !important;
+}
+
 .hidden.menu {
     display: none;
 }
