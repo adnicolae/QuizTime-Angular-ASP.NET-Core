@@ -17,6 +17,7 @@ import { Group } from '../../models/group.model';
 
 export class GroupManagementComponent {
     groupShowed: boolean = false;
+    creatingGroup: boolean = false;
 
     groupData = {
         title: '',
@@ -36,7 +37,12 @@ export class GroupManagementComponent {
     }
 
     createGroup() {
+        this.repo.groupCreated = true;
         this.repo.createGroup(this.groupData);
+    }
+
+    get groupCreated() {
+        return this.repo.groupCreated;
     }
 
     get groups() {
