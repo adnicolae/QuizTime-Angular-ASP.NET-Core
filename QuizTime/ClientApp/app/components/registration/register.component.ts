@@ -15,6 +15,7 @@ import { AuthService } from './auth.service';
 
 export class RegisterComponent {
     registrationForm;
+    sendingForm: boolean = false;
 
     constructor(private fb: FormBuilder, private auth: AuthService) {
         this.registrationForm = fb.group({

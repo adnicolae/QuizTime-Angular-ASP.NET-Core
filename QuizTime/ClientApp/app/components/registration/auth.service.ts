@@ -1,6 +1,7 @@
 ﻿import { Injectable, Inject } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Router } from '@angular/router'
+import { ErrorHandlerService, ValidationError } from '../../errorHandler.service';
 
 @Injectable()
 
@@ -39,7 +40,30 @@ export class AuthService {
 
     register(user) {
         delete user.passwordConfirmation;
-        this.http.post(this.baseUrl + '/auth/register', user)
+        this.http
+            .post(this.baseUrl + '/auth/register', user)
+            .map(response => response.json())
+            .catch((errorResponse: Response) => {
+                if (errorResponse.status == 400) {
+                    let jsonData: string;
+                    try {
+                        jsonData = errorResponse.json();
+                    } catch (e) {
+                        throw new Error("Network error!");
+                    }
+
+                    if (typeof jsonData == "string") {
+                        let messages: string[] = [];
+                        messages.push(jsonData);
+                        throw new ValidationError(messages);
+                    } else if (typeof jsonData == "object") {
+                        let messages = Object.getOwnPropertyNames(jsonData)
+                            .map(p => jsonData[p]);
+                        throw new ValidationError(messages);
+                    }
+                }
+                throw new Error("Network error!");
+            })
             .subscribe(response => {
                 this.authenticate(response);
             });
@@ -53,11 +77,37 @@ export class AuthService {
     }
 
     login(loginData) {
-        this.http.post(this.baseUrl + 'auth/login', loginData).subscribe(response => { this.authenticate(response); })
+        this.http
+            .post(this.baseUrl + 'auth/login', loginData)
+            .map(response => response.json())
+            .catch((errorResponse: Response) => {
+                if (errorResponse.status == 400) {
+                    let jsonData: string;
+                    try {
+                        jsonData = errorResponse.json();
+                    } catch (e) {
+                        throw new Error("Network error!");
+                    }
+
+                    if (typeof jsonData == "string") {
+                        let messages: string[] = [];
+                        messages.push(jsonData);
+                        throw new ValidationError(messages);
+                    } else if (typeof jsonData == "object") {
+                        let messages = Object.getOwnPropertyNames(jsonData)
+                            .map(p => jsonData[p]);
+                        throw new ValidationError(messages);
+                    }
+                }
+                throw new Error("Network error!");
+            })
+            .subscribe(response => {
+                this.authenticate(response);
+            });
     }
 
     authenticate(response) {
-        var authenticationResponse = response.json();
+        var authenticationResponse = response;
 
         if (!authenticationResponse.token)
             return;
