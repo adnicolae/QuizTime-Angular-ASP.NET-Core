@@ -5,6 +5,13 @@
     }
 }
 
+body ::-webkit-scrollbar {
+    all: initial;
+    * {
+    all: unset;
+    }
+}
+
 .hidden.menu {
     display: none;
 }

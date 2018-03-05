@@ -11,11 +11,13 @@ import { Http, RequestMethod, Request, Response } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/takeWhile";
 import "rxjs/add/operator/map";
+import "rxjs/add/operator/catch";
 import { QuizFilter, ResultFilter } from "./config.repository";
 import { CookieService } from 'ngx-cookie';
 import { AuthService } from '../components/registration/auth.service';
 import { isPlatformServer, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ErrorHandlerService, ValidationError } from '../errorHandler.service';
 
 const quizzesUrl = "api/quizzes";
 const resultsUrl = "api/results";
@@ -40,6 +42,7 @@ export class Repository {
     userGroups: Group[];
     group: Group;
     latestQuiz: Quiz;
+    groupCreated: boolean = false;
     groupResults: GroupResults[];
     private currentUser = {
         id: ''
@@ -93,6 +96,11 @@ export class Repository {
     getSession(id: number) {
         this.sendRequest(RequestMethod.Get, this.urlBase + sessionsUrl + "/" + id)
             .subscribe(response => { this.session = response; });
+    }
+
+    getHostSession(id: number) {
+        return this.sendRequest(RequestMethod.Get, this.urlBase + sessionsUrl + "/host/" + id)
+            .takeWhile(() => this.alive);
     }
 
     getHostedSession(generatedHostId: number) {
@@ -202,6 +210,12 @@ export class Repository {
             });
     }
 
+    //createResultFromData(data) {
+    //    let url = this.urlBase + resultsUrl;
+    //    return this.sendRequest(RequestMethod.Post, url, data)
+    //        .takeWhile(() => this.alive);
+    //}
+
     createResult(score: number, participant: string, session: number) {
         let data = {
             score: score,
@@ -211,9 +225,9 @@ export class Repository {
 
         let url = this.urlBase + resultsUrl;
 
-        this.sendRequest(RequestMethod.Post, url, data)
-            .takeWhile(() => this.alive)
-            .subscribe(response => { this.cookieService.put("resultId", response); });
+        return this.sendRequest(RequestMethod.Post, url, data)
+            .takeWhile(() => this.alive);
+            //.subscribe(response => { this.cookieService.put("resultId", response); });
     }
 
     createSession(newSession: Session) {
@@ -278,7 +292,7 @@ export class Repository {
             .map(res => res.json())
             .takeWhile(() => this.alive)
             .subscribe(res => {
-                this.userGroups = res.reverse();
+                this.userGroups = (res == null) ? res : res.reverse();
             });
     }
 
@@ -288,10 +302,14 @@ export class Repository {
 
     createGroup(groupData) {
         groupData.dateCreated = new Date();
-        return this.http
-            .post(this.urlBase + groupsUrl, groupData)
-            .map(response => response.json())
-            .subscribe(res => this.userGroups.push(res));
+        return this.sendRequest(RequestMethod.Post, this.urlBase + groupsUrl, groupData).subscribe(res => {
+            (this.userGroups != null) ? this.userGroups.push(res) : this.getGroups();
+            this.groupCreated = false;
+        });
+        //return this.http
+        //    .post(this.urlBase + groupsUrl, groupData)
+        //    .map(response => response.json())
+        //    .subscribe(res => this.userGroups.push(res));
     }
 
     getGroup(groupId) {
@@ -337,6 +355,13 @@ export class Repository {
             });
     }
 
+    deleteResult(id) {
+        let url = this.urlBase + resultsUrl;
+        return this.sendRequest(RequestMethod.Delete, url + "/" + id)
+            .takeWhile(() => this.alive)
+            .subscribe(response => console.log("Removed result " + id));
+    }
+
     get resultFilter(): ResultFilter {
         return this.resultFilterObject;
     }
@@ -352,6 +377,29 @@ export class Repository {
             method: verb,
             url: url,
             body: data
-        })).map(response => response.json());
+        })).map(response => response.json())
+            .catch((errorResponse: Response) => {
+                if (errorResponse.status == 400) {
+                    let jsonData: string;
+                    try {
+                        jsonData = errorResponse.json();
+                    } catch (e) {
+                        throw new Error("Network error!");
+                    }
+
+                    //let messages = Object.getOwnPropertyNames(jsonData);
+                    //    .map(p => jsonData[p]);
+                    if (typeof jsonData == "string") {
+                        let messages: string[] = [];
+                        messages.push(jsonData);
+                        throw new ValidationError(messages);
+                    } else if (typeof jsonData == "object") {
+                        let messages = Object.getOwnPropertyNames(jsonData)
+                            .map(p => jsonData[p]);
+                        throw new ValidationError(messages);
+                    }
+                }
+                throw new Error("Network error");
+            });
     }
 }

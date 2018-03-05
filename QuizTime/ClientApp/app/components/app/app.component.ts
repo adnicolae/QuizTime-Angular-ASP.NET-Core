@@ -3,8 +3,9 @@ import { isPlatformServer, isPlatformBrowser } from '@angular/common';
 import { AuthService } from '../registration/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Repository } from '../../data/repository';
+import { ErrorHandlerService } from '../../errorHandler.service';
 
-declare var $;
+//declare var $: any;
 
 @Component({
     selector: 'app',
@@ -13,19 +14,32 @@ declare var $;
 })
 export class AppComponent {
     isBrowser: boolean;
+    private lastError: string[];
 
     constructor(
         @Inject(PLATFORM_ID) private platformId: Object,
         public auth: AuthService,
         private fb: FormBuilder,
-        private repo: Repository) {
+        private repo: Repository,
+        errorHandler: ErrorHandlerService) {
         this.isBrowser = isPlatformBrowser(platformId);
+        errorHandler.applicationErrors.subscribe(error => {
+            this.lastError = error;
+        });
     }
 
-    ngOnInit() {
-        $('.ui.sidebar')
-            .sidebar('attach events', '.toc.item')
-            ;
+    get error(): string[] {
+        return this.lastError;
     }
+
+    clearError() {
+        this.lastError = [];
+    }
+
+    //ngOnInit() {
+    //    $('.ui.sidebar')
+    //        .sidebar('attach events', '.toc.item')
+    //        ;
+    //}
  
 }

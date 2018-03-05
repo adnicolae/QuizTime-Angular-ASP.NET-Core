@@ -9,5 +9,10 @@
         </div>
     </div>
 </div>-->
+<div class="ui center aligned error message" *ngIf="error != null && error.length > 0">
+    <h6 *ngFor="let e of error">{{ e }}</h6>
+    <button class="ui default button" (click)="clearError()">Ok</button>
+</div>
+
 <nav-menu></nav-menu>
        
