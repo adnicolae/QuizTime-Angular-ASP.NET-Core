@@ -47,8 +47,8 @@ export class JoinSessionComponent implements OnDestroy {
     sendingFormFailed(failed: boolean) {
         console.log(failed);
         failed ? this.sendingForm = false : this.sendingForm = true;
-        //failed ? this.showError = true : this.sendingForm = true;
     }
+
     ngOnChanges() {
         this.joinForm.reset();
     }
