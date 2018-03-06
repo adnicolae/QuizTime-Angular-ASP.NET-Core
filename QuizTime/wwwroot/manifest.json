@@ -52,9 +52,14 @@
       "src": "/apple-touch-icon-144x144.png",
       "sizes": "144x144",
       "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ],
     "theme_color": "#4183c4",
-    "background_color": "#4183c4",
+    "background_color": "#ffffff",
     "display": "standalone"
 }
