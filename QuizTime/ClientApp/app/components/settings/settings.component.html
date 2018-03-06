@@ -11,22 +11,13 @@
     </div>
     <div class="ui large form attached compact fluid blue segment">
         <div class="field">
-            <label>First name</label>
+            <label>Public name</label>
             <div class="ui left icon input">
                 <input [(ngModel)]="settingsData.name" type="text" placeholder="Name">
                 <i class="user icon"></i>
             </div>
         </div>
 
-        <div class="field">
-            <label>Default quiz title</label>
-            <div class="ui left icon input">
-                <input [(ngModel)]="settingsData.defaultQuizTitle" type="text" placeholder="Default quiz title">
-                <i class="font icon"></i>
-            </div>
-        </div>
-
         <div class="fluid ui large primary button" (click)="saveChanges(settingsData)">Save changes</div>
-        <div style="margin-top:15px"><i class="info icon"></i>Results will be grouped by the default title.</div>
     </div>
 </div>

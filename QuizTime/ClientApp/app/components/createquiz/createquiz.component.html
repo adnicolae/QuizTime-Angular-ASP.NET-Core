@@ -69,23 +69,38 @@
                     </span>
                 </div>
             </div>
-        </div>
 
-        <div class="field">
-            <label>Time Limit</label>
-            <div class="ui buttons">
-                <span class="ui green icon button" (click)="increaseTimeLimit()">
-                    <i class="plus icon"></i>
-                </span>
-                <span class="ui button" data-tooltip="Adjust the duration of the session.">
-                    <i class="clock icon"></i>
-                    {{quizTimeLimit}}
-                </span>
-                <span class="ui red icon button" (click)="decreaseTimeLimit()">
-                    <i class="minus icon"></i>
-                </span>
+            <div class="field">
+                <label>Time Limit</label>
+                <div class="ui vertical buttons">
+                    <span class="ui green icon button" (click)="increaseTimeLimit()">
+                        <i class="plus icon"></i>
+                    </span>
+                    <span class="ui button" data-tooltip="Adjust the duration of the session.">
+                        {{quizTimeLimit}}
+                    </span>
+                    <span class="ui red icon button" (click)="decreaseTimeLimit()">
+                        <i class="minus icon"></i>
+                    </span>
+                </div>
+            </div>
+
+            <div class="field">
+                <label>Challenge timer</label>
+                <div class="ui vertical buttons">
+                    <span class="ui green icon button" (click)="increaseTimeLimit()">
+                        <i class="plus icon"></i>
+                    </span>
+                    <span class="ui button" data-tooltip="Adjust the duration of the session.">
+                        {{quizTimeLimit}}
+                    </span>
+                    <span class="ui red icon button" (click)="decreaseTimeLimit()">
+                        <i class="minus icon"></i>
+                    </span>
+                </div>
             </div>
         </div>
+
         <h3 class="ui horizontal divider header">
             <button type="button" class="ui icon button" (click)="addChoice()">
                 <i class="plus icon"></i>
@@ -108,7 +123,7 @@
                                     </div>
                                     <!--<input style="display:none" type="checkbox" formControlName="correctness" value="true" class="ui checkbox" />-->
                                     <!--Is this a correct choice?-->
-                                    <input class="form-control hidden" formControlName="title" value="Choice" />
+                                    <!--<input style="display:none!important" formControlName="title" value="Choice"/>-->
                                 </div>
                                 <div *ngIf="choice.value.correctness != true" class="ui bottom attached red button" (click)="setTrue(choice)">
                                     WRONG

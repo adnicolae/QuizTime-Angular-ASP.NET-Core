@@ -195,7 +195,7 @@ export class SessionBoardComponent implements OnInit, OnDestroy {
         if (this.currentStatus == 4) {
             this.audio.pause();
             this.audio.currentTime = 0;
-            this.playAudio(ahem);
+            //this.playAudio(ahem);
         }
 
         if (this.currentStatus == 5 && this.session.results != null) {
@@ -293,7 +293,7 @@ export class SessionBoardComponent implements OnInit, OnDestroy {
         this.counter1--;
 
         if (this.counter1 == 1) {
-            this.playAudio(ahem);
+            //this.playAudio(ahem);
         }
 
         if (this.counter1 == 0) {
