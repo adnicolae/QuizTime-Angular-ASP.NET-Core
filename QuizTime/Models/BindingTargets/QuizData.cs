@@ -14,6 +14,9 @@ namespace QuizTime.Models.BindingTargets
         [Required]
         public int TimeLimit { get; set; }
 
+        [Required]
+        public int ChallengeTimer { get; set; }
+
         [Range(0, int.MaxValue, ErrorMessage = "Points must be at least 0")]
         public int AssignedPoints { get; set; }
 
@@ -33,6 +36,7 @@ namespace QuizTime.Models.BindingTargets
         {
             Title = Title,
             TimeLimit = TimeLimit,
+            ChallengeTimer = ChallengeTimer,
             AssignedPoints = AssignedPoints,
             DeducedPoints = DeducedPoints,
             DateCreated = DateCreated,
