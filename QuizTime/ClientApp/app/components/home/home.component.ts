@@ -18,7 +18,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.isBrowser = isPlatformBrowser(platformId);
         if (this.isBrowser && this.auth.isAuthenticated) {
             this.repo.initialise();
-            this.repo.getParticipantResults(5);
         }
     }
 
