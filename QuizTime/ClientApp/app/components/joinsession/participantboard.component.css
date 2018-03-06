@@ -1,5 +1,11 @@
-﻿#showChoicesWrapper{
-    height: 100%;
+﻿.status-wrapper {
+    padding: 50px 5% 50px 5%;
+}
+
+#showChoicesWrapper{
+    height: 100vh!important;
+    margin-left: 0!important;
+    margin-right: 0!important;
     padding-bottom: 58vh;
     left: 0;
     right: 0;

@@ -47,9 +47,9 @@ export class ParticipantBoardComponent implements OnInit, OnDestroy{
     counter1 = 3; // FIRST TIMER 
     counter2: number; // SECOND TIMER = TIME LIMIT
     counter3 = 10; // THIRD TIMER = PICK YES/NO to explain
-    counter4 = 30; // EXPLAIN
+    counter4: number; // EXPLAIN
     counter5 = 10; // VOTING
-    counters = [3, this.counter2, 10, 30, 10];
+    counters = [3, this.counter2, 10, this.counter4, 10];
 
     constructor(
         private repo: Repository,
@@ -100,7 +100,7 @@ export class ParticipantBoardComponent implements OnInit, OnDestroy{
             }
 
             if (status == 4) {
-                this.subscribeTimer(2);
+                if (this.counters[3] > 0) { this.subscribeTimer(2); }
                 this.updateResult();
             }
 
@@ -177,7 +177,10 @@ export class ParticipantBoardComponent implements OnInit, OnDestroy{
             .subscribe(response => {
                 this.session = response.json();
                 console.log(this.session);
-                if (this.session.status == 2) { (this.session.quiz != null && this.session.quiz.timeLimit != null) ? this.counters[1] = this.session.quiz.timeLimit : this.counters[1] = 0; }
+                if (this.session.status == 2) {
+                    (this.session.quiz != null && this.session.quiz.timeLimit != null) ? this.counters[1] = this.session.quiz.timeLimit : this.counters[1] = 0;
+                    (this.session.quiz != null && this.session.quiz.challengeTimer != null) ? this.counters[3] = this.session.quiz.challengeTimer : this.counters[3] = 0;
+                }
                 console.log((this.session.selectedToExplain != null) ? this.session.selectedToExplain.username : ' not defined ');
                 if (this.session.selectedToExplain != null && this.auth.username == this.session.selectedToExplain.username) {
                     this.selected = true;
