@@ -7,6 +7,7 @@ export class Quiz {
         public quizId?: number,
         public title?: string,
         public timeLimit?: number,
+        public challengeTimer?: number,
         public assignedPoints?: number,
         public deducedPoints?: number,
         public dateCreated?: Date,
