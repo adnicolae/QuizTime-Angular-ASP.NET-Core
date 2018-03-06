@@ -1,0 +1,11 @@
+﻿.ui.card > .extra.welcome, input {
+    background-color: #fafafa !important;
+}
+
+h5 {
+    margin-top: 10px !important;
+}
+
+.ng-invalid.ng-touched:not(form) {
+    border-bottom: 2px solid #a94442 !important; /* red */
+}

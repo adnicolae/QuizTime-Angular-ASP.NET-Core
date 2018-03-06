@@ -2,7 +2,7 @@
     <div class="ui grid center aligned container">
         <div class="sixteen wide column">
             <h1 style="font-family:Cookie; font-size:60px; margin: 22px auto 12px; color:#4189C7">quiztime<span style="font-family:'Ceviche One'">!</span></h1>
-            <h4 style="font-size:17px; margin:0 40px 40px; color: #b3b3b3">Join a quiz session or sign up to create quizzes and track your results.</h4>
+            <h4 style="font-size:17px; margin:0 40px 40px; color: #b3b3b3">Sign up to participate, create quizzes and track your results.</h4>
 
             <!-- LOGIN FORM -->
             <div *ngIf="loginShowed">
@@ -15,27 +15,27 @@
                         <label style="display:none">Password</label>
                         <input [(ngModel)]="loginData.password" style="width:250px" placeholder="Password" type="password" required minlength="6" #loginPassword="ngModel">
                     </div>
+                    <div style="width:250px; margin-left:auto; margin-right:auto"><err (sendingFormFailed)="sendingFormFailed($event)"></err></div>
+
+                    <button [disabled]="loginUsername.invalid && loginPassword.invalid" [ngClass]="{'disabled loading' : sendingForm}" (click)="onSubmitLoginForm()" class="ui primary button" style="width:250px; padding:8px; margin:0">Log in</button>
+
                     <div *ngIf="loginUsername.invalid && (loginUsername.dirty || loginUsername.touched)">
-                        <h6 class="ui header red" *ngIf="loginUsername.errors?.required">
+                        <h5 class="ui header red" *ngIf="loginUsername.errors?.required">
                             Please provide a valid student id (username).
-                        </h6>
-                        <h6 class="ui header red" *ngIf="loginUsername.errors?.minlength">
+                        </h5>
+                        <h5 class="ui header red" *ngIf="loginUsername.errors?.minlength">
                             Your student id must have at least 8 characters.
-                        </h6>
+                        </h5>
                     </div>
 
                     <div *ngIf="loginPassword.invalid && (loginPassword.dirty || loginPassword.touched)">
-                        <h6 class="ui header red" *ngIf="loginPassword.errors?.required">
+                        <h5 class="ui header red" *ngIf="loginPassword.errors?.required">
                             Please provide a valid password.
-                        </h6>
-                        <h6 class="ui header red" *ngIf="loginPassword.errors?.minlength">
+                        </h5>
+                        <h5 class="ui header red" *ngIf="loginPassword.errors?.minlength">
                             Your password must have at least 6 characters.
-                        </h6>
+                        </h5>
                     </div>
-                    <div style="width:250px; margin-left:auto; margin-right:auto"><err (sendingFormFailed)="sendingFormFailed($event)"></err></div>
-                    
-
-                    <button [disabled]="loginUsername.invalid && loginPassword.invalid" [ngClass]="{'disabled loading' : sendingForm}" (click)="onSubmitLoginForm()" class="ui primary button" style="width:250px; padding:8px; margin:0">Log in</button>
                 </div>
             </div>
 
@@ -47,8 +47,9 @@
 
             <div class="ui blue card" style="margin:auto">
                 <div class="content">
-                    <img class="right floated mini ui image" src="/android-chrome-192x192.png" alt="Small application logo.">
-                    <div class="header left floated">
+                    <img *ngIf="!registerShowed" class="right floated mini ui image" src="/android-chrome-192x192.png" alt="Small application logo.">
+                    <img *ngIf="registerShowed" class="mini ui image" src="/android-chrome-192x192.png" alt="Small application logo.">
+                    <div *ngIf="!registerShowed" class="header left floated">
                         <div>
                             Register a new account
                         </div>
@@ -57,7 +58,7 @@
                         <div *ngIf="!registerShowed">Or log in with an existing account</div>
                     </div>
                     <div class="description">
-                        <div *ngIf="!registerShowed">You need to be signed in to create quizzes and track results.</div>
+                        <div *ngIf="!registerShowed">You need to be signed in to participate, create quizzes and track results.</div>
 
                         <!-- REGISTRATION FORM -->
                         <div *ngIf="registerShowed">
@@ -78,49 +79,47 @@
                                     <label style="display:none">Password Confirmation</label>
                                     <input formControlName="passwordConfirmation" style="width:250px" placeholder="Confirm Password" type="password" required>
                                 </div>
-
+                                <button [ngClass]="{'disabled loading' : sendingForm}" [disabled]="registerForm.status == 'INVALID'" (click)="onSubmitRegisterForm()" class="ui primary button" style="width:250px; padding:8px; margin:0">Sign up</button>
                                 <!--<div *ngIf="registerForm.invalid && (registerForm.dirty || registerForm.touched)" class="ui error message">
-        <div class="header">Action Forbidden</div>-->
+                <div class="header">Action Forbidden</div>-->
                                 <div *ngIf="registerUsername.invalid && (registerUsername.dirty || registerUsername.touched)">
-                                    <h6 class="ui header red" *ngIf="registerUsername.errors?.required">
+                                    <h5 class="ui header red" *ngIf="registerUsername.errors?.required">
                                         Please provide a valid student id (username).
-                                    </h6>
-                                    <h6 class="ui header red" *ngIf="registerUsername.errors?.minlength">
+                                    </h5>
+                                    <h5 class="ui header red" *ngIf="registerUsername.errors?.minlength">
                                         Your username (student ID) must have at least 8 characters.
-                                    </h6>
+                                    </h5>
                                 </div>
                                 <div *ngIf="registerName.invalid && (registerName.dirty || registerName.touched)">
-                                    <h6 class="ui header red" *ngIf="registerName.errors?.required">
-                                        Please provide a public name. That can be your first name and surname.
-                                    </h6>
-                                    <h6 class="ui header red" *ngIf="registerName.errors?.minlength">
+                                    <h5 class="ui header red" *ngIf="registerName.errors?.required">
+                                        Please provide a public name. That can be your full name.
+                                    </h5>
+                                    <h5 class="ui header red" *ngIf="registerName.errors?.minlength">
                                         Your public name must have at least 4 characters.
-                                    </h6>
+                                    </h5>
                                 </div>
                                 <div *ngIf="registerPass.invalid && (registerPass.dirty || registerPass.touched)">
-                                    <h6 class="ui header red" *ngIf="registerPass.errors?.required">
+                                    <h5 class="ui header red" *ngIf="registerPass.errors?.required">
                                         Please provide a password.
-                                    </h6>
-                                    <h6 class="ui header red" *ngIf="registerPass.errors?.minlength">
+                                    </h5>
+                                    <h5 class="ui header red" *ngIf="registerPass.errors?.minlength">
                                         Your password must have at least 6 characters.
-                                    </h6>
+                                    </h5>
                                 </div>
                                 <div *ngIf="registerConfirm.invalid && (registerConfirm.dirty || registerConfirm.touched)">
-                                    <h6 class="ui header red" *ngIf="registerConfirm.errors?.required">
+                                    <h5 class="ui header red" *ngIf="registerConfirm.errors?.required">
                                         Please provide a password confirmation.
-                                    </h6>
-                                    <h6 class="ui header red" *ngIf="registerConfirm.errors?.minlength">
+                                    </h5>
+                                    <h5 class="ui header red" *ngIf="registerConfirm.errors?.minlength">
                                         Your password confirmation must have at least 6 characters.
-                                    </h6>
-                                    </div>
-                                    <div *ngIf="registerConfirm.invalid && (registerConfirm.dirty || registerConfirm.touched)">
-                                        <h6 class="ui header red" *ngIf="registerForm.errors?.mismatchedFields">Sorry, your confirmation does not match the password. Please try again!</h6>
-                                    </div>
-                                    <!--</div>-->
-                                    <err *ngIf="registerForm.status == 'VALID'" (sendingFormFailed)="sendingFormFailed($event)"></err>
-
-                                    <button [ngClass]="{'disabled loading' : sendingForm}" [disabled]="registerForm.status == 'INVALID'" (click)="onSubmitRegisterForm()" class="ui primary button" style="width:250px; padding:8px; margin:0">Register</button>
-</form>
+                                    </h5>
+                                </div>
+                                <div *ngIf="registerConfirm.invalid && (registerConfirm.dirty || registerConfirm.touched)">
+                                    <h5 class="ui header red" *ngIf="registerForm.errors?.mismatchedFields">Sorry, your confirmation does not match the password. Please try again!</h5>
+                                </div>
+                                <!--</div>-->
+                                <err *ngIf="registerForm.status == 'VALID'" (sendingFormFailed)="sendingFormFailed($event)"></err>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -129,8 +128,8 @@
                     <button (click)="showRegisterForm()" class="ui basic primary button" style="width:250px; padding:8px; margin:0">Create account</button>
                 </div>
 
-                <div class="extra content" *ngIf="registerShowed">
-                    Have an account? <div style="color:#4189C7; cursor:pointer; font-weight: bold" (click)="hideRegister()">Login here.</div>
+                <div class="extra content welcome" *ngIf="registerShowed">
+                    Have an account? <a style="color:#4189C7; cursor:pointer; font-weight: bold" (click)="hideRegister()">Log in</a>
                 </div>
             </div>
         </div>
