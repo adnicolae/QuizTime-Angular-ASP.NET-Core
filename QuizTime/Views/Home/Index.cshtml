@@ -6,7 +6,12 @@
 }
 @*<link rel="stylesheet" type="text/css" href="~/dist/Semantic-UI-CSS-master/semantic.min.css" />*@
 @*<app></app>*@
-<app asp-ng2-prerender-module="ClientApp/dist/main-server">Loading...</app>
+<app asp-ng2-prerender-module="ClientApp/dist/main-server">
+    <div class="ui active inverted dimmer" style="margin-top:auto;margin-bottom:auto">
+        <h1 style="font-family:Cookie; font-size:60px; padding-bottom:10rem; color:#4189C7">quiztime<span style="font-family:'Ceviche One'">!</span></h1>
+        <div class="ui large text loader">Loading</div>
+    </div>
+</app>
 
 
 
