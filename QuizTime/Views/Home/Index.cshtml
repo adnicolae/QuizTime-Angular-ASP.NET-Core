@@ -16,7 +16,18 @@
 
 
 
-
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+            .register('/service-worker.js')
+            .then(function (registration) {
+                // Registration was successful
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            }).catch(function (err) {      // registration failed :(
+                console.log('ServiceWorker registration failed: ', err);
+            });
+    }
+</script>
 @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <script type="text/javascript" src="~/dist/Semantic-UI-CSS-master/semantic.min.js"></script>*@
 <script src="~/dist/vendor.js" asp-append-version="true"></script>

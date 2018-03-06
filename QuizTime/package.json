@@ -3,7 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "test": "karma start ClientApp/test/karma.conf.js"
+    "test": "karma start ClientApp/test/karma.conf.js",
+    "precache": "sw-precache --verbose --config=sw-precache-config.js"
   },
   "dependencies": {
     "@angular/animations": "4.3.1",
@@ -71,6 +72,7 @@
     "karma-cli": "1.0.1",
     "karma-jasmine": "1.1.0",
     "karma-webpack": "2.0.3",
+    "sw-precache": "^5.2.1",
     "uglifyjs-webpack-plugin": "1.0.0-beta.2",
     "webpack-cli": "^2.0.10",
     "webpack-dev-server": "^2.11.1"
