@@ -12,11 +12,14 @@ import { Http } from '@angular/http';
 import "rxjs/add/operator/takeWhile";
 
 const ahem = "sounds/ahem.wav";
+const hooray = "sounds/cheering.wav";
+const whah = "sounds/whah_whah.wav";
 const milionaire = "sounds/milionaire.mp3";
 
 @Component({
     selector: 'session-board',
-    templateUrl: './sessionboard.component.html'
+    templateUrl: './sessionboard.component.html',
+    styleUrls: ['./sessionboard.component.css']
 })
 
 export class SessionBoardComponent implements OnInit, OnDestroy {
@@ -34,7 +37,7 @@ export class SessionBoardComponent implements OnInit, OnDestroy {
     counter1 = 3; // FIRST TIMER 
     counter2: number; // SECOND TIMER = TIME LIMIT
     counter3 = 10; // THIRD TIMER = PICK YES/NO to explain
-    counter4 = 30; // EXPLAIN
+    counter4: number; // EXPLAIN-ChallengeTimer
     counter5 = 10; // VOTING
     private alive: boolean = true;
     baseUrl: string;
@@ -143,11 +146,11 @@ export class SessionBoardComponent implements OnInit, OnDestroy {
 
     cancelSession() {
         let changes = new Map<string, any>();
-        changes.set("status", 0);
+        changes.set("status", 8);
         this.repo.updateSession(this.session.sessionId as number, changes);
     }
 
-    updateSession(timeLimit: number) {
+    updateSession(timeLimit: number, challengeTimer: number) {
         let changes = new Map<string, any>();
         changes.set("status", this.currentStatus + 1);
         this.repo.updateSession(this.session.sessionId as number, changes);
@@ -155,6 +158,13 @@ export class SessionBoardComponent implements OnInit, OnDestroy {
         if (timeLimit != 0) {
             this.counter2 = timeLimit;
         }
+
+        console.log("Updating session with: " + challengeTimer);
+        if (challengeTimer != null) {
+            this.counter4 = challengeTimer;
+            console.log("counter 4 is now " + this.counter4);
+        }
+        
 
         if (this.currentStatus == 2) {
             this.subscribeTimer1();
@@ -195,7 +205,7 @@ export class SessionBoardComponent implements OnInit, OnDestroy {
         if (this.currentStatus == 4) {
             this.audio.pause();
             this.audio.currentTime = 0;
-            //this.playAudio(ahem);
+            this.playAudio(whah);
         }
 
         if (this.currentStatus == 5 && this.session.results != null) {
@@ -204,14 +214,17 @@ export class SessionBoardComponent implements OnInit, OnDestroy {
             console.log(cleanUsers);
 
             if (cleanUsers.length > 0) {
+                let changes = new Map<string, any>();
                 let randIdx = Math.floor((Math.random() * (cleanUsers.length - 1)) + 0);
                 console.log("Random index is: " + randIdx);
                 this.selectedParticipant = cleanUsers[randIdx];
+
+                changes.set("selectedToExplain", this.selectedParticipant.userId);
+                this.repo.updateSession(this.session.sessionId as number, changes);
+                console.log(this.selectedParticipant);
+            } else {
+                this.cancelSession();
             }
-            let changes = new Map<string, any>();
-            changes.set("selectedToExplain", this.selectedParticipant.userId);
-            this.repo.updateSession(this.session.sessionId as number, changes);
-            console.log(this.selectedParticipant);
         } 
 
         if (this.currentStatus == 7 && this.session.results != null) {
@@ -223,6 +236,14 @@ export class SessionBoardComponent implements OnInit, OnDestroy {
             this.noVotes = (negVotes.length > 0) ? negVotes.length - 1 : negVotes.length;
             this.barChartData[0].data[0] = this.noVotes;
             this.barChartData[1].data[0] = this.yesVotes;
+            this.audio.pause();
+            this.audio.currentTime = 0;
+            if (this.yesVotes >= this.noVotes) {
+                this.playAudio(hooray);
+            } else {
+                this.playAudio(whah);
+            }
+            
         }
     }
 
@@ -309,7 +330,10 @@ export class SessionBoardComponent implements OnInit, OnDestroy {
         if (this.counter2 == 0) {
             this.timer.unsubscribe(this.timer2Id);
             this.updateSessionWithNoTimer();
-            this.subscribeTimer3();
+            console.log("Counter 4: " + this.counter4);
+            if (this.counter4 > 0) {
+                this.subscribeTimer3();
+            }
         }
     }
 
@@ -328,8 +352,11 @@ export class SessionBoardComponent implements OnInit, OnDestroy {
 
         if (this.counter4 == 0) {
             this.timer.unsubscribe(this.timer4Id);
-            this.updateSessionWithNoTimer();
-            this.subscribeTimer5();
+            if (this.session.status != 8) {
+                this.updateSessionWithNoTimer();
+                this.subscribeTimer5();
+            }
+
         }
     }
 
