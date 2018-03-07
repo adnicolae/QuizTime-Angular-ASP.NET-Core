@@ -138,7 +138,7 @@ namespace QuizTime.Controllers
                         .ThenInclude(r => r.Group)
                         .ThenInclude(q => q.Owner)
                     .Include(r => r.Choice);
-
+                   
                 List<Result> data = query.ToList();
 
                 data.ForEach(r =>
@@ -180,9 +180,11 @@ namespace QuizTime.Controllers
                     }
                 });
 
+
+                data.Sort(new SortResults());
                 if (last > 0 && data.Count() > 0)
                 {
-                    return data.TakeLast(last);
+                    return data.Take(last);
                 }
 
                 return data;
@@ -298,6 +300,24 @@ namespace QuizTime.Controllers
             _context.SaveChanges();
             _boardHubContext.Clients.All.InvokeAsync("Send", "Removed result for user");
             return new NoContentResult();
+        }
+
+        public static IComparer<Result> SortResults()
+        {
+            return (IComparer<Result>)new SortResults();
+        }
+    }
+
+    class SortResults : IComparer<Result>
+    {
+        int IComparer<Result>.Compare(Result a, Result b)
+        {
+            if (a.ResultId < b.ResultId)
+                return 1;
+            if (a.ResultId > b.ResultId)
+                return -1;
+            else
+                return 0;
         }
     }
 }
