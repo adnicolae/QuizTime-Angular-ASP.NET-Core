@@ -17,17 +17,17 @@
         <div class="field" [ngClass]="{'error' : noGroupError}">
             <label>Class</label>
             <!--<sui-select class="selection"
-                        form[ngModel]="selectedGroup"
-                        [options]="groups"
-                        labelField="title"
-                        #select>
-                <sui-select-option *ngFor="let option of select.filteredOptions"
-                                   [value]="option">
-                </sui-select-option>
-            </sui-select>-->
+                    form[ngModel]="selectedGroup"
+                    [options]="groups"
+                    labelField="title"
+                    #select>
+            <sui-select-option *ngFor="let option of select.filteredOptions"
+                               [value]="option">
+            </sui-select-option>
+        </sui-select>-->
             <select [ngModel]="selectedGroup" (ngModelChange)="onChangeSelect($event)" name="Class" class="ui left dropdown" id="select" [ngModelOptions]="{standalone: true}">
-        <option *ngFor="let group of groups" [ngValue]="group">{{group.title}}</option>
-    </select>
+                <option *ngFor="let group of groups" [ngValue]="group">{{group.title}}</option>
+            </select>
         </div>
 
         <div class="ui warning message">
@@ -36,26 +36,29 @@
                 <li>Please <a style="font-weight:bold" [routerLink]="['/groups']">create a new class group</a> before getting started.</li>
             </ul>
         </div>
-
+        <h4 class="ui horizontal divider header">
+            <i class="sort numeric up icon"></i>
+            Points
+        </h4>
         <div class="fields">
-            <div class="field">
-                <label>Winning points</label>
+            <div class="field" style="margin-left:auto">
+                <label style="text-align:center">Win</label>
                 <div class="ui buttons">
-                    <span class="ui green icon button" (click)="increaseAssignedPoints()">
-                        <i class="plus icon"></i>
+                    <span class="ui red icon button" (click)="decreaseAssignedPoints()">
+                        <i class="minus icon"></i>
                     </span>
                     <span class="ui button" data-tooltip="Adjust winning points.">
                         <i class="plus icon"></i>
                         {{ quizAssignedPoints }}
                     </span>
-                    <span class="ui red icon button" (click)="decreaseAssignedPoints()">
-                        <i class="minus icon"></i>
+                    <span class="ui green icon button" (click)="increaseAssignedPoints()">
+                        <i class="plus icon"></i>
                     </span>
                 </div>
             </div>
-
-            <div class="field">
-                <label>Losing points</label>
+             
+            <div class="field" style="margin-right:auto">
+                <label style="text-align:center">Lose</label>
                 <div class="ui buttons">
                     <span class="ui red icon button" (click)="increaseDeducedPoints()">
                         <i class="minus icon"></i>
@@ -69,14 +72,20 @@
                     </span>
                 </div>
             </div>
-
-            <div class="field">
-                <label>Time Limit</label>
+        </div>
+        <h4 class="ui horizontal divider header">
+            <i class="hourglass half icon"></i>
+            Timers
+        </h4>
+        <div class="fields">
+            <div class="field" style="margin-left:auto">
+                <label style="text-align:center">Solve</label>
                 <div class="ui vertical buttons">
                     <span class="ui green icon button" (click)="increaseTimeLimit()">
                         <i class="plus icon"></i>
                     </span>
-                    <span class="ui button" data-tooltip="Adjust the duration of the session.">
+                    <span class="ui button">
+                        <i class="clock outline icon"></i>
                         {{quizTimeLimit}}
                     </span>
                     <span class="ui red icon button" (click)="decreaseTimeLimit()">
@@ -85,16 +94,17 @@
                 </div>
             </div>
 
-            <div class="field">
-                <label>Challenge timer</label>
+            <div class="field" style="margin-right:auto">
+                <label style="text-align:center">Challenge</label>
                 <div class="ui vertical buttons">
-                    <span class="ui green icon button" (click)="increaseTimeLimit()">
+                    <span class="ui green icon button" (click)="increaseChallengeTimer()">
                         <i class="plus icon"></i>
                     </span>
-                    <span class="ui button" data-tooltip="Adjust the duration of the session.">
-                        {{quizTimeLimit}}
+                    <span class="ui button">
+                        <i class="stopwatch icon"></i>
+                        {{quizChallengeTimer}}
                     </span>
-                    <span class="ui red icon button" (click)="decreaseTimeLimit()">
+                    <span class="ui red icon button" (click)="decreaseChallengeTimer()">
                         <i class="minus icon"></i>
                     </span>
                 </div>

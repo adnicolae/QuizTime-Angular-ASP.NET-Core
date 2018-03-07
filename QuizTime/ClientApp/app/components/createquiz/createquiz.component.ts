@@ -22,6 +22,7 @@ export class CreateQuizComponent implements OnDestroy{
     quizForm: FormGroup;
     latestQuiz: Quiz;
     quizTimeLimit: number = 30;
+    quizChallengeTimer: number = 0;
     quizAssignedPoints: number = 0;
     quizDeducedPoints: number = 0;
     private thisBaseUrl: string;
@@ -35,7 +36,7 @@ export class CreateQuizComponent implements OnDestroy{
     noGroupError: boolean;
 
     constructor( @Inject(PLATFORM_ID) private platformId: Object, private router: Router, private formBuilder: FormBuilder, private repo: Repository, private http: Http, @Inject('BASE_URL') baseUrl: string, public auth: AuthService) {
-        this.repo.getGroups()
+        this.repo.getGroups();
         this.thisBaseUrl = baseUrl;
         this.createForm();
         this.isBrowser = isPlatformBrowser(platformId);
@@ -45,7 +46,7 @@ export class CreateQuizComponent implements OnDestroy{
 
     ngOnInit() {
 
-        this.repo.getGroups();
+        this.repo.initialise();
         if (this.groups != null) {
             this.last5Groups = this.groups.slice(0, 4);
             console.log("Im here");
@@ -104,6 +105,7 @@ export class CreateQuizComponent implements OnDestroy{
             group: this.selectedGroup,
             title: ("Quiz #" + groupQuizId) as string,
             timeLimit: this.quizTimeLimit,
+            challengeTimer: this.quizChallengeTimer,
             dateCreated: new Date(),
             assignedPoints: this.quizAssignedPoints,
             deducedPoints: this.quizDeducedPoints
@@ -113,6 +115,7 @@ export class CreateQuizComponent implements OnDestroy{
             group: this.selectedGroup.groupId,
             title: newQuiz.title,
             timeLimit: newQuiz.timeLimit,
+            challengeTimer: newQuiz.challengeTimer,
             assignedPoints: newQuiz.assignedPoints,
             deducedPoints: newQuiz.deducedPoints,
             dateCreated: newQuiz.dateCreated,
@@ -216,8 +219,18 @@ export class CreateQuizComponent implements OnDestroy{
     }
 
     decreaseTimeLimit() {
-        if (this.quizTimeLimit >= 30) {
+        if (this.quizTimeLimit > 30) {
             this.quizTimeLimit -= 30;
+        }
+    }
+
+    increaseChallengeTimer() {
+        this.quizChallengeTimer += 30;
+    }
+
+    decreaseChallengeTimer() {
+        if (this.quizChallengeTimer >= 30) {
+            this.quizChallengeTimer -= 30;
         }
     }
 
