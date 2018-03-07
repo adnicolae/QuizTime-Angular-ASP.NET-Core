@@ -137,9 +137,9 @@ export class Repository {
                 .takeWhile(() => this.alive)
                 .subscribe(response => {
                     if (last == 0) {
-                        this.participantResults = response.reverse();
+                        this.participantResults = response;
                     } else {
-                        this.participantRecentResults = response.reverse();
+                        this.participantRecentResults = response;
                     }
                 });
         }
@@ -152,7 +152,7 @@ export class Repository {
             return this.sendRequest(RequestMethod.Get, url)
                 .takeWhile(() => this.alive)
                 .subscribe(response => {
-                    this.participantReport = response
+                    this.participantReport = (response == null) ? response : response.reverse();
                 });
         }
         return null;
