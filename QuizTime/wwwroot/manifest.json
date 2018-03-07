@@ -1,7 +1,7 @@
 ﻿{
   "name": "QuizTime!",
   "short_name": "QuizTime!",
-  "start_url": "/",
+  "start_url": "./?utm_source=web_app_manifest",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",

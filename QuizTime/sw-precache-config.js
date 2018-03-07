@@ -1,10 +1,13 @@
 ﻿module.exports = {
     staticFileGlobs: [
+        '/',
         'Views/**.cshtml',
         'Views/Home/**.cshtml',
         'Views/Shared/**.cshtml',
         'wwwroot/**.js',
         'wwwroot/**.css',
+        'wwwroot/**.jpg',
+        'wwwroot/**.html',
         'wwwroot/**.png',
         'wwwroot/dist/**.js',
         'wwwroot/dist/**.css',
@@ -19,5 +22,6 @@
     ],
     root: 'wwwroot/dist',
     stripPrefix: 'wwwroot/dist/',
-    navigateFallback: 'Views/Home/Index'
+    navigateFallback: 'Views/Home/Index',
+    runtimeCaching: [{ urlPattern: /pointspot\.azurewebsites\.net/, handler: 'networkFirst' }]
 };
