@@ -46,10 +46,10 @@ export class ParticipantBoardComponent implements OnInit, OnDestroy{
     timerIds = [this.timer1Id, this.timer2Id, this.timer3Id, this.timer4Id, this.timer5Id];
     counter1 = 3; // FIRST TIMER 
     counter2: number; // SECOND TIMER = TIME LIMIT
-    counter3 = 10; // THIRD TIMER = PICK YES/NO to explain
+    counter3 = 15; // THIRD TIMER = PICK YES/NO to explain
     counter4: number; // EXPLAIN
-    counter5 = 10; // VOTING
-    counters = [3, this.counter2, 10, this.counter4, 10];
+    counter5 = 15; // VOTING
+    counters = [3, this.counter2, 15, this.counter4, 15];
 
     constructor(
         private repo: Repository,
@@ -93,6 +93,8 @@ export class ParticipantBoardComponent implements OnInit, OnDestroy{
 
             if (status == 2) {
                 this.subscribeTimer(0);
+                (this.session.quiz != null && this.session.quiz.deducedPoints != null) ? this.score = -this.session.quiz.deducedPoints : this.score = 0;
+                this.result = "lost";
             }
 
             if (status == 3) {
@@ -124,9 +126,13 @@ export class ParticipantBoardComponent implements OnInit, OnDestroy{
                     this.score += 10;
                 }
                 else {
-                    this.score = 0;
+                    this.score = -5;
                 }
                 this.updateResult();
+            }
+
+            if (status == 8) {
+                this.router.navigateByUrl("/");
             }
         });
 
@@ -154,8 +160,9 @@ export class ParticipantBoardComponent implements OnInit, OnDestroy{
     }
 
     timerCallback(id) {
-        this.counters[id]--;
-
+        if (this.counters[id] > 0) {
+            this.counters[id]--;
+        }
         //if (this.counters[id] == 0) {
         //    this.timer.unsubscribe(this.timerIds[id]);
         //    if (id != 4) {

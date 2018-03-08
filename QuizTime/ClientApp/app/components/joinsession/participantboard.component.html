@@ -118,19 +118,31 @@
                     </div>
                 </div>
 
-                <div *ngIf="counters[3] > 0">
-                    <!--<div *ngIf="!promptAnswered">-->
-                    <button type="button" style="padding:8px; margin:0" class="ui fluid green button" (click)="participationAction()">Yes</button>
-                    <div class="ui horizontal divider">
-                        Or
+                <div *ngIf="counters[3] > 0" style="margin-top:15px">
+                    <div *ngIf="!promptAnswered">
+                        <button type="button" style="padding:8px; margin:0" class="ui fluid basic green button" (click)="participationAction()">Yes</button>
+                        <div class="ui horizontal divider">
+                            Or
+                        </div>
+                        <button type="button" style="padding:8px; margin:0" class="ui fluid red button" (click)="noParticipationAction()">No</button>
                     </div>
-                    <button type="button" style="padding:8px; margin:0" class="ui fluid red button" (click)="noParticipationAction()">No</button>
-                    <!--</div>-->
 
                     <div *ngIf="promptAnswered && !joiningSelection">
+                        <button type="button" style="padding:8px; margin:0" class="ui fluid basic green button" (click)="participationAction()">Yes</button>
+                        <div class="ui horizontal divider">
+                            Or
+                        </div>
+                        <button type="button" style="padding:8px; margin:0" class="ui fluid red button" (click)="noParticipationAction()">No</button>
+
                         <h4 class="ui header" style="margin-top:35px;text-align:center"><i class="frown icon"></i> You will have to vote next!</h4>
                     </div>
                     <div *ngIf="promptAnswered && joiningSelection">
+                        <button type="button" style="padding:8px; margin:0" class="ui fluid green button" (click)="participationAction()">Yes</button>
+                        <div class="ui horizontal divider">
+                            Or
+                        </div>
+                        <button type="button" style="padding:8px; margin:0" class="ui fluid basic red button" (click)="noParticipationAction()">No</button>
+
                         <h4 class="ui header" style="margin-top:35px;text-align:center"><i class="smile icon"></i>Only one of you will be selected!</h4>
                     </div>
                 </div>
