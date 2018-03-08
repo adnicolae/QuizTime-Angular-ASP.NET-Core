@@ -64,7 +64,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let result of results?.reverse()">
+                    <tr *ngFor="let result of results">
                         <td>{{ result?.score }} out of {{ result?.session.quiz.assignedPoints }}</td>
                         <td>{{ result?.session.dateCreated | date}}</td>
                         <td>{{ result?.session.quiz.title }}</td>
