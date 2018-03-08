@@ -203,6 +203,18 @@
                     </div>
                 </div>
             </div>
+
+            <div *ngIf="!(counter4 > 0)">
+                <div style="display: block; width:500px; margin-left:auto; margin-right:auto; margin-top:10px">
+                    <canvas baseChart
+                            [datasets]="barChartChoicesData"
+                            [labels]="barChartChoicesLabels"
+                            [options]="barChartOptions"
+                            [legend]="barChartLegend"
+                            [chartType]="barChartType"></canvas>
+                </div>
+            </div>
+
             <h4 class="ui center aligned header" style="margin-top:5em" *ngIf="counter4 > 0">Challenge: A random participant will be chosen to explain the answer and the others will vote on how well he explained!</h4>
         </div>
     </div>
@@ -268,6 +280,17 @@
                 <canvas baseChart
                         [datasets]="barChartData"
                         [labels]="barChartLabels"
+                        [options]="barChartOptions"
+                        [legend]="barChartLegend"
+                        [chartType]="barChartType"></canvas>
+            </div>
+        </div>
+
+        <div>
+            <div style="display: block; width:500px; margin-left:auto; margin-right:auto; margin-top:10px">
+                <canvas baseChart
+                        [datasets]="barChartChoicesData"
+                        [labels]="barChartChoicesLabels"
                         [options]="barChartOptions"
                         [legend]="barChartLegend"
                         [chartType]="barChartType"></canvas>

@@ -11,10 +11,13 @@ import { SimpleTimer } from 'ng2-simple-timer';
 import { Http } from '@angular/http';
 import "rxjs/add/operator/takeWhile";
 
-const ahem = "sounds/ahem.wav";
-const hooray = "sounds/cheering.wav";
+const hooray = "sounds/scootermaria.wav";
 const whah = "sounds/whah_whah.wav";
 const milionaire = "sounds/milionaire.mp3";
+
+interface IDictionary {
+    [index: string]: number;
+}
 
 @Component({
     selector: 'session-board',
@@ -36,9 +39,9 @@ export class SessionBoardComponent implements OnInit, OnDestroy {
     timer5Id: string;
     counter1 = 3; // FIRST TIMER 
     counter2: number; // SECOND TIMER = TIME LIMIT
-    counter3 = 10; // THIRD TIMER = PICK YES/NO to explain
+    counter3 = 15; // THIRD TIMER = PICK YES/NO to explain
     counter4: number; // EXPLAIN-ChallengeTimer
-    counter5 = 10; // VOTING
+    counter5 = 15; // VOTING
     private alive: boolean = true;
     baseUrl: string;
     id: number;
@@ -54,6 +57,10 @@ export class SessionBoardComponent implements OnInit, OnDestroy {
     public barChartLabels: string[] = ['Challenge votes'];
     public barChartType: string = 'bar';
     public barChartLegend: boolean = true;
+    public barChartChoicesLabels: string[] = ['Choices'];
+
+    public barChartChoicesData: any[] = [
+    ];
 
     public barChartData: any[] = [
         { data: [20], label: 'No' },
@@ -131,10 +138,36 @@ export class SessionBoardComponent implements OnInit, OnDestroy {
             .subscribe(response => {
                 this.session = response.json();
                 console.log(this.session);
+
+                if (this.currentStatus == 2) {
+                    let sessionChoicesTitles = (this.session.quiz != null && this.session.quiz.choices != null) ? this.session.quiz.choices.map(this.getSessionChoices) : null;
+                    console.log(sessionChoicesTitles);
+                    let clone = JSON.parse(JSON.stringify(this.barChartChoicesData));
+                    (sessionChoicesTitles != null) ? sessionChoicesTitles.map(title => clone.push({ data: [0], label: title })) : [];
+                    this.barChartChoicesData = clone;
+                    console.log(this.barChartChoicesData);
+                }
+                if (this.currentStatus == 4) {
+                    console.log(this.session.results);
+                    let choicesTitles = (this.session.results != null) ? this.session.results.map(this.getChoices) : null;
+                    let choiceCounters = {} as IDictionary;
+                    (choicesTitles != null) ? choicesTitles.forEach(title => choiceCounters[title]=0) : [];
+                    (choicesTitles != null) ? choicesTitles.forEach(title => choiceCounters[title]++) : [];
+                    let uniqueChoiceTitles = uniq(choicesTitles);
+                    let clone = JSON.parse(JSON.stringify(this.barChartChoicesData));
+                    console.log("Unique: " + uniqueChoiceTitles);
+                    (uniqueChoiceTitles != null) ? uniqueChoiceTitles.map(title => clone.forEach(item => (item.label == title) ? item.data[0] = choiceCounters[title] : null)) : [];
+                    console.log("clone: " + clone);
+                    this.barChartChoicesData = uniq(clone);
+                    console.log(this.barChartChoicesData);
+                    console.log(choicesTitles);
+                    console.log(choiceCounters);
+                }
             }, response => {
                 this.errorMessage = "Unable to load session.";
             });
     }
+
 
     setGreen() {
         this.greenIcon = true;
@@ -148,6 +181,7 @@ export class SessionBoardComponent implements OnInit, OnDestroy {
         let changes = new Map<string, any>();
         changes.set("status", 8);
         this.repo.updateSession(this.session.sessionId as number, changes);
+        this.router.navigateByUrl("/");
     }
 
     updateSession(timeLimit: number, challengeTimer: number) {
@@ -192,17 +226,31 @@ export class SessionBoardComponent implements OnInit, OnDestroy {
         return vote;
     }
 
+    getSessionChoices(item, index) {
+        let choices = (item != null && item.title != null) ? item.title : 'None';
+        return choices;
+    }
+
+    getChoices(item, index) {
+        let choiceTitle = (item.choice != null && item.choice.title != null) ? item.choice.title : 'None';
+        return choiceTitle;
+    }
+
     updateSessionWithNoTimer() {
         let changes = new Map<string, any>();
-        changes.set("status", this.currentStatus + 1);
-        this.repo.updateSession(this.session.sessionId as number, changes);
         this.currentStatus++;
+        changes.set("status", this.currentStatus);
+        if (this.currentStatus == 2) {
+            this.repo.updateSession(this.session.sessionId as number, changes);
+        }
 
         if (this.currentStatus == 3) {
+            this.repo.updateSession(this.session.sessionId as number, changes);
             this.playAudio(milionaire);
         }
 
         if (this.currentStatus == 4) {
+            this.repo.updateSession(this.session.sessionId as number, changes);
             this.audio.pause();
             this.audio.currentTime = 0;
             this.playAudio(whah);
@@ -220,14 +268,20 @@ export class SessionBoardComponent implements OnInit, OnDestroy {
                 this.selectedParticipant = cleanUsers[randIdx];
 
                 changes.set("selectedToExplain", this.selectedParticipant.userId);
-                this.repo.updateSession(this.session.sessionId as number, changes);
                 console.log(this.selectedParticipant);
             } else {
                 this.cancelSession();
             }
-        } 
+            (this.selectedParticipant != null && this.selectedParticipant.userId != null) ? changes.set("selectedToExplain", this.selectedParticipant.userId) : null;
+            this.repo.updateSession(this.session.sessionId as number, changes);
+        }
+
+        if (this.currentStatus == 6) {
+            this.repo.updateSession(this.session.sessionId as number, changes);
+        }
 
         if (this.currentStatus == 7 && this.session.results != null) {
+            this.repo.updateSession(this.session.sessionId as number, changes);
             let votes = this.session.results.map(this.getVotes);
             let posVotes = votes.filter((vote) => vote == true);
             let negVotes = votes.filter((vote) => vote == false);
@@ -385,4 +439,10 @@ export class SessionBoardComponent implements OnInit, OnDestroy {
         this.audio.load();
         this.audio.play();
     }
+}
+
+function uniq(a) {
+    return a.sort().filter(function (item, pos, ary) {
+        return !pos || item != ary[pos - 1];
+    })
 }
