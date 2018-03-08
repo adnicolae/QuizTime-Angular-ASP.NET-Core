@@ -69,6 +69,7 @@ export class CreateQuizComponent implements OnDestroy{
 
     onChangeSelect(newGroup) {
         this.selectedGroup = newGroup;
+        this.noGroupError = false;
     }
 
     setChoices(choices: Choice[]) {
