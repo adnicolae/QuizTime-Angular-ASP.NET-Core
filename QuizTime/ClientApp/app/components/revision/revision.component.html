@@ -1,0 +1,149 @@
+﻿<div class="ui container" style="margin-top:20px;max-width:750px!important;margin-bottom:50px">
+    <h4 class="ui header" style="margin-top:10px;text-align:center">It's <span style="font-family:Cookie; font-size:2rem; color:#4189C7">revision time<span style="font-family:'Ceviche One'">!</span></span></h4>
+    <h4 class="ui header" style="margin-top:2px;margin-bottom:10px; text-align:center">Create a detailed quiz, challenge your peers and gather results!</h4>
+    <div class="ui attached icon message">
+        <img class="ui tiny image" src="school.png" style="margin-right:1em">
+        <div class="content">
+            <h2 class="header">
+                Revision Quiz
+            </h2>
+            <p>Fill out the form below to create a detailed quiz.</p>
+        </div>
+    </div>
+
+    <form [formGroup]="quizForm" (ngSubmit)="onSubmit()" class="ui form attached compact fluid blue segment" [ngClass]="{'warning' : noGroupError}">
+
+        <div class="field" [ngClass]="{'error' : noGroupError}">
+            <label>Class</label>
+            <select [ngModel]="selectedGroup" (ngModelChange)="onChangeSelect($event)" name="Class" class="ui left dropdown" id="select" [ngModelOptions]="{standalone: true}">
+                <option *ngFor="let group of groups" [ngValue]="group">{{group.title}}</option>
+            </select>
+        </div>
+
+        <div class="ui warning message">
+            <div class="header">Could you check something?</div>
+            <ul class="list">
+                <li>Please <a style="font-weight:bold" [routerLink]="['/groups']">create a new class group</a> before getting started.</li>
+            </ul>
+        </div>
+
+        <div class="field">
+            <label>Question</label>
+            <input formControlName="title" type="text" placeholder="Question title" />
+        </div>
+
+        <h4 class="ui horizontal divider header">
+            <i class="sort numeric up icon"></i>
+            Points
+        </h4>
+        <div class="fields">
+            <div class="field" style="margin-left:auto">
+                <label style="text-align:center">Win</label>
+                <div class="ui buttons">
+                    <span class="ui red icon button" (click)="decreaseAssignedPoints()">
+                        <i class="minus icon"></i>
+                    </span>
+                    <span class="ui button" data-tooltip="Adjust winning points.">
+                        <i class="plus icon"></i>
+                        {{ quizAssignedPoints }}
+                    </span>
+                    <span class="ui green icon button" (click)="increaseAssignedPoints()">
+                        <i class="plus icon"></i>
+                    </span>
+                </div>
+            </div>
+             
+            <div class="field" style="margin-right:auto">
+                <label style="text-align:center">Lose</label>
+                <div class="ui buttons">
+                    <span class="ui red icon button" (click)="increaseDeducedPoints()">
+                        <i class="minus icon"></i>
+                    </span>
+                    <span class="ui button" data-tooltip="Adjust losing points.">
+                        <i class="minus icon"></i>
+                        {{ quizDeducedPoints }}
+                    </span>
+                    <span class="ui green icon button" (click)="decreaseDeducedPoints()">
+                        <i class="plus icon"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <h4 class="ui horizontal divider header">
+            <i class="hourglass half icon"></i>
+            Timers
+        </h4>
+        <div class="fields">
+            <div class="field" style="margin-left:auto">
+                <label style="text-align:center">Solve</label>
+                <div class="ui buttons">
+                    <span class="ui green icon button" (click)="increaseTimeLimit()">
+                        <i class="plus icon"></i>
+                    </span>
+                    <span class="ui button">
+                        <i class="clock outline icon"></i>
+                        {{quizTimeLimit}}
+                    </span>
+                    <span class="ui red icon button" (click)="decreaseTimeLimit()">
+                        <i class="minus icon"></i>
+                    </span>
+                </div>
+            </div>
+
+            <div class="field" style="margin-right:auto">
+                <label style="text-align:center">Challenge</label>
+                <div class="ui buttons">
+                    <span class="ui green icon button" (click)="increaseChallengeTimer()">
+                        <i class="plus icon"></i>
+                    </span>
+                    <span class="ui button">
+                        <i class="stopwatch icon"></i>
+                        {{quizChallengeTimer}}
+                    </span>
+                    <span class="ui red icon button" (click)="decreaseChallengeTimer()">
+                        <i class="minus icon"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="ui horizontal divider header">
+            <button type="button" class="ui icon button" (click)="addChoice()">
+                <i class="plus icon"></i>
+            </button>
+            Choices
+            <button type="button" class="ui icon button" (click)="removeChoice(0)">
+                <i class="remove icon"></i>
+            </button>
+        </h3>
+
+        <div formArrayName="choices" class="ui message">
+            <div class="ui two column centered stackable grid">
+                <div class="column">
+                    <div class="row">
+                        <div class="ui two cards">
+                            <div class="card" *ngFor="let choice of choices?.controls; let i=index" [formGroupName]="i">
+                                <div class="content">
+                                    <div class="header" style="margin-bottom:5px;margin-top:5px;text-align:center">
+                                        Choice # {{ i+1 }}
+                                    </div>
+                                    <!--<input style="display:none" type="checkbox" formControlName="correctness" value="true" class="ui checkbox" />-->
+                                    <!--Is this a correct choice?-->
+                                    <input type="text" formControlName="title" value="Choice" placeholder="Choice title"/>
+                                </div>
+                                <div *ngIf="choice.value.correctness != true" class="ui bottom attached red button" (click)="setTrue(choice)">
+                                    WRONG
+                                </div>
+                                <div *ngIf="choice.value.correctness == true" class="ui bottom attached green button" (click)="setFalse(choice)">
+                                    CORRECT
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button [disabled]="noGroupError" [ngClass]="{'disabled loading' : sendingForm}" style="margin-top: 15px;margin-left:auto!important; margin-right:auto!important; display:block" type="submit" class="circular ui huge green submit button">Start</button>
+    </form>
+</div>
