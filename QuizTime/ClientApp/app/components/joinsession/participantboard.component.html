@@ -219,24 +219,30 @@
             </div>
 
             <div *ngIf="!selected">
-                <div *ngIf="!voted">
-                    <h4 class="ui header" style="margin-top:5px;text-align:center">Did you understand the explanation?</h4>
-                    <button type="button" style="padding:8px;" class="ui fluid green button" (click)="voteYes()">Yes</button>
-                    <div class="ui horizontal divider">
-                        Or
-                    </div>
-                    <button type="button" style="padding:8px;" class="ui fluid red button" (click)="voteNo()">No</button>
-                </div>
-                <div *ngIf="voted">
-                    <div *ngIf="!vote">
-                        <h4 class="ui header" style="margin-top:35px;text-align:center"><i class="frown icon"></i> You voted no!</h4>
-                    </div>
-                    <div *ngIf="vote">
-                        <h4 class="ui header" style="margin-top:35px;text-align:center"><i class="smile icon"></i>You voted yes!</h4>
-                    </div>
-                </div>
-            </div>
+                <h4 class="ui header" style="margin-top:5px; margin-bottom:10px;text-align:center">How did you find the explanation?</h4>
+                <button type="button" [ngClass]="{'basic' : !votingSelection[0]}" style="padding:8px;" class="ui fluid red button" (click)="voteNo(1)">Bad</button>
+                <button type="button" [ngClass]="{'basic' : !votingSelection[1]}" style="padding:8px; margin-top:5px" class="ui basic fluid orange button" (click)="voteNo(2)">Confusing</button>
+                <button type="button" [ngClass]="{'basic' : !votingSelection[2]}" style="padding:8px; margin-top:5px" class="ui basic fluid yellow button" (click)="voteNo(3)">Can't decide</button>
+                <button type="button" [ngClass]="{'basic' : !votingSelection[3]}" style="padding:8px; margin-top:5px" class="ui basic fluid olive button" (click)="voteYes(4)">Good</button>
+                <button type="button" [ngClass]="{'basic' : !votingSelection[4]}" style="padding:8px; margin-top:5px" class="ui basic fluid green button" (click)="voteYes(5)">Perfect</button>
+                <!--<div *ngIf="!voted">
+        <h4 class="ui header" style="margin-top:5px;text-align:center">Did you understand the explanation?</h4>
+        <button type="button" style="padding:8px;" class="ui fluid green button" (click)="voteYes()">Yes</button>
+        <div class="ui horizontal divider">
+            Or
         </div>
+        <button type="button" style="padding:8px;" class="ui fluid red button" (click)="voteNo()">No</button>
+    </div>
+    <div *ngIf="voted">
+        <div *ngIf="!vote">
+            <h4 class="ui header" style="margin-top:35px;text-align:center"><i class="frown icon"></i> You voted no!</h4>
+        </div>
+        <div *ngIf="vote">
+            <h4 class="ui header" style="margin-top:35px;text-align:center"><i class="smile icon"></i>You voted yes!</h4>
+        </div>
+    </div>-->
+            </div>
+            </div>
     </div>
 
     <!-- STATUS: Show voting result -->

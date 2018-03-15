@@ -63,8 +63,8 @@ export class SessionBoardComponent implements OnInit, OnDestroy {
     ];
 
     public barChartData: any[] = [
-        { data: [20], label: 'No' },
-        { data: [20], label: 'Yes' }
+        { data: [20], label: 'Bad' },
+        { data: [20], label: 'Good' }
         //{ data: [(this.session != null && this.session.results != null) ? this.session.results.length : 0 ], label: 'Participants' }
     ];
 

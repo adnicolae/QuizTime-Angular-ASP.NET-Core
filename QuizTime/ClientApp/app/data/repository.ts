@@ -33,7 +33,7 @@ export class Repository {
     result: Result;
     session: Session;
     hostedSession: Session;
-    quizzes: Quiz[];
+    quizzes: Quiz[] = [];
     results: Result[];
     participantRecentResults: Result[];
     participantResults: Result[];
@@ -61,7 +61,7 @@ export class Repository {
 
         this.quizFilter.related = true;
         this.urlBase = baseUrl;
-        this.getQuizzes(true, 0);
+        //this.getQuizzes(true, 0);
         //this.getResults();
         this.isBrowser = isPlatformBrowser(platformId);
 

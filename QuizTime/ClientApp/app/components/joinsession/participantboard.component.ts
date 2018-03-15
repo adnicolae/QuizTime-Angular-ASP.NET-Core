@@ -50,6 +50,7 @@ export class ParticipantBoardComponent implements OnInit, OnDestroy{
     counter4: number; // EXPLAIN
     counter5 = 15; // VOTING
     counters = [3, this.counter2, 15, this.counter4, 15];
+    votingSelection = [false, false, false, false, false];
 
     constructor(
         private repo: Repository,
@@ -238,15 +239,25 @@ export class ParticipantBoardComponent implements OnInit, OnDestroy{
         console.log(this.score);
     }
 
-    voteYes() {
+    resetVotingButton(id: number) {
+        for (var i = 0; i < 5; i++) {
+            this.votingSelection[i] = false;
+        }
+        this.votingSelection[id - 1] = true;   
+    }
+
+    voteYes(id: number) {
         this.voted = true;
         this.vote = true;
+        this.resetVotingButton(id);  
         this.updateResult();
     }
 
-    voteNo() {
+    voteNo(id: number) {
         this.voted = true;
         this.vote = false;
+        this.resetVotingButton(id);
+        this.updateResult();
     }
 
     updateResult() {

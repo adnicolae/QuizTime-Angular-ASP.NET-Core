@@ -27,6 +27,7 @@
                 </div>
             </div>
         </div>
+
         <div *ngIf="isBrowser && auth.isAuthenticated && participantResults" class="ui blue segment" style="margin-top:2em">
             <h2 class="ui header">
                 <div class="content">
@@ -36,7 +37,7 @@
             <div class="ui very relaxed divided ordered list">
                 <div class="item" *ngFor="let result of participantResults">
                     <div class="content">
-                        <div class="header">Scored <span *ngIf="result.score > 0" style="font-size:15px; font-weight:bold"><i class="plus green icon"></i>{{result.score}}</span> <span *ngIf="result.score < 0" style="font-size:15px; font-weight:bold"><i class="minus red icon"></i>{{result.score}}</span></div>
+                        <div class="header">Scored <span *ngIf="result.score > 0" style="font-size:15px; font-weight:bold"><i class="plus green icon"></i>{{result.score}}</span> <span *ngIf="result.score < 0" style="font-size:15px; font-weight:bold"><i class="minus red icon"></i>{{result.score  * (-1)}}</span></div>
                         <div class="description">In <span style="color:#4189C7">{{result.session.quiz.title}}</span> (<span style="color:#4189C7">{{result.session.quiz.group.title}}</span>) on {{result.session.dateCreated | date}}.</div>
                     </div>
                 </div>
@@ -44,4 +45,4 @@
             <button [routerLink]="['/fetch-results']" type="button" class="ui default fluid button" style="padding:8px">View all results</button>
         </div>
     </div>
-</div>
+    </div>

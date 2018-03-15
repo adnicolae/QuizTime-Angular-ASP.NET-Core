@@ -10,7 +10,6 @@ import { CookieModule } from 'ngx-cookie';
 import { AppComponent } from './components/app/app.component';
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { HomeComponent } from './components/home/home.component';
-import { FetchQuizzesComponent } from './components/fetchquizzes/fetchquizzes.component';
 import { FetchResultsComponent } from './components/fetchresults/fetchresults.component';
 import { SessionBoardComponent } from './components/sessionboard/sessionboard.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
@@ -27,6 +26,7 @@ import { AuthService } from './components/registration/auth.service';
 import { GroupManagementComponent } from './components/groupmanagement/groupmanagement.component';
 import { GroupQuizzesComponent } from './components/groupmanagement/groupquizzes.component';
 import { GroupResultsComponent } from './components/groupmanagement/groupresults.component';
+import { RevisionComponent } from './components/revision/revision.component';
 import { ErrorHandler } from "@angular/core";
 import { ErrorHandlerService } from "./errorHandler.service";
 import { DisplayErrorComponent } from "./components/displayerror/displayerror.component";
@@ -52,7 +52,6 @@ export function handler() {
         AppComponent,
         NavMenuComponent,
         WelcomeComponent,
-        FetchQuizzesComponent,
         FetchResultsComponent,
         SessionBoardComponent,
         BoardComponent,
@@ -66,6 +65,7 @@ export function handler() {
         GroupQuizzesComponent,
         GroupResultsComponent,
         DisplayErrorComponent,
+        RevisionComponent,
         HomeComponent
     ],
     imports: [
@@ -82,7 +82,6 @@ export function handler() {
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
             { path: 'welcome', component: WelcomeComponent },
-            { path: 'fetch-quizzes', component: FetchQuizzesComponent },
             { path: 'new/quiz', component: CreateQuizComponent },
             { path: 'fetch-results', component: FetchResultsComponent },
             { path: 'session-board', component: SessionBoardComponent },
@@ -96,6 +95,7 @@ export function handler() {
             { path: 'groups', component: GroupManagementComponent },
             { path: 'groups/quizzes/:id', component: GroupQuizzesComponent },
             { path: 'groups/results/:id', component: GroupResultsComponent },
+            { path: 'new/revision', component: RevisionComponent },
             { path: '**', redirectTo: 'home' }
         ])
     ]

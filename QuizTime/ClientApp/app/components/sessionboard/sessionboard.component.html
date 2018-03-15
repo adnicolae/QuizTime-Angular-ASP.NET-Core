@@ -270,27 +270,30 @@
 
     <!-- Show votes && leaderboard -->
     <div *ngIf="session?.status == 7">
-        <div class="ui center aligned header" style="margin-top:30px;margin-bottom: 5px;text-align:center"><span style="font-family:Cookie; font-size:4rem; color:#4189C7">voting results<span style="font-family:'Ceviche One'">!</span></span> <br /> <br />The quiz is now over!</div>
+        <div class="ui center aligned header" style="margin-top:30px;margin-bottom: 5px;text-align:center"><span style="font-family:Cookie; font-size:4rem; color:#4189C7">quiz results<span style="font-family:'Ceviche One'">!</span></span> <br /> <br />The quiz is now over!</div>
 
         <h4 *ngIf="yesVotes >= noVotes" class="ui header" style="margin-top:35px; text-align:center">Congratulations, {{ session?.selectedToExplain.username }}! You <span style="color:green">win</span> 10 more points!</h4>
         <h4 *ngIf="yesVotes < noVotes" class="ui header" style="margin-top:35px; text-align:center">Sorry, {{ session?.selectedToExplain.username }}! You <span style="color:red">lose</span> all your points!</h4>
 
-        <div>
-            <div style="display: block; width:500px; margin-left:auto; margin-right:auto; margin-top:10px">
-                <canvas baseChart
-                        [datasets]="barChartData"
-                        [labels]="barChartLabels"
-                        [options]="barChartOptions"
-                        [legend]="barChartLegend"
-                        [chartType]="barChartType"></canvas>
-            </div>
-        </div>
 
         <div>
             <div style="display: block; width:500px; margin-left:auto; margin-right:auto; margin-top:10px">
                 <canvas baseChart
                         [datasets]="barChartChoicesData"
                         [labels]="barChartChoicesLabels"
+                        [options]="barChartOptions"
+                        [legend]="barChartLegend"
+                        [chartType]="barChartType"></canvas>
+            </div>
+        </div>
+
+        <h2 class="ui center aligned header">Voting results:</h2>
+
+        <div>
+            <div style="display: block; width:500px; margin-left:auto; margin-right:auto; margin-top:10px">
+                <canvas baseChart
+                        [datasets]="barChartData"
+                        [labels]="barChartLabels"
                         [options]="barChartOptions"
                         [legend]="barChartLegend"
                         [chartType]="barChartType"></canvas>
