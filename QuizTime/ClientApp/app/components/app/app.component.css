@@ -5,15 +5,10 @@
     }
 }
 
-body ::-webkit-scrollbar {
-    all: initial;
-    * {
-    all: unset;
-    }
-}
-
-.hidden.menu {
-    display: none;
+@media (max-width: 767px) {
+    .field {
+        margin-left:0!important;
+        }
 }
 
 .masthead.segment {
