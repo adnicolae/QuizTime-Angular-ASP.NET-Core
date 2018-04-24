@@ -1,0 +1,154 @@
+﻿<div class="ui container" style="margin-top:20px;max-width:750px!important;margin-bottom:50px">
+    <h4 class="ui header" style="margin-top:10px;text-align:center">It's <span style="font-family:Cookie; font-size:2rem; color:#4189C7">quiztime<span style="font-family:'Ceviche One'">!</span></span></h4>
+    <h4 class="ui header" style="margin-top:2px;margin-bottom:10px; text-align:center">Create a quick quiz, challenge your students and gather their results!</h4>
+    <div class="ui attached icon message">
+        <img class="ui tiny image" src="school.png" style="margin-right:1em">
+        <div class="content">
+            <h2 class="header">
+                Quick Quiz
+                <span data-tooltip="To speed the process of quizzing, choices are not titled. It is recommended that the choices be given outside the system."><i class="question circle icon"></i></span>
+            </h2>
+            <p>Fill out the form below to create a quick quiz.</p>
+        </div>
+    </div>
+
+    <form [formGroup]="quizForm" (ngSubmit)="onSubmit()" class="ui form attached compact fluid blue segment" [ngClass]="{'warning' : noGroupError}">
+
+        <div class="field" [ngClass]="{'error' : noGroupError}">
+            <label>Class</label>
+            <!--<sui-select class="selection"
+                    form[ngModel]="selectedGroup"
+                    [options]="groups"
+                    labelField="title"
+                    #select>
+            <sui-select-option *ngFor="let option of select.filteredOptions"
+                               [value]="option">
+            </sui-select-option>
+        </sui-select>-->
+            <select [ngModel]="selectedGroup" (ngModelChange)="onChangeSelect($event)" name="Class" class="ui left dropdown" id="select" [ngModelOptions]="{standalone: true}">
+                <option *ngFor="let group of groups" [ngValue]="group">{{group.title}}</option>
+            </select>
+        </div>
+
+        <div class="ui warning message">
+            <div class="header">Could you check something?</div>
+            <ul class="list">
+                <li>Please <a style="font-weight:bold" [routerLink]="['/groups']">create a new class group</a> before getting started.</li>
+            </ul>
+        </div>
+        <h4 class="ui horizontal divider header">
+            <i class="sort numeric up icon"></i>
+            Points
+        </h4>
+        <div class="fields">
+            <div class="field" style="margin-left:auto">
+                <label style="text-align:center">Win</label>
+                <div class="ui buttons">
+                    <span class="ui red icon button" (click)="decreaseAssignedPoints()">
+                        <i class="minus icon"></i>
+                    </span>
+                    <span class="ui button" data-tooltip="Adjust winning points.">
+                        <i class="plus icon"></i>
+                        {{ quizAssignedPoints }}
+                    </span>
+                    <span class="ui green icon button" (click)="increaseAssignedPoints()">
+                        <i class="plus icon"></i>
+                    </span>
+                </div>
+            </div>
+
+            <div class="field" style="margin-right:auto">
+                <label style="text-align:center">Lose</label>
+                <div class="ui buttons">
+                    <span class="ui red icon button" (click)="increaseDeducedPoints()">
+                        <i class="minus icon"></i>
+                    </span>
+                    <span class="ui button" data-tooltip="Adjust losing points.">
+                        <i class="minus icon"></i>
+                        {{ quizDeducedPoints }}
+                    </span>
+                    <span class="ui green icon button" (click)="decreaseDeducedPoints()">
+                        <i class="plus icon"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <h4 class="ui horizontal divider header">
+            <i class="hourglass half icon"></i>
+            Timers
+        </h4>
+        <div class="fields">
+            <div class="field" style="margin-left:auto">
+                <label style="text-align:center">Solve</label>
+                <div class="ui vertical buttons">
+                    <span class="ui green icon button" (click)="increaseTimeLimit()">
+                        <i class="plus icon"></i>
+                    </span>
+                    <span class="ui button">
+                        <i class="clock outline icon"></i>
+                        {{quizTimeLimit}}
+                    </span>
+                    <span class="ui red icon button" (click)="decreaseTimeLimit()">
+                        <i class="minus icon"></i>
+                    </span>
+                </div>
+            </div>
+
+            <div class="field" style="margin-right:auto">
+                <label style="text-align:center">Challenge</label>
+                <div class="ui vertical buttons">
+                    <span class="ui green icon button" (click)="increaseChallengeTimer()">
+                        <i class="plus icon"></i>
+                    </span>
+                    <span class="ui button">
+                        <i class="stopwatch icon"></i>
+                        {{quizChallengeTimer}}
+                    </span>
+                    <span class="ui red icon button" (click)="decreaseChallengeTimer()">
+                        <i class="minus icon"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="ui horizontal divider header">
+            Choices
+        </h3>
+        <div style="height:400px; background-color:#f7f7f7">
+            <canvas-whiteboard #canvasWhiteboard
+                               [drawButtonClass]="'drawButtonClass'"
+                               [drawButtonText]="'Draw'"
+                               [clearButtonClass]="'clearButtonClass'"
+                               [clearButtonText]="'Clear'"
+                               [undoButtonText]="'Undo'"
+                               [undoButtonEnabled]="true"
+                               [redoButtonText]="'Redo'"
+                               [redoButtonEnabled]="true"
+                               [colorPickerEnabled]="true"
+                               [saveDataButtonEnabled]="true"
+                               [saveDataButtonText]="'Save'"
+                               [lineWidth]="5"
+                               [strokeColor]="'rgb(0,0,0)'"
+                               [shouldDownloadDrawing]="true"
+                               (onBatchUpdate)="sendBatchUpdate($event)"
+                               (onClear)="onCanvasClear()"
+                               (onUndo)="onCanvasUndo($event)"
+                               (onRedo)="onCanvasRedo($event)">
+            </canvas-whiteboard>
+        </div>
+
+
+        <!--<div class="inline field">
+        <div class="ui slider checkbox">
+            <input type="checkbox" id="terms" formControlName="startSessionBool" value="true" checked>
+            <label for="terms">Start the quiz session immediately.</label>
+        </div>
+    </div>-->
+
+        <button [disabled]="noGroupError" [ngClass]="{'disabled loading' : sendingForm}" style="margin-top: 15px;margin-left:auto!important; margin-right:auto!important; display:block" type="submit" class="circular ui huge green submit button">Start</button>
+    </form>
+    <div class="ui bottom attached warning message">
+        <i class="icon help"></i>
+        Want to create a <a [routerLink]="['/new/revision']"><strong>detailed quiz</strong></a> instead?
+    </div>
+</div>

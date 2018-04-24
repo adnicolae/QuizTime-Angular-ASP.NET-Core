@@ -33,6 +33,8 @@ import { DisplayErrorComponent } from "./components/displayerror/displayerror.co
 import { SuiModule } from 'ng2-semantic-ui';
 import { ChartsModule } from 'ng2-charts';
 import { SidebarModule } from 'ng-sidebar';
+import { CanvasWhiteboardModule } from 'ng2-canvas-whiteboard';
+import { DrawQuizComponent } from './components/drawquiz/drawquiz.component';
 // Create handler object to override ng behaviour such that
 // all errors are handled using the custom handler service
 const eHandler = new ErrorHandlerService();
@@ -66,6 +68,7 @@ export function handler() {
         GroupResultsComponent,
         DisplayErrorComponent,
         RevisionComponent,
+        DrawQuizComponent,
         HomeComponent
     ],
     imports: [
@@ -76,6 +79,7 @@ export function handler() {
         RepositoryModule,
         SuiModule,
         ChartsModule,
+        CanvasWhiteboardModule,
         SidebarModule.forRoot(),
         CookieModule.forRoot(),
         RouterModule.forRoot([
@@ -96,6 +100,7 @@ export function handler() {
             { path: 'groups/quizzes/:id', component: GroupQuizzesComponent },
             { path: 'groups/results/:id', component: GroupResultsComponent },
             { path: 'new/revision', component: RevisionComponent },
+            { path: 'draw', component: DrawQuizComponent},
             { path: '**', redirectTo: 'home' }
         ])
     ]
