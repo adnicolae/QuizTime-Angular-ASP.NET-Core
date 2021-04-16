@@ -1,4 +1,13 @@
+![Quiztime](https://itsquiztime.azurewebsites.net/android-chrome-192x192.png)
 # QuizTime
+
+Project available [Here](https://itsquiztime.azurewebsites.net/)
+
+Tech used: Angular, TypeScript, .NET Core (MVC, Entity Framework, SignalR web sockets), MSSQL, Microsoft Azure
+
+Gathered user feedback during a couple of sessions where the application was used live by over 100 students in a Mathematics university lecture at Warwick.
+
+## How to run
 
 The ASP.NET Core 2.0 SDK must be installed.
 
